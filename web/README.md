@@ -8,7 +8,7 @@ AI를 활용한 정보관리기술사 시험 답안 생성 및 학습 플랫폼
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 (Anthropic Brand Colors)
 - **AI**: Vercel AI SDK v6 beta + Anthropic Claude 3.5 Sonnet
-- **Database**: Supabase (PostgreSQL)
+- **Database**: Neon PostgreSQL + Drizzle ORM
 - **Package Manager**: pnpm
 
 ## 주요 기능
@@ -47,16 +47,14 @@ AI를 활용한 정보관리기술사 시험 답안 생성 및 학습 플랫폼
 
 ### 1. 환경 변수 설정
 
-`.env.local` 파일을 생성하고 다음 값을 설정하세요:
+`.env.local` 파일이 이미 생성되어 있습니다. Anthropic API 키를 추가하세요:
 
 ```bash
 # Anthropic API
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+# Neon PostgreSQL (이미 설정됨)
+DATABASE_URL=postgresql://neondb_owner:npg_...@ep-holy-bonus-...neon.tech/neondb?sslmode=require
 ```
 
 ### 2. 의존성 설치
@@ -65,9 +63,13 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 pnpm install
 ```
 
-### 3. Supabase 스키마 설정
+### 3. 데이터베이스 스키마 푸시
 
-`lib/db/schema.sql` 파일의 SQL을 Supabase SQL Editor에서 실행하세요.
+Drizzle ORM을 사용하여 Neon PostgreSQL에 스키마를 푸시합니다:
+
+```bash
+pnpm db:push
+```
 
 ### 4. 개발 서버 실행
 
@@ -92,13 +94,15 @@ web/
 │   ├── ai/
 │   │   └── client.ts          # Anthropic Claude 클라이언트
 │   ├── db/
-│   │   ├── schema.sql         # Supabase 스키마
-│   │   └── supabase.ts        # Supabase 클라이언트
+│   │   ├── schema.ts          # Drizzle ORM 스키마
+│   │   ├── index.ts           # DB 클라이언트
+│   │   └── migrations/        # 마이그레이션 파일
 │   └── utils/
 ├── components/
 │   ├── ui/                    # 공통 UI 컴포넌트 (예정)
 │   ├── answer/                # 답안 관련 컴포넌트 (예정)
 │   └── editor/                # 마크다운 에디터 (예정)
+├── drizzle.config.ts          # Drizzle 설정
 └── package.json
 ```
 
@@ -150,7 +154,7 @@ web/
 - `keywords`: 도메인별 키워드 맵
 - `learning_progress`: 학습 진도
 
-자세한 스키마는 `lib/db/schema.sql` 참조
+자세한 스키마는 `lib/db/schema.ts` 참조
 
 ## 배포
 
@@ -164,9 +168,7 @@ vercel
 
 Vercel Dashboard에서 다음 환경 변수를 설정하세요:
 - `ANTHROPIC_API_KEY`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `DATABASE_URL`
 
 ## 라이선스
 
@@ -177,5 +179,6 @@ Private
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Vercel AI SDK](https://sdk.vercel.ai/docs)
 - [Anthropic Claude API](https://docs.anthropic.com/)
-- [Supabase Documentation](https://supabase.com/docs)
+- [Drizzle ORM Documentation](https://orm.drizzle.team/docs/overview)
+- [Neon PostgreSQL](https://neon.tech/docs)
 - [Tailwind CSS v4](https://tailwindcss.com/docs)
