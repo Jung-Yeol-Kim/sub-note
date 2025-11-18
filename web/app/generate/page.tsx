@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useChat } from 'ai/react'
+import { useChat } from 'ai'
 
 const QUESTION_TYPES = ['정의형', '설명형', '비교형', '절차형', '분석형'] as const
 type QuestionType = typeof QUESTION_TYPES[number]
