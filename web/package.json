@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.45",
+    "@supabase/supabase-js": "^2.83.0",
+    "ai": "6.0.0-beta.99",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
