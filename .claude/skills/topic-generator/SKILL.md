@@ -1,6 +1,6 @@
 ---
 name: topic-generator
-description: Generate structured answer sheets for IT Professional Examination (정보처리기술사) topics. Use when user requests to create answer sheet for a specific technology topic following Korean PE exam format with definition, diagrams, tables, and concise explanations. Follows strict 1-page format with omitted particles, clear structure, and emphasis on keywords.
+description: Generate structured answer sheets for IT Professional Examination (정보관리기술사) topics. Use when user requests to create answer sheet for a specific technology topic following Korean PE exam format with definition, diagrams, tables, and concise explanations. Follows strict 1-page format with omitted particles, clear structure, and emphasis on keywords.
 ---
 
 # Topic Generator
