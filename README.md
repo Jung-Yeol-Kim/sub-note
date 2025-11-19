@@ -6,17 +6,31 @@
 - Claude Code와 함께 토픽별 서브노트 작성 및 관리
 - 주차별 셀프테스트와 모의고사 답안의 축적 및 개선
 - 템플릿과 레퍼런스를 정리하여 일관된 답안 스타일 확립
+- **기출문제 분석**: 출제 경향 파악 및 전략적 학습 계획 수립
 
 ## 디렉터리 구조
-- `sub-notes/` : 주제별 서브노트(개인 정리본)
-- `self-test/` : 셀프테스트 답안 작성
-- `kpc/` : 개인 학습 자료 (gitignore 처리)
-  - `00. 답안지 관련` : 답안지 양식 및 샘플
-  - `10. 기출풀이`
-  - `20. 모의고사`
-  - `30. 서브노트`
-  - `40. 주간모의고사`
-  - `50. 자료실`
+```
+sub-note/
+├── scripts/              # 기출문제 분석 도구
+│   ├── exam_analyzer.py      # 범용 기출문제 분석기
+│   ├── report_generator.py   # 분석 리포트 생성기
+│   ├── exam_data_helper.py   # 문제 데이터 입력 헬퍼
+│   └── analyze_137.py        # 137회 상세 분석
+├── reports/              # 분석 리포트
+│   └── 137회_분석_리포트.md
+├── data/                 # 분석 데이터
+│   ├── syllabus/            # 출제기준 원본 데이터
+│   └── exam_results/        # 회차별 분석 결과
+├── sub-notes/            # 주제별 서브노트
+├── self-test/            # 셀프테스트 답안
+└── kpc/                  # 개인 학습 자료 (gitignore)
+    ├── 00. 답안지 관련
+    ├── 10. 기출풀이
+    ├── 20. 모의고사
+    ├── 30. 서브노트
+    ├── 40. 주간모의고사
+    └── 50. 자료실
+```
 
 ## 답안지 작성 가이드
 
@@ -48,10 +62,42 @@
 3. (선택) 추가 설명/고려사항/전망
 ```
 
-## 사용법
+## 기출문제 분석 도구 사용법
+
+### 1. 기출문제 분석하기
+```bash
+# 특정 회차 분석
+python scripts/exam_analyzer.py 137
+
+# 여러 회차 동시 분석
+python scripts/exam_analyzer.py 135 136 137
+```
+
+### 2. 분석 리포트 생성하기
+```bash
+# 단일 회차 리포트 생성
+python scripts/report_generator.py 137
+
+# 여러 회차 비교 리포트 생성
+python scripts/report_generator.py 135 136 137
+```
+
+### 3. 새로운 회차 문제 데이터 추가하기
+1. `scripts/exam_data_helper.py`를 편집
+2. 새로운 회차 데이터를 `EXAM_XXX_DATA` 형식으로 추가
+3. 스크립트 실행: `python scripts/exam_data_helper.py`
+
+### 4. 분석 결과 확인하기
+- **리포트**: `reports/` 폴더의 마크다운 파일
+- **상세 데이터**: `data/exam_results/` 폴더의 JSON 파일
+
+## 답안지 작성 가이드
+
+### Skills 활용
 - **답안지 작성**: `topic-generator` skill을 사용하여 체계적인 답안 생성
-- **개인 학습**: 관심 토픽 파일을 열어 학습하고 필요 내용 보완
-- **버전 관리**: 로컬에서 편집 후 커밋하여 버전별 관리
+- **답안 채점**: `grading` skill로 작성한 답안 평가
+- **키워드 분석**: `keyword-analyzer` skill로 핵심 키워드 확인
+- **답안 비교**: `topic-comparer` skill로 여러 답안 비교 분석
 
 ## 업데이트 정책
 - 주차별(또는 필요 시) 내용 보완 및 템플릿 업데이트 진행
