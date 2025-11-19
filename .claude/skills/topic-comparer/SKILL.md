@@ -1,6 +1,6 @@
 ---
 name: topic-comparer
-description: Compare multiple answer sheets for the same IT Professional Examination (정보처리기술사) topic, analyze differences in approach, quality, and effectiveness. Use when user wants to compare their answers with others or track improvement over time.
+description: Compare multiple answer sheets for the same IT Professional Examination (정보관리기술사) topic, analyze differences in approach, quality, and effectiveness. Use when user wants to compare their answers with others or track improvement over time.
 ---
 
 # Topic Comparer (답안 비교 분석)

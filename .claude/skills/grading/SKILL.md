@@ -1,6 +1,6 @@
 ---
 name: grading
-description: Grade IT Professional Examination (정보처리기술사) answer sheets based on 6 evaluation criteria. Provides detailed scoring, feedback, and improvement suggestions. Use when user wants to evaluate their practice answers.
+description: Grade IT Professional Examination (정보관리기술사) answer sheets based on 6 evaluation criteria. Provides detailed scoring, feedback, and improvement suggestions. Use when user wants to evaluate their practice answers.
 ---
 
 # Grading (채점자)

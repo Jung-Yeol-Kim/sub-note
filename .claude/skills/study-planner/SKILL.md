@@ -1,6 +1,6 @@
 ---
 name: study-planner
-description: Create personalized study plans for IT Professional Examination (정보처리기술사) based on weak areas, exam timeline, and learning goals. Tracks progress and adjusts plan. Use when user wants structured learning schedule.
+description: Create personalized study plans for IT Professional Examination (정보관리기술사) based on weak areas, exam timeline, and learning goals. Tracks progress and adjusts plan. Use when user wants structured learning schedule.
 ---
 
 # Study Planner (학습 계획 수립)
@@ -52,7 +52,7 @@ When user requests a study plan:
 ## Study Plan Format
 
 ```markdown
-# 정보처리기술사 학습 계획
+# 정보관리기술사 학습 계획
 
 ## 개인 정보 및 목표
 

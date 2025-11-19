@@ -1,6 +1,6 @@
 ---
 name: answer-reviewer
-description: Provide detailed, line-by-line review of IT Professional Examination (정보처리기술사) answer sheets with specific improvement suggestions. More detailed than grading, focuses on actionable feedback. Use when user wants in-depth review with alternative expressions and examples.
+description: Provide detailed, line-by-line review of IT Professional Examination (정보관리기술사) answer sheets with specific improvement suggestions. More detailed than grading, focuses on actionable feedback. Use when user wants in-depth review with alternative expressions and examples.
 ---
 
 # Answer Reviewer (답안 리뷰어)

@@ -1,6 +1,6 @@
-# 정보처리기술사 Topic Sub-note
+# 정보관리기술사 Topic Sub-note
 
-이 저장소는 정보처리기술사(IT Professional Examination) 대비를 위한 개인용 토픽 서브노트 모음입니다. 각 토픽은 실전 답안 작성 연습과 정리 자료를 바탕으로 주기적으로 보완됩니다.
+이 저장소는 정보관리기술사(IT Professional Examination) 대비를 위한 개인용 토픽 서브노트 모음입니다. 각 토픽은 실전 답안 작성 연습과 정리 자료를 바탕으로 주기적으로 보완됩니다.
 
 ## 프로젝트 목적
 - Claude Code와 함께 토픽별 서브노트 작성 및 관리

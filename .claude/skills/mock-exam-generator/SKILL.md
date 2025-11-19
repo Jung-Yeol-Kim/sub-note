@@ -1,6 +1,6 @@
 ---
 name: mock-exam-generator
-description: Generate realistic mock exam questions for IT Professional Examination (정보처리기술사) based on latest technology trends, exam patterns, and difficulty levels. Use when user wants to practice with realistic exam questions.
+description: Generate realistic mock exam questions for IT Professional Examination (정보관리기술사) based on latest technology trends, exam patterns, and difficulty levels. Use when user wants to practice with realistic exam questions.
 ---
 
 # Mock Exam Generator (모의 시험 문제 생성기)

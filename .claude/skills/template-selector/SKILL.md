@@ -1,6 +1,6 @@
 ---
 name: template-selector
-description: Help select the most appropriate answer template for IT Professional Examination (정보처리기술사) questions based on question type, topic characteristics, and exam strategy. Use when user is unsure which template to use.
+description: Help select the most appropriate answer template for IT Professional Examination (정보관리기술사) questions based on question type, topic characteristics, and exam strategy. Use when user is unsure which template to use.
 ---
 
 # Template Selector (템플릿 선택 도우미)

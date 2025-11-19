@@ -1,6 +1,6 @@
 ---
 name: keyword-analyzer
-description: Analyze IT Professional Examination (정보처리기술사) answers to extract keywords, identify missing critical terms, assess keyword hierarchy, and evaluate keyword density. Use when user wants to check if their answer covers essential concepts.
+description: Analyze IT Professional Examination (정보관리기술사) answers to extract keywords, identify missing critical terms, assess keyword hierarchy, and evaluate keyword density. Use when user wants to check if their answer covers essential concepts.
 ---
 
 # Keyword Analyzer (키워드 분석기)
