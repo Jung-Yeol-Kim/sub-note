@@ -1,0 +1,222 @@
+{
+  "exam_number": "131",
+  "questions": {
+    "1교시": [
+      {
+        "번호": "1",
+        "제목": "디지털 트랜스포메이션(Digital Transformation)",
+        "키워드": [
+          "Digital Transformation"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "NFC(Near Field Communication)",
+        "키워드": [
+          "NFC",
+          "Near Field Communication"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "폭포수 개발 방법론과 애자일 개발 방법론의 특징 및 장ㆍ단점 비교",
+        "키워드": []
+      },
+      {
+        "번호": "4",
+        "제목": "클라우드 컴퓨팅의 Service Model 과 Deployment Model 비교",
+        "키워드": []
+      },
+      {
+        "번호": "5",
+        "제목": "데이터 차원 축소(Data Dimensionality Reduction)",
+        "키워드": [
+          "Data Dimensionality Reduction"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "정보시스템 감리와 PMO(Project Management Office) 비교",
+        "키워드": [
+          "PMO",
+          "Project Management Office"
+        ]
+      },
+      {
+        "번호": "7",
+        "제목": "머신러닝(Machine Learning)과 딥러닝(Deep Learning) 차이",
+        "키워드": [
+          "Machine Learning",
+          "Deep Learning"
+        ]
+      },
+      {
+        "번호": "8",
+        "제목": "오토 스케일링(Auto Scailing)",
+        "키워드": [
+          "Auto Scailing"
+        ]
+      },
+      {
+        "번호": "9",
+        "제목": "독립표본 t-검정(Independent t-test)과 대응 표본 t-검정(Paired t-test) 비교",
+        "키워드": []
+      },
+      {
+        "번호": "10",
+        "제목": "크리덴셜 스터핑(Credential stuffing)",
+        "키워드": [
+          "Credential stuffing"
+        ]
+      },
+      {
+        "번호": "11",
+        "제목": "데이터 표준화의 필요성과 기대효과",
+        "키워드": []
+      },
+      {
+        "번호": "12",
+        "제목": "객체지향 방법론에서 캡슐화(Encapsulation)와 정보은닉(Information Hiding)",
+        "키워드": [
+          "Encapsulation",
+          "Information Hiding"
+        ]
+      },
+      {
+        "번호": "13",
+        "제목": "SBOM(Software Bill of Material)",
+        "키워드": [
+          "SBOM",
+          "Software Bill of Material"
+        ]
+      }
+    ],
+    "2교시": [
+      {
+        "번호": "1",
+        "제목": "ISP(Information Strategetic Planning)와 BPR(Business Process Reengineering)의 개념과 수행절차를 비교 설명하고, 기업에서 이 두가지가 상호 보관적으로 활용하기 좋은 방안을 설명하시오.",
+        "키워드": [
+          "ISP",
+          "BPR",
+          "Information Strategetic Planning",
+          "Business Process Reengineering"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 데이터 시각화(Data Visualization)와 관련하여 다음을 설명하시오.",
+        "키워드": [
+          "Data Visualization"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "인공지능의 개발 및 적용과정에서 윤리적으로 다루어져야 할 주요 내용과 인공지능을 효과적으로 관리하고 규제하기 위한 거버넌스 모형에 대하여 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "4",
+        "제목": "제로 트러스트 보안(Zero Trust Security)모델의 보안원리, 핵심원칙, 적용분야를 트러스트 보안(Trust Security)모델과 비교하여 설명하시오.",
+        "키워드": [
+          "Zero Trust Security",
+          "Trust Security"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 소켓(Socket) 통신과 관련하여 다음을 설명하시오.",
+        "키워드": [
+          "Socket"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 아키텍처 스타일과 디자인 패턴에 대하여 다음을 설명하시오.",
+        "키워드": []
+      }
+    ],
+    "3교시": [
+      {
+        "번호": "1",
+        "제목": "인공지능 학습용 데이터 허브 구축 과정에서 생성된 학습용 데이터 셋의 품질확보를 위한 주요활동과 데이터 생애 주기별 품질관리 수행절차에 대하여 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 데이터 구조(Data Structure)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Data Structure"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. 통합 테스트(Integration Test)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Integration Test"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 소프트웨어 안전성 분석의 필요성과 다음의 분석 기법을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "5",
+        "제목": "운영체제 메모리 관리 기법 중 페이징 기법과 세그멘테이션 기법의 개념을 설명하고, 두 기법에 대하여 비교 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 정보보호 및 개인정보보호 인증제도(ISMS, Information Security Management System)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "ISMS"
+        ]
+      }
+    ],
+    "4교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 전략적 기업경영(Strategic Enterprise Management)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Strategic Enterprise Management"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 개인정보보호를 위한 ‘개인정보의 안전성 확보조치 기준’ 고시 내용 중 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. 데이터 품질관리에 대하여 다음을 설명 하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "4",
+        "제목": "인공지능 분야에서 파운데이션(Foundation) 모델의 개념, 특징, 기반기술 및 구현시 법적ㆍ환경적ㆍ사회적 측면의 고려사항에 대하여 설명하시오.",
+        "키워드": [
+          "Foundation"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 소프트웨어 규모산정에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 정렬 알고리즘은 데이터 Set 이 주어졌을 때, 이를 사용자가 지정한 기준에 맞게 순서 대로 나열하여 재배치하는 기법이다. 정렬 알고리즘과 관련하여 다음에 대하여 설명하 시오.",
+        "키워드": []
+      }
+    ]
+  },
+  "metadata": {
+    "total_questions": 31,
+    "periods": [
+      "1교시",
+      "2교시",
+      "3교시",
+      "4교시"
+    ]
+  }
+}

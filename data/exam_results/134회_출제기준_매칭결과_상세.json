@@ -1,0 +1,367 @@
+{
+  "분석일자": "2025-11-20",
+  "시험회차": "134회",
+  "분석결과": {
+    "1교시": [
+      {
+        "번호": "1",
+        "제목": "터크만 사다리 모델(Tuckman Ladder Model)의 팀 발달 단계별 특징",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "팀"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "시장 규모 추정 방법인 TAM-SAM-SOM(Total Addressable Market-Serviceable Addressable Market-Serviceable Obtainable Market) 프레임 워크",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "TAM"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "머신러닝(Machine Learning) 성능지표",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "Machine Learning",
+          "머신러닝"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "형상관리의 개념과 형상관리 기준선(Baseline)",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "5",
+        "제목": "객체 간의 데이터 보호를 위한 정보은닉(Information Hiding)",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "정보은닉",
+          "Information Hiding"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "이미지 데이터 어노테이션(Data Annotation) 유형과 기법",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "7",
+        "제목": "정적 SQL(Static SQL)과 동적 SQL(Dynamic SQL) 비교",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "8",
+        "제목": "RIP(Routing Information Protocol)와 OSPF(Open Shortest Path First) 비교",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "9",
+        "제목": "인터미턴트 컴퓨팅(Intermittent Computing)",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "10",
+        "제목": "스토리지 가상화(Storage Virtualization) 유형별 특징",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "가상화",
+          "Virtualization"
+        ]
+      },
+      {
+        "번호": "11",
+        "제목": "개인정보 보호 강화기술(Privacy Enhancing Technology)",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "12",
+        "제목": "고대역 초고속 메모리(High Bandwidth Memory)",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "메모리"
+        ]
+      },
+      {
+        "번호": "13",
+        "제목": "RAG(Retrieval Augmented Generation)",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      }
+    ],
+    "2교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 국가기관, 지방자치단체 및 공공기관이 안전하고 효율적으로 SaaS(Software as a Service)를 이용하기 위해 공공부문 SaaS 이용 가이드라인을 발표하였다. 다음에 대하여 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "2",
+        "제목": "소비자를 기만하여 이익을 편취하고자 하는 다크패턴(Dark Pattern)이 발생하고 있다. 이와 관련하여 다크패턴의 세부 유형 및 대응 방안을 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. IT 커버넌스에 대하여 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 대규모 AI 서비스를 위한 데이터센터 구축 기술에 대하여 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "AI",
+          "범용 AI",
+          "초거대 AI"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. ESG(Environment, Social, Governance) 경영에 대하여 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "ESG"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "트랜잭션 격리 수준(Transaction Isolation Level) 4가지를 사례 중심으로 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "트랜잭션",
+          "Transaction"
+        ]
+      }
+    ],
+    "3교시": [
+      {
+        "번호": "1",
+        "제목": "실행 중인 애플리케이션에 대한 배포 전략 및 테스트 전략에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "테스트"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 소프트웨어 테스트에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "테스트"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. SBOM(Software Bill of Materials)에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "Software Bill of Material",
+          "SBOM"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "알고리즘의 복잡도를 설명하고 성능을 표기하기 위한 O-Notation의 개념과 유형 및 유형별 연산시간의 차이를 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "5",
+        "제목": "다차원 색인구조(Multidimensional Index Structure)의 개념, 유형, 활용 사례에 대하여 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "6",
+        "제목": "일부 오픈소스 라이선스가 개방형(예: MIT, BSD 등)에서 폐쇄형(예: SSPL(Server Side Public License), BSL(Business Source License) 등)으로 변화하고 있다. 이러한 오픈소스 라이선스 정책 변경의 배경 및 소프트웨어 산업에 미치는 영향에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": []
+      }
+    ],
+    "4교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. IT 프로젝트 관리에서 리스크 대응에 대하여 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "프로젝트 관리"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 딥러닝에서 대규모 신경망을 효율적으로 훈련하기 위한 멀티 GPU 기술에 대하여 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "딥러닝"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "AI 시스템에 대한 법적 이슈, 윤리적 문제, 기술적 문제에 대하여 설명하고 해결방안을 제시하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "AI",
+          "범용 AI",
+          "초거대 AI",
+          "윤리"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 개방형 API(Open API)에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "API",
+          "API 설계",
+          "REST API"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "클라우드 전환사업의 단계별 감리 방법과 검토항목에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "검토"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 군집분석 기법인 SOM(Self Organization Map)에 대하여 설명하시오.",
+        "categories": [
+          "미분류"
+        ],
+        "matched_keywords": []
+      }
+    ]
+  },
+  "통계": {
+    "카테고리별_문제수": {
+      "1. 정보 전략 및 관리": 4,
+      "2. 소프트웨어 공학": 7,
+      "3. 자료처리": 2,
+      "4. 컴퓨터 시스템 및 정보통신": 2,
+      "5. 정보보안": 1,
+      "6. 최신기술, 법규 및 정책": 4,
+      "미분류": 11
+    },
+    "카테고리별_문제목록": {
+      "1. 정보 전략 및 관리": [
+        "1교시 1. 터크만 사다리 모델(Tuckman Ladder Model)의 팀 발달 단계별 특징",
+        "1교시 2. 시장 규모 추정 방법인 TAM-SAM-SOM(Total Addressable Market-Serviceable Addressable Market-Serviceable Obtainable Market) 프레임 워크",
+        "2교시 5. \"5. ESG(Environment, Social, Governance) 경영에 대하여 설명하시오.",
+        "4교시 1. \"1. IT 프로젝트 관리에서 리스크 대응에 대하여 설명하시오."
+      ],
+      "2. 소프트웨어 공학": [
+        "1교시 5. 객체 간의 데이터 보호를 위한 정보은닉(Information Hiding)",
+        "3교시 1. 실행 중인 애플리케이션에 대한 배포 전략 및 테스트 전략에 대하여 설명하시오.",
+        "3교시 2. \"2. 소프트웨어 테스트에 대하여 설명하시오.",
+        "3교시 3. \"3. SBOM(Software Bill of Materials)에 대하여 설명하시오.",
+        "3교시 6. 일부 오픈소스 라이선스가 개방형(예: MIT, BSD 등)에서 폐쇄형(예: SSPL(Server Side Public License), BSL(Business Source License) 등)으로 변화하고 있다. 이러한 오픈소스 라이선스 정책 변경의 배경 및 소프트웨어 산업에 미치는 영향에 대하여 설명하시오.",
+        "4교시 4. \"4. 개방형 API(Open API)에 대하여 설명하시오.",
+        "4교시 5. 클라우드 전환사업의 단계별 감리 방법과 검토항목에 대하여 설명하시오."
+      ],
+      "3. 자료처리": [
+        "1교시 6. 이미지 데이터 어노테이션(Data Annotation) 유형과 기법",
+        "2교시 6. 트랜잭션 격리 수준(Transaction Isolation Level) 4가지를 사례 중심으로 설명하시오."
+      ],
+      "4. 컴퓨터 시스템 및 정보통신": [
+        "1교시 10. 스토리지 가상화(Storage Virtualization) 유형별 특징",
+        "1교시 12. 고대역 초고속 메모리(High Bandwidth Memory)"
+      ],
+      "5. 정보보안": [
+        "1교시 11. 개인정보 보호 강화기술(Privacy Enhancing Technology)"
+      ],
+      "6. 최신기술, 법규 및 정책": [
+        "1교시 3. 머신러닝(Machine Learning) 성능지표",
+        "2교시 4. \"4. 대규모 AI 서비스를 위한 데이터센터 구축 기술에 대하여 설명하시오.",
+        "4교시 2. \"2. 딥러닝에서 대규모 신경망을 효율적으로 훈련하기 위한 멀티 GPU 기술에 대하여 설명하시오.",
+        "4교시 3. AI 시스템에 대한 법적 이슈, 윤리적 문제, 기술적 문제에 대하여 설명하고 해결방안을 제시하시오."
+      ],
+      "미분류": [
+        "1교시 4. 형상관리의 개념과 형상관리 기준선(Baseline)",
+        "1교시 7. 정적 SQL(Static SQL)과 동적 SQL(Dynamic SQL) 비교",
+        "1교시 8. RIP(Routing Information Protocol)와 OSPF(Open Shortest Path First) 비교",
+        "1교시 9. 인터미턴트 컴퓨팅(Intermittent Computing)",
+        "1교시 13. RAG(Retrieval Augmented Generation)",
+        "2교시 1. \"1. 국가기관, 지방자치단체 및 공공기관이 안전하고 효율적으로 SaaS(Software as a Service)를 이용하기 위해 공공부문 SaaS 이용 가이드라인을 발표하였다. 다음에 대하여 설명하시오.",
+        "2교시 2. 소비자를 기만하여 이익을 편취하고자 하는 다크패턴(Dark Pattern)이 발생하고 있다. 이와 관련하여 다크패턴의 세부 유형 및 대응 방안을 설명하시오.",
+        "2교시 3. \"3. IT 커버넌스에 대하여 설명하시오.",
+        "3교시 4. 알고리즘의 복잡도를 설명하고 성능을 표기하기 위한 O-Notation의 개념과 유형 및 유형별 연산시간의 차이를 설명하시오.",
+        "3교시 5. 다차원 색인구조(Multidimensional Index Structure)의 개념, 유형, 활용 사례에 대하여 설명하시오.",
+        "4교시 6. \"6. 군집분석 기법인 SOM(Self Organization Map)에 대하여 설명하시오."
+      ]
+    },
+    "총_문제수": 31
+  }
+}

@@ -1,9 +1,11 @@
-# x Y� ��
+# KPC 온라인과정 자료
 kpc/
 
 # macOS
 .DS_Store
 
-# IDE
+# IDE₩
 .vscode/
 .idea/
+
+.claude/settings.local.json

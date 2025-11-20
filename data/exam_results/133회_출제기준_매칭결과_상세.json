@@ -1,0 +1,425 @@
+{
+  "분석일자": "2025-11-20",
+  "시험회차": "133회",
+  "분석결과": {
+    "1교시": [
+      {
+        "번호": "1",
+        "제목": "REST API(Representational State Transfer Application Programming Interface)에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "REST API",
+          "REST",
+          "RESTful",
+          "API",
+          "API 설계"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "소프트웨어 테스트 유형 중 뮤테이션 테스트(Mutation Test)에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "Mutation Test",
+          "Mutation",
+          "뮤테이션 테스트",
+          "테스트"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "NoSQL과 모델링 절차를 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "NoSQL"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "전자봉투 생성절차와 개봉절차를 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "전자봉투"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "동형암호(Homomorphic Encryption)의 동작원리와 유형을 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "Homomorphic Encryption",
+          "Homomorphic",
+          "동형암호"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "기술수용모델(Technology Acceptance Model: TAM)의 개념과 주요 구성요소에 대하여 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "TAM",
+          "기술수용모델",
+          "Technology Acceptance Model"
+        ]
+      },
+      {
+        "번호": "7",
+        "제목": "데이터모델링에서 CRUD 매트릭스(Matrix)를 사용하는 목적과 이를 표현하는 방법에 대하여 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "매트릭스",
+          "데이터모델링",
+          "CRUD"
+        ]
+      },
+      {
+        "번호": "8",
+        "제목": "인공지능 신뢰성의 개념과 핵심 속성에 대하여 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "신뢰성",
+          "인공지능"
+        ]
+      },
+      {
+        "번호": "9",
+        "제목": "BCP(Business Continuity Planning) 수립 시의 주요 지표와 DRS(Disaster Recovery System) 구축 시의 핵심 고려사항에 대하여 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "BCP",
+          "Disaster Recovery System",
+          "Business Continuity",
+          "Business Continuity Planning",
+          "Disaster Recovery",
+          "DRS"
+        ]
+      },
+      {
+        "번호": "10",
+        "제목": "딥페이크(Deepfake)에 대하여 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "Deepfake",
+          "딥페이크"
+        ]
+      },
+      {
+        "번호": "11",
+        "제목": "소프트웨어 유지보수 향상 및 비용절감을 위한 3R을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "유지보수"
+        ]
+      },
+      {
+        "번호": "12",
+        "제목": "쿠버네티스(Kubernetes)를 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "쿠버네티스"
+        ]
+      },
+      {
+        "번호": "13",
+        "제목": "TCP(Transmission Control Protocol)프로토콜의 3-way handshake와 4-way handshake를 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "handshake",
+          "TCP",
+          "프로토콜",
+          "Transmission Control Protocol"
+        ]
+      }
+    ],
+    "2교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 정보시스템 하드웨어 규모산정 지침(TTAK.KO-10.0292/R3, 2023.12.06. 개정)에 대하여 다음을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "규모산정"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 디지털 정부서비스 UI/UX 가이드라인’(2024.2, 행정안전부)은 디지털 서비스를 구성하는 사용자 인터페이스(User Interface; UI)와 사용자 경험(User Experience; UX) 품질에 큰 영향을 주는 요소에 대하여 행정기관 및 공공기관이 준수해야 할 세부사항을 제시한다. 이와 관련하여 다음을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "UI/UX",
+          "품질"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "ISO/IEC 20000에서 제시하는 기준을 중심으로, 정보기술 서비스 관리체계(ITSM)의 개념을 설명하고, 이 시스템의 서비스 설계 및 구축, 전환을 위한 활동에 대하여 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "서비스 관리",
+          "ISO 21500",
+          "ITSM",
+          "ISO"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "자연어 언어모델에서의 PLM(Pre-trained Language Model)의 특성을 설명하고, 이 모델이 최종 LLM(Large Language Model)으로 만들어지는 과정에 대하여 훈련 특성을 중심으로 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "Pre-trained Language Model",
+          "LLM",
+          "PLM"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. PbD(Privacy by Design)는 광범위한 네트워크 환경에서 발생할 수 있는 데이터 처리의 폐해를 방지하기 위해 캐나다 온타리오주의 정보 및 프라이버시 위원(Information and Privacy Commissioner)을 지낸 Ann Cavoukian이 처음 창안해 낸 개념이다. ICT분야의 프라이버시 보호를 위한 주요방법론으로서 다수의 국가에서 이를 정책에 반영하고 있다. 이와 관련하여 다음을 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "Privacy by Design",
+          "PbD"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "데이터 안심구역의 정의, 기능, 지정요건에 대하여 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": []
+      }
+    ],
+    "3교시": [
+      {
+        "번호": "1",
+        "제목": "안티포렌식(Anti-Forensic)이 등장하게 된 배경 및 기술을 설명하고, 안티포렌식에 대응하기 위한 컴플라이언스(Compliance) 시스템의 구축 프로세스와 활용 프로세스에 대하여 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "포렌식",
+          "안티포렌식",
+          "Anti-Forensic"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2. 국가사이버안보센터는 생성형AI의 보안위협과 안전한 활용을 위한 가이드라인(챗GPT 등 생성형 AI 활용 보안 가이드라인, 2023.6)을 발간하였다. 이와 관련하여 다음을 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "범용 AI",
+          "초거대 AI",
+          "AI",
+          "생성형AI"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. 슈퍼앱에 대하여 다음을 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "슈퍼앱"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 경영환경을 분석하는 방법인 SWOT(Strengths, Weaknesses, Opportunities, Threats)",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "SWOT"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 소프트웨어 요구공학(Requirement Engineering)에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "요구공학",
+          "Requirement Engineering"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 인공신경망에 대하여 다음을 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "인공신경망"
+        ]
+      }
+    ],
+    "4교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 데이터 중심 사회에서 데이터의 프라이버시와 보안은 매우 중요한 이슈로 부상하고 있고, 이를 해결하기 위한 다양한 기술적 접근이 시도되고 있다. 그러한 시도 중에서 다자간 계산(Multi-Party Computation: MPC)에 대하여 다음을 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "Multi-Party Computation",
+          "다자간 계산",
+          "MPC"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "정보시스템 개발과 운영 단계에서 수행되는 소프트웨어 테스트의 종류를 쓰고, 이 중 신뢰성 테스트와 이식성 테스트의 세부 활동에 대하여 각각 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "운영",
+          "테스트"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "정보보호 방법을 암호화와 접근제어로 크게 분류할 때, 접근제어에 대하여, 그 개념과 정책, 절차, 그리고 이를 구현하는 메커니즘에 대하여 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "접근제어",
+          "암호화"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. RDBMS를 적용하기 위한 데이터 모델링에 대하여 다음을 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "DBMS",
+          "RDBMS"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 5G 특화망을 위한 네트워크를 구축할 때 고려되어야 할 사항에 대하여 다음을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "특화망",
+          "네트워크",
+          "5G"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. VPN(Virtual Private Network)에 대하여 다음을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "VPN",
+          "Virtual Private",
+          "Virtual Private Network"
+        ]
+      }
+    ]
+  },
+  "통계": {
+    "카테고리별_문제수": {
+      "1. 정보 전략 및 관리": 4,
+      "2. 소프트웨어 공학": 7,
+      "3. 자료처리": 5,
+      "4. 컴퓨터 시스템 및 정보통신": 3,
+      "5. 정보보안": 5,
+      "6. 최신기술, 법규 및 정책": 7,
+      "미분류": 0
+    },
+    "카테고리별_문제목록": {
+      "1. 정보 전략 및 관리": [
+        "1교시 6. 기술수용모델(Technology Acceptance Model: TAM)의 개념과 주요 구성요소에 대하여 설명하시오.",
+        "1교시 9. BCP(Business Continuity Planning) 수립 시의 주요 지표와 DRS(Disaster Recovery System) 구축 시의 핵심 고려사항에 대하여 설명하시오.",
+        "2교시 3. ISO/IEC 20000에서 제시하는 기준을 중심으로, 정보기술 서비스 관리체계(ITSM)의 개념을 설명하고, 이 시스템의 서비스 설계 및 구축, 전환을 위한 활동에 대하여 설명하시오.",
+        "3교시 4. \"4. 경영환경을 분석하는 방법인 SWOT(Strengths, Weaknesses, Opportunities, Threats)"
+      ],
+      "2. 소프트웨어 공학": [
+        "1교시 1. REST API(Representational State Transfer Application Programming Interface)에 대하여 설명하시오.",
+        "1교시 2. 소프트웨어 테스트 유형 중 뮤테이션 테스트(Mutation Test)에 대하여 설명하시오.",
+        "1교시 11. 소프트웨어 유지보수 향상 및 비용절감을 위한 3R을 설명하시오.",
+        "2교시 1. \"1. 정보시스템 하드웨어 규모산정 지침(TTAK.KO-10.0292/R3, 2023.12.06. 개정)에 대하여 다음을 설명하시오.",
+        "2교시 2. \"2. 디지털 정부서비스 UI/UX 가이드라인’(2024.2, 행정안전부)은 디지털 서비스를 구성하는 사용자 인터페이스(User Interface; UI)와 사용자 경험(User Experience; UX) 품질에 큰 영향을 주는 요소에 대하여 행정기관 및 공공기관이 준수해야 할 세부사항을 제시한다. 이와 관련하여 다음을 설명하시오.",
+        "3교시 5. \"5. 소프트웨어 요구공학(Requirement Engineering)에 대하여 설명하시오.",
+        "4교시 2. 정보시스템 개발과 운영 단계에서 수행되는 소프트웨어 테스트의 종류를 쓰고, 이 중 신뢰성 테스트와 이식성 테스트의 세부 활동에 대하여 각각 설명하시오."
+      ],
+      "3. 자료처리": [
+        "1교시 3. NoSQL과 모델링 절차를 설명하시오.",
+        "1교시 7. 데이터모델링에서 CRUD 매트릭스(Matrix)를 사용하는 목적과 이를 표현하는 방법에 대하여 설명하시오.",
+        "2교시 6. 데이터 안심구역의 정의, 기능, 지정요건에 대하여 설명하시오.",
+        "4교시 1. \"1. 데이터 중심 사회에서 데이터의 프라이버시와 보안은 매우 중요한 이슈로 부상하고 있고, 이를 해결하기 위한 다양한 기술적 접근이 시도되고 있다. 그러한 시도 중에서 다자간 계산(Multi-Party Computation: MPC)에 대하여 다음을 설명하시오.",
+        "4교시 4. \"4. RDBMS를 적용하기 위한 데이터 모델링에 대하여 다음을 설명하시오."
+      ],
+      "4. 컴퓨터 시스템 및 정보통신": [
+        "1교시 13. TCP(Transmission Control Protocol)프로토콜의 3-way handshake와 4-way handshake를 설명하시오.",
+        "4교시 5. \"5. 5G 특화망을 위한 네트워크를 구축할 때 고려되어야 할 사항에 대하여 다음을 설명하시오.",
+        "4교시 6. \"6. VPN(Virtual Private Network)에 대하여 다음을 설명하시오."
+      ],
+      "5. 정보보안": [
+        "1교시 4. 전자봉투 생성절차와 개봉절차를 설명하시오.",
+        "1교시 5. 동형암호(Homomorphic Encryption)의 동작원리와 유형을 설명하시오.",
+        "2교시 5. \"5. PbD(Privacy by Design)는 광범위한 네트워크 환경에서 발생할 수 있는 데이터 처리의 폐해를 방지하기 위해 캐나다 온타리오주의 정보 및 프라이버시 위원(Information and Privacy Commissioner)을 지낸 Ann Cavoukian이 처음 창안해 낸 개념이다. ICT분야의 프라이버시 보호를 위한 주요방법론으로서 다수의 국가에서 이를 정책에 반영하고 있다. 이와 관련하여 다음을 설명하시오.",
+        "3교시 1. 안티포렌식(Anti-Forensic)이 등장하게 된 배경 및 기술을 설명하고, 안티포렌식에 대응하기 위한 컴플라이언스(Compliance) 시스템의 구축 프로세스와 활용 프로세스에 대하여 설명하시오.",
+        "4교시 3. 정보보호 방법을 암호화와 접근제어로 크게 분류할 때, 접근제어에 대하여, 그 개념과 정책, 절차, 그리고 이를 구현하는 메커니즘에 대하여 설명하시오."
+      ],
+      "6. 최신기술, 법규 및 정책": [
+        "1교시 8. 인공지능 신뢰성의 개념과 핵심 속성에 대하여 설명하시오.",
+        "1교시 10. 딥페이크(Deepfake)에 대하여 설명하시오.",
+        "1교시 12. 쿠버네티스(Kubernetes)를 설명하시오.",
+        "2교시 4. 자연어 언어모델에서의 PLM(Pre-trained Language Model)의 특성을 설명하고, 이 모델이 최종 LLM(Large Language Model)으로 만들어지는 과정에 대하여 훈련 특성을 중심으로 설명하시오.",
+        "3교시 2. \"2. 국가사이버안보센터는 생성형AI의 보안위협과 안전한 활용을 위한 가이드라인(챗GPT 등 생성형 AI 활용 보안 가이드라인, 2023.6)을 발간하였다. 이와 관련하여 다음을 설명하시오.",
+        "3교시 3. \"3. 슈퍼앱에 대하여 다음을 설명하시오.",
+        "3교시 6. \"6. 인공신경망에 대하여 다음을 설명하시오."
+      ],
+      "미분류": []
+    },
+    "총_문제수": 31
+  }
+}
