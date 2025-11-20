@@ -1,0 +1,397 @@
+{
+  "분석일자": "2025-11-20",
+  "시험회차": "137회",
+  "분석결과": {
+    "1교시": [
+      {
+        "번호": "1",
+        "제목": "동적 라우팅 프로토콜인 IGP (Interior Gateway Protocol)와 EGP (Exterior Gateway Protocol)를 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "라우팅 프로토콜",
+          "라우팅",
+          "프로토콜"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "디지털 포렌식에서 아티팩트(Artifact)를 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "포렌식",
+          "디지털 포렌식"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "MODBUS 프로토콜을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "프로토콜"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "암호문 공격(Ciphertext Attack)을 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "5",
+        "제목": "GNN(Graph Neural Network)을 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "GNN"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "AI 거버넌스(Artificial Intelligence Governance)를 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "초거대 AI",
+          "범용 AI",
+          "Governance",
+          "거버넌스",
+          "AI"
+        ]
+      },
+      {
+        "번호": "7",
+        "제목": "트랜스포머(Transformer)와 MoE(Mixture of Experts)를 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "Transformer",
+          "MoE"
+        ]
+      },
+      {
+        "번호": "8",
+        "제목": "AI 신뢰성 검증 제도(CAT)를 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "초거대 AI",
+          "범용 AI",
+          "AI",
+          "신뢰성"
+        ]
+      },
+      {
+        "번호": "9",
+        "제목": "A/B 테스트를 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "테스트"
+        ]
+      },
+      {
+        "번호": "10",
+        "제목": "데이터 늪(Data Swamp)을 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "11",
+        "제목": "소프트웨어의 역공학과 재공학을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": []
+      },
+      {
+        "번호": "12",
+        "제목": "이진 탐색 트리를 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "트리"
+        ]
+      },
+      {
+        "번호": "13",
+        "제목": "데이터마이닝의 연관 규칙 분석(Association Rule Analysis) 지표를 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "데이터마이닝",
+          "연관 규칙"
+        ]
+      }
+    ],
+    "2교시": [
+      {
+        "번호": "1",
+        "제목": "\"1.캐시 메모리(Cache Memory)에 대하여 다음을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "캐시",
+          "메모리"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2.(A)기업은 전자상거래 정보시스템 개발 프로젝트를 완료하고, 운영으로 전환하고자 한다. 각 항목을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "운영"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "MCP(Model Context Protocol)를 이용한 인공지능 서비스 구축 시 보안 취약점을 설명하고 대응 방안을 제시하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "MCP",
+          "인공지능"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4.“공공부문 초거대 AI 도입ㆍ활용 가이드라인 2.0”에 대하여 다음을 설명하시오.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "초거대 AI",
+          "범용 AI",
+          "AI"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5.소프트웨어 테스트 중 동적 테스트에 대하여 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "테스트"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6.TEXT2SQL에 대하여 다음 각 항목을 설명하시어.",
+        "categories": [
+          "6. 최신기술, 법규 및 정책"
+        ],
+        "matched_keywords": [
+          "TEXT2SQL"
+        ]
+      }
+    ],
+    "3교시": [
+      {
+        "번호": "1",
+        "제목": "\"1.운영체제 스케줄링 기법에 대한 각 내용을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "스케줄링",
+          "운영체제"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "\"2.정보시스템 감리의 시스템 운영 및 유지보수 감리에 대하여 다음을 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "유지보수",
+          "운영"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3.다중지역 동시 가동방식(Multi-Region Active-Active) 재해복구시스템에 대하여 다음을 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "재해복구"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4.데이터베이스 트랜잭션 격리 수준(Transaction Isolation Level)과 관련하여 아래 사항을 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "Transaction",
+          "데이터베이스",
+          "트랜잭션"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5.통신 프로토콜에 대하여 각 항목을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "프로토콜"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6.2025년 1월 국가정보원에서는 공공기관을 대상으로 국가 망 보안체계(National Network Security Framework, N2SF) 보안 가이드라인을 발표하였다. 다음에 대하여 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": []
+      }
+    ],
+    "4교시": [
+      {
+        "번호": "1",
+        "제목": "\"1.BPFdoor(Berkeley Packet Filter door) 악성코드와 관련하여 다음을 설명하시오.",
+        "categories": [
+          "5. 정보보안"
+        ],
+        "matched_keywords": [
+          "악성코드"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "벡터 데이터베이스(Vector Database)의 효율적 검색을 위한 HNSW(Hierarchical Navigable Small World)와 IVF(Inverted File Index)의 동작원리를 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "벡터 데이터베이스",
+          "데이터베이스"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3.쿠버네티스(Kubernetes)에 대하여 다음을 설명하시오.",
+        "categories": [
+          "4. 컴퓨터 시스템 및 정보통신"
+        ],
+        "matched_keywords": [
+          "Kubernetes",
+          "쿠버네티스"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "UML(Unified Modeling Language)에서 사용하는 행위 다이어그램(Behavior Diagram)인 활동 다이어그램(Acity Dragram), 상태 다이어그램(State Diagram), 그리고 유스케이스 다이어그램(Use-Case Diagram)에 대하여 각각 설명하시오.",
+        "categories": [
+          "2. 소프트웨어 공학"
+        ],
+        "matched_keywords": [
+          "다이어그램",
+          "UML"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5.유전 알고리즘(Genetic Algorithm)에 대하여 설명하시오.",
+        "categories": [
+          "3. 자료처리"
+        ],
+        "matched_keywords": [
+          "알고리즘"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6.소프트웨어 사업 대가산정에 대하여 다음을 설명하시오.",
+        "categories": [
+          "1. 정보 전략 및 관리"
+        ],
+        "matched_keywords": [
+          "대가산정"
+        ]
+      }
+    ]
+  },
+  "통계": {
+    "카테고리별_문제수": {
+      "1. 정보 전략 및 관리": 2,
+      "2. 소프트웨어 공학": 6,
+      "3. 자료처리": 6,
+      "4. 컴퓨터 시스템 및 정보통신": 6,
+      "5. 정보보안": 4,
+      "6. 최신기술, 법규 및 정책": 7,
+      "미분류": 0
+    },
+    "카테고리별_문제목록": {
+      "1. 정보 전략 및 관리": [
+        "3교시 3. \"3.다중지역 동시 가동방식(Multi-Region Active-Active) 재해복구시스템에 대하여 다음을 설명하시오.",
+        "4교시 6. \"6.소프트웨어 사업 대가산정에 대하여 다음을 설명하시오."
+      ],
+      "2. 소프트웨어 공학": [
+        "1교시 9. A/B 테스트를 설명하시오.",
+        "1교시 11. 소프트웨어의 역공학과 재공학을 설명하시오.",
+        "2교시 2. \"2.(A)기업은 전자상거래 정보시스템 개발 프로젝트를 완료하고, 운영으로 전환하고자 한다. 각 항목을 설명하시오.",
+        "2교시 5. \"5.소프트웨어 테스트 중 동적 테스트에 대하여 설명하시오.",
+        "3교시 2. \"2.정보시스템 감리의 시스템 운영 및 유지보수 감리에 대하여 다음을 설명하시오.",
+        "4교시 4. UML(Unified Modeling Language)에서 사용하는 행위 다이어그램(Behavior Diagram)인 활동 다이어그램(Acity Dragram), 상태 다이어그램(State Diagram), 그리고 유스케이스 다이어그램(Use-Case Diagram)에 대하여 각각 설명하시오."
+      ],
+      "3. 자료처리": [
+        "1교시 10. 데이터 늪(Data Swamp)을 설명하시오.",
+        "1교시 12. 이진 탐색 트리를 설명하시오.",
+        "1교시 13. 데이터마이닝의 연관 규칙 분석(Association Rule Analysis) 지표를 설명하시오.",
+        "3교시 4. \"4.데이터베이스 트랜잭션 격리 수준(Transaction Isolation Level)과 관련하여 아래 사항을 설명하시오.",
+        "4교시 2. 벡터 데이터베이스(Vector Database)의 효율적 검색을 위한 HNSW(Hierarchical Navigable Small World)와 IVF(Inverted File Index)의 동작원리를 설명하시오.",
+        "4교시 5. \"5.유전 알고리즘(Genetic Algorithm)에 대하여 설명하시오."
+      ],
+      "4. 컴퓨터 시스템 및 정보통신": [
+        "1교시 1. 동적 라우팅 프로토콜인 IGP (Interior Gateway Protocol)와 EGP (Exterior Gateway Protocol)를 설명하시오.",
+        "1교시 3. MODBUS 프로토콜을 설명하시오.",
+        "2교시 1. \"1.캐시 메모리(Cache Memory)에 대하여 다음을 설명하시오.",
+        "3교시 1. \"1.운영체제 스케줄링 기법에 대한 각 내용을 설명하시오.",
+        "3교시 5. \"5.통신 프로토콜에 대하여 각 항목을 설명하시오.",
+        "4교시 3. \"3.쿠버네티스(Kubernetes)에 대하여 다음을 설명하시오."
+      ],
+      "5. 정보보안": [
+        "1교시 2. 디지털 포렌식에서 아티팩트(Artifact)를 설명하시오.",
+        "1교시 4. 암호문 공격(Ciphertext Attack)을 설명하시오.",
+        "3교시 6. \"6.2025년 1월 국가정보원에서는 공공기관을 대상으로 국가 망 보안체계(National Network Security Framework, N2SF) 보안 가이드라인을 발표하였다. 다음에 대하여 설명하시오.",
+        "4교시 1. \"1.BPFdoor(Berkeley Packet Filter door) 악성코드와 관련하여 다음을 설명하시오."
+      ],
+      "6. 최신기술, 법규 및 정책": [
+        "1교시 5. GNN(Graph Neural Network)을 설명하시오.",
+        "1교시 6. AI 거버넌스(Artificial Intelligence Governance)를 설명하시오.",
+        "1교시 7. 트랜스포머(Transformer)와 MoE(Mixture of Experts)를 설명하시오.",
+        "1교시 8. AI 신뢰성 검증 제도(CAT)를 설명하시오.",
+        "2교시 3. MCP(Model Context Protocol)를 이용한 인공지능 서비스 구축 시 보안 취약점을 설명하고 대응 방안을 제시하시오.",
+        "2교시 4. \"4.“공공부문 초거대 AI 도입ㆍ활용 가이드라인 2.0”에 대하여 다음을 설명하시오.",
+        "2교시 6. \"6.TEXT2SQL에 대하여 다음 각 항목을 설명하시어."
+      ],
+      "미분류": []
+    },
+    "총_문제수": 31
+  }
+}

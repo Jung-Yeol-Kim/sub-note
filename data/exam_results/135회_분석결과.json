@@ -1,0 +1,286 @@
+{
+  "exam_number": "135",
+  "analysis_date": "2025-11-20",
+  "questions": {
+    "1교시": [
+      {
+        "번호": "1",
+        "제목": "PR(Precision Recall) 곡선과 ROC(Receiver Operating Characteristic) 곡선 비교",
+        "키워드": [
+          "PR",
+          "ROC",
+          "Precision Recall",
+          "Receiver Operating Characteristic"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "Multimodal LLM(Large Language Model)",
+        "키워드": [
+          "LLM",
+          "Large Language Model"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "요구사항 추적표(Requirement Traceabillity Matrix)",
+        "키워드": [
+          "Requirement Traceabillity Matrix"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "IBN(Intent-Based Networking)",
+        "키워드": [
+          "IBN"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "SIEM(Security Information & Event Management)와 SOAR(Security Orchestration, Automation & Response) 비교",
+        "키워드": [
+          "SIEM",
+          "SOAR"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "실루엣 계수(Silhouette Coefficient)",
+        "키워드": [
+          "Silhouette Coefficient"
+        ]
+      },
+      {
+        "번호": "7",
+        "제목": "개인정보 안심구역",
+        "키워드": []
+      },
+      {
+        "번호": "8",
+        "제목": "불편추정량(Unbiased Estimator)",
+        "키워드": [
+          "Unbiased Estimator"
+        ]
+      },
+      {
+        "번호": "9",
+        "제목": "소프트웨어 기술 부채의 유형과 관리 방법",
+        "키워드": []
+      },
+      {
+        "번호": "10",
+        "제목": "IEEE 802bn",
+        "키워드": [
+          "IEEE"
+        ]
+      },
+      {
+        "번호": "11",
+        "제목": "팬텀충돌(Phantom Conflict)",
+        "키워드": [
+          "Phantom Conflict"
+        ]
+      },
+      {
+        "번호": "12",
+        "제목": "VAE(Variational AutoEncoder)",
+        "키워드": [
+          "VAE",
+          "Variational AutoEncoder"
+        ]
+      },
+      {
+        "번호": "13",
+        "제목": "AGI(Artificial General Intelligence) 측면에서 ANI(Artificial Narrow Intelligence)의 필요성",
+        "키워드": [
+          "AGI",
+          "ANI",
+          "Artificial General Intelligence",
+          "Artificial Narrow Intelligence"
+        ]
+      }
+    ],
+    "2교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 물리 데이터 모델링 중 반정규화에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "2",
+        "제목": "CI/CD(Continuous Integration/Continuous Delivery or Continuous Deployment) 파이프라인에서 DevSecOps 적용방안에 대하여 설명하시오.",
+        "키워드": [
+          "CI",
+          "CD"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "희귀모형에서 오차의 등분산성(Homoscedasticity)과 다중공선성(Multicollinearity)에 대하여 설명하시오.",
+        "키워드": [
+          "Homoscedasticity",
+          "Multicollinearity"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 6G 이동통신기술에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 최근 많은 공공기관에서 거대 언어 모델(Large Language Model)의 적용을 준비하고 있다. 다음에 대하여 설명하시오.",
+        "키워드": [
+          "Large Language Model"
+        ]
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. AI 디지털교과서에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "AI"
+        ]
+      }
+    ],
+    "3교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. IT 프로젝트 관리에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "IT"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "프롬프트 엔지니어링(Prompt Engineering)의 기술 요소와 활용 방안에 대하여 설명하시오.",
+        "키워드": [
+          "Prompt Engineering"
+        ]
+      },
+      {
+        "번호": "3",
+        "제목": "\"3. 멀티클라우드(MultiCloud)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "MultiCloud"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 양자 암호 기술에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 데이터 거래를 위한 데이터 가치평가에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "6",
+        "제목": "\"6. 딥페이크(Deepfake)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Deepfake"
+        ]
+      }
+    ],
+    "4교시": [
+      {
+        "번호": "1",
+        "제목": "\"1. 확장성 해싱(Extendible Hashing)기법에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Extendible Hashing"
+        ]
+      },
+      {
+        "번호": "2",
+        "제목": "릴레이션 무결성 제약의 유형과 사례를 제시하고, 구현 방법에 대하여 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "3",
+        "제목": "이항 분포(Binomial Distribution)와 포아송 분포(Poisson Distribution)를 비교 설명하시오.",
+        "키워드": [
+          "Binomial Distribution",
+          "Poisson Distribution"
+        ]
+      },
+      {
+        "번호": "4",
+        "제목": "\"4. 빅데이터 시각화(Visualization)에 대하여 다음을 설명하시오.",
+        "키워드": [
+          "Visualization"
+        ]
+      },
+      {
+        "번호": "5",
+        "제목": "\"5. 인공지능 소프트웨어 품질 보증을 위한 테스트 기법에 대하여 다음을 설명하시오.",
+        "키워드": []
+      },
+      {
+        "번호": "6",
+        "제목": "경계 기반 보안(Perimeter Security)과 제로 트러스트(Zero Trust) 성숙도모델 2.0에 대하여 비교 설명하고, 제로 트러스트 아키텍처 도입 시 고려사항에 대하여 설명하시오.",
+        "키워드": [
+          "Perimeter Security",
+          "Zero Trust"
+        ]
+      }
+    ]
+  },
+  "statistics": {
+    "total_questions": 31,
+    "category_count": {
+      "1. 정보 전략 및 관리": 2,
+      "2. 소프트웨어 공학": 3,
+      "3. 자료처리": 8,
+      "4. 컴퓨터 시스템 및 정보통신": 3,
+      "5. 정보보안": 4,
+      "6. 최신기술, 법규 및 정책": 11,
+      "미분류": 0
+    },
+    "category_questions": {
+      "1. 정보 전략 및 관리": [
+        "1교시 3. 요구사항 추적표(Requirement Traceabillity Matrix)",
+        "4교시 3. 이항 분포(Binomial Distribution)와 포아송 분포(Poisson Distribution)를 비교 설명하시오."
+      ],
+      "2. 소프트웨어 공학": [
+        "1교시 9. 소프트웨어 기술 부채의 유형과 관리 방법",
+        "2교시 2. CI/CD(Continuous Integration/Continuous Delivery or Continuous Deployment) 파이프라인에서 DevSecOps 적용방안에 대하여 설명하시오.",
+        "4교시 5. \"5. 인공지능 소프트웨어 품질 보증을 위한 테스트 기법에 대하여 다음을 설명하시오."
+      ],
+      "3. 자료처리": [
+        "1교시 8. 불편추정량(Unbiased Estimator)",
+        "1교시 11. 팬텀충돌(Phantom Conflict)",
+        "2교시 1. \"1. 물리 데이터 모델링 중 반정규화에 대하여 다음을 설명하시오.",
+        "2교시 3. 희귀모형에서 오차의 등분산성(Homoscedasticity)과 다중공선성(Multicollinearity)에 대하여 설명하시오.",
+        "3교시 5. \"5. 데이터 거래를 위한 데이터 가치평가에 대하여 다음을 설명하시오.",
+        "4교시 1. \"1. 확장성 해싱(Extendible Hashing)기법에 대하여 다음을 설명하시오.",
+        "4교시 2. 릴레이션 무결성 제약의 유형과 사례를 제시하고, 구현 방법에 대하여 설명하시오.",
+        "4교시 4. \"4. 빅데이터 시각화(Visualization)에 대하여 다음을 설명하시오."
+      ],
+      "4. 컴퓨터 시스템 및 정보통신": [
+        "1교시 4. IBN(Intent-Based Networking)",
+        "1교시 10. IEEE 802bn",
+        "3교시 3. \"3. 멀티클라우드(MultiCloud)에 대하여 다음을 설명하시오."
+      ],
+      "5. 정보보안": [
+        "1교시 5. SIEM(Security Information & Event Management)와 SOAR(Security Orchestration, Automation & Response) 비교",
+        "1교시 7. 개인정보 안심구역",
+        "3교시 4. \"4. 양자 암호 기술에 대하여 다음을 설명하시오.",
+        "4교시 6. 경계 기반 보안(Perimeter Security)과 제로 트러스트(Zero Trust) 성숙도모델 2.0에 대하여 비교 설명하고, 제로 트러스트 아키텍처 도입 시 고려사항에 대하여 설명하시오."
+      ],
+      "6. 최신기술, 법규 및 정책": [
+        "1교시 1. PR(Precision Recall) 곡선과 ROC(Receiver Operating Characteristic) 곡선 비교",
+        "1교시 2. Multimodal LLM(Large Language Model)",
+        "1교시 6. 실루엣 계수(Silhouette Coefficient)",
+        "1교시 12. VAE(Variational AutoEncoder)",
+        "1교시 13. AGI(Artificial General Intelligence) 측면에서 ANI(Artificial Narrow Intelligence)의 필요성",
+        "2교시 4. \"4. 6G 이동통신기술에 대하여 다음을 설명하시오.",
+        "2교시 5. \"5. 최근 많은 공공기관에서 거대 언어 모델(Large Language Model)의 적용을 준비하고 있다. 다음에 대하여 설명하시오.",
+        "2교시 6. \"6. AI 디지털교과서에 대하여 다음을 설명하시오.",
+        "3교시 1. \"1. IT 프로젝트 관리에 대하여 다음을 설명하시오.",
+        "3교시 2. 프롬프트 엔지니어링(Prompt Engineering)의 기술 요소와 활용 방안에 대하여 설명하시오.",
+        "3교시 6. \"6. 딥페이크(Deepfake)에 대하여 다음을 설명하시오."
+      ],
+      "미분류": []
+    }
+  }
+}

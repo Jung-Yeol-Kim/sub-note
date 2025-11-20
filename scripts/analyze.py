@@ -53,7 +53,8 @@ SYLLABUS_STRUCTURE = {
             "애자일", "아키텍처 스타일", "통합 테스트", "Integration Test",
             "소프트웨어 안전성", "SBOM", "Software Bill of Material", "규모산정",
             "정보은닉", "Information Hiding", "REST API", "RESTful", "API 설계",
-            "뮤테이션 테스트", "Mutation Test", "요구공학", "Requirement Engineering"
+            "뮤테이션 테스트", "Mutation Test", "요구공학", "Requirement Engineering",
+            "형상관리", "Configuration Management", "Baseline", "기준선"
         ],
         "키워드": ["소프트웨어", "테스트", "감리", "UML", "다이어그램", "개발", "설계",
                   "역공학", "재공학", "인스펙션", "검토", "제품계열", "DevOps", "DevSecOps",
@@ -63,7 +64,8 @@ SYLLABUS_STRUCTURE = {
                   "Event Driven", "아키텍처", "노코드", "no-code", "요구사항명세서",
                   "DataOps", "데이터옵스", "빅데이터", "폭포수", "애자일", "통합 테스트",
                   "Integration", "안전성", "SBOM", "규모산정", "정보은닉", "REST", "API",
-                  "RESTful", "뮤테이션", "Mutation", "요구공학", "Requirement Engineering"]
+                  "RESTful", "뮤테이션", "Mutation", "요구공학", "Requirement Engineering",
+                  "형상관리", "Configuration", "Baseline", "기준선"]
     },
     "3. 자료처리": {
         "세부항목": [
@@ -79,7 +81,11 @@ SYLLABUS_STRUCTURE = {
             "스택", "큐", "리스트", "선형 자료구조", "TF-IDF", "형태소 분석",
             "Term Frequency", "Inverse Document Frequency", "텍스트 마이닝",
             "NoSQL", "CRUD", "매트릭스", "RDBMS", "관계형 데이터베이스",
-            "다자간 계산", "MPC", "Multi-Party Computation"
+            "다자간 계산", "MPC", "Multi-Party Computation", "정적 SQL", "동적 SQL",
+            "Static SQL", "Dynamic SQL", "SQL 비교", "알고리즘", "복잡도",
+            "O-Notation", "Big O", "시간복잡도", "다차원 색인구조", "Multidimensional Index Structure",
+            "색인구조", "Index Structure", "다차원", "인덱스", "팬텀충돌", "Phantom Conflict",
+            "팬텀", "확장성 해싱", "Extendible Hashing", "해싱", "Hashing"
         ],
         "키워드": ["자료구조", "데이터", "DB", "트리", "마이닝", "트랜잭션", "벡터",
                   "정규형", "정규화", "아웃라이어", "이상치", "F1", "Clustering",
@@ -90,7 +96,10 @@ SYLLABUS_STRUCTURE = {
                   "학습용", "정렬", "점추정", "구간추정", "추정", "다중공선성", "Multicollinearity",
                   "스택", "큐", "리스트", "선형 자료", "TF-IDF", "형태소", "Term Frequency",
                   "텍스트 마이닝", "NoSQL", "CRUD", "매트릭스", "RDBMS", "관계형",
-                  "MPC", "Multi-Party", "다자간"]
+                  "MPC", "Multi-Party", "다자간", "정적 SQL", "동적 SQL", "Static SQL",
+                  "Dynamic SQL", "알고리즘", "복잡도", "O-Notation", "Big O", "시간복잡도",
+                  "색인구조", "Index Structure", "다차원", "인덱스", "Multidimensional",
+                  "팬텀충돌", "Phantom Conflict", "팬텀", "해싱", "Hashing", "Extendible"]
     },
     "4. 컴퓨터 시스템 및 정보통신": {
         "세부항목": [
@@ -104,7 +113,12 @@ SYLLABUS_STRUCTURE = {
             "오토 스케일링", "Auto Scaling", "페이징", "소켓 통신", "Socket",
             "ELK", "Elasticsearch", "Logstash", "Kibana", "로그 분석",
             "SCTP", "Stream Control Transmission Protocol", "전송 프로토콜",
-            "VPN", "Virtual Private Network", "5G", "특화망", "handshake"
+            "VPN", "Virtual Private Network", "5G", "특화망", "handshake",
+            "RIP", "Routing Information Protocol", "OSPF", "Open Shortest Path First",
+            "라우팅 프로토콜", "Routing Protocol", "인터미턴트 컴퓨팅", "Intermittent Computing",
+            "간헐적 컴퓨팅", "IBN", "Intent-Based Networking", "의도 기반 네트워킹",
+            "IEEE 802", "무선랜", "표준", "IPC", "Inter Process Communication", "프로세스 간 통신",
+            "쿠버네티스", "Kubernetes", "컨테이너 오케스트레이션"
         ],
         "키워드": ["운영체제", "네트워크", "프로토콜", "라우팅", "캐시", "메모리", "스케줄링",
                   "클라우드", "서버리스", "CXL", "세그먼테이션", "동기화", "누수",
@@ -112,7 +126,10 @@ SYLLABUS_STRUCTURE = {
                   "subnetting", "TCP", "Congestion", "NFC", "Near Field", "Service Model",
                   "Deployment", "오토 스케일링", "Auto Scaling", "페이징", "소켓", "Socket",
                   "ELK", "Elasticsearch", "Logstash", "Kibana", "로그", "SCTP",
-                  "Stream Control", "전송", "VPN", "Virtual Private", "5G", "특화망", "handshake"]
+                  "Stream Control", "전송", "VPN", "Virtual Private", "5G", "특화망", "handshake",
+                  "RIP", "OSPF", "Routing Information", "Open Shortest Path", "라우팅 프로토콜",
+                  "인터미턴트", "Intermittent", "간헐적", "IBN", "Intent-Based", "IEEE", "802", "무선랜",
+                  "IPC", "Inter Process", "프로세스 간 통신", "쿠버네티스", "Kubernetes", "컨테이너"]
     },
     "5. 정보보안": {
         "세부항목": [
@@ -129,7 +146,9 @@ SYLLABUS_STRUCTURE = {
             "FIPS", "Federal Information Processing Standard", "암호 표준",
             "CBPR", "Cross Border Privacy Rules", "국제 개인정보", "마이데이터",
             "동형암호", "Homomorphic Encryption", "안티포렌식", "Anti-Forensic",
-            "전자봉투", "PbD", "Privacy by Design"
+            "전자봉투", "PbD", "Privacy by Design", "SIEM", "SOAR",
+            "Security Information & Event Management", "Security Orchestration",
+            "보안 정보", "이벤트 관리", "보안 오케스트레이션"
         ],
         "키워드": ["보안", "암호", "포렌식", "취약점", "악성코드", "백도어", "BPFdoor",
                   "CC", "인증", "ECC", "타원곡선", "E2E", "제로트러스트", "개인정보", "안심구역",
@@ -140,30 +159,47 @@ SYLLABUS_STRUCTURE = {
                   "TPM", "Trusted Platform", "하드웨어 보안", "신뢰", "FIPS", "Federal Information",
                   "암호 표준", "CBPR", "Cross Border", "Privacy Rules", "마이데이터",
                   "동형암호", "Homomorphic", "안티포렌식", "Anti-Forensic", "전자봉투",
-                  "PbD", "Privacy by Design"]
+                  "PbD", "Privacy by Design", "SIEM", "SOAR", "Security Information",
+                  "Security Orchestration", "이벤트 관리", "오케스트레이션"]
     },
     "6. 최신기술, 법규 및 정책": {
         "세부항목": [
             "인공지능", "AI", "영상", "그래픽", "IoT", "모바일", "클라우드",
             "스마트팩토리", "전자정부법", "개인정보보호법", "소프트웨어진흥법",
-            "데이터산업법", "MCP", "Transformer", "GNN", "MoE", "쿠버네티스",
+            "데이터산업법", "MCP", "Transformer", "GNN", "MoE",
             "초거대 AI", "TEXT2SQL", "범용 AI", "GPAI", "에이전틱", "Agentic",
-            "LLM", "생성형AI", "윤리", "화이트레이블", "마케팅", "프록시",
+            "LLM", "Large Language Model", "거대 언어 모델", "생성형AI", "윤리", "화이트레이블", "마케팅", "프록시",
             "디지털 플랫폼", "딥뷰", "DeepView", "반도체", "정보보호 제품", "신속 확인",
             "6G", "이동통신", "메타버스", "디지털 역기능", "Machine Learning",
             "머신러닝", "웹3.0", "최적화 알고리즘", "딥러닝", "Deep Learning",
             "파운데이션 모델", "Foundation", "LangChain", "프레임워크",
             "예지정비", "Predictive Maintenance", "설비 정비", "딥페이크", "Deepfake",
-            "슈퍼앱", "인공신경망", "PLM", "Pre-trained Language Model", "신뢰성"
+            "슈퍼앱", "인공신경망", "PLM", "Pre-trained Language Model", "신뢰성",
+            "RAG", "Retrieval Augmented Generation", "검색 증강 생성", "SaaS",
+            "Software as a Service", "다크패턴", "Dark Pattern", "IT 거버넌스",
+            "IT Governance", "거버넌스", "Governance", "군집분석", "Clustering Analysis",
+            "Self Organization Map", "PR 곡선", "ROC 곡선", "Precision Recall",
+            "Receiver Operating Characteristic", "성능지표", "실루엣 계수", "Silhouette Coefficient",
+            "실루엣", "VAE", "Variational AutoEncoder", "오토인코더", "AGI", "ANI",
+            "Artificial General Intelligence", "Artificial Narrow Intelligence",
+            "범용 인공지능", "약한 인공지능", "프롬프트 엔지니어링", "Prompt Engineering", "프롬프트",
+            "혼동행렬", "Confusion Matrix"
         ],
         "키워드": ["AI", "인공지능", "GNN", "Transformer", "MoE", "초거대", "클라우드",
-                  "쿠버네티스", "TEXT2SQL", "거버넌스", "검인증", "GPAI", "범용", "Agentic",
-                  "에이전틱", "LLM", "MCP", "생성형", "윤리", "화이트레이블", "프록시",
+                  "TEXT2SQL", "거버넌스", "검인증", "GPAI", "범용", "Agentic",
+                  "에이전틱", "LLM", "Large Language", "거대 언어", "MCP", "생성형", "윤리", "화이트레이블", "프록시",
                   "디지털 플랫폼", "정부", "딥뷰", "DeepView", "반도체", "정보보호 제품", "법규", "정책",
                   "6G", "이동통신", "메타버스", "디지털 역기능", "Machine Learning", "머신러닝",
                   "웹3.0", "Optimization", "딥러닝", "Deep Learning", "파운데이션", "Foundation",
                   "LangChain", "프레임워크", "예지정비", "Predictive Maintenance", "설비",
-                  "딥페이크", "Deepfake", "슈퍼앱", "신경망", "PLM", "Pre-trained", "신뢰성"]
+                  "딥페이크", "Deepfake", "슈퍼앱", "신경망", "PLM", "Pre-trained", "신뢰성",
+                  "RAG", "Retrieval Augmented", "검색 증강", "SaaS", "Software as a Service",
+                  "다크패턴", "Dark Pattern", "IT 거버넌스", "Governance", "거버넌스",
+                  "군집분석", "Clustering Analysis", "Self Organization", "PR 곡선", "ROC",
+                  "Precision Recall", "Receiver Operating", "성능지표", "실루엣", "Silhouette",
+                  "VAE", "Variational", "AutoEncoder", "오토인코더", "AGI", "ANI",
+                  "General Intelligence", "Narrow Intelligence", "범용", "프롬프트", "Prompt Engineering",
+                  "혼동행렬", "Confusion Matrix"]
     }
 }
 

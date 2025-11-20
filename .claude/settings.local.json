@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(python scripts/parse_exam_txt.py:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
