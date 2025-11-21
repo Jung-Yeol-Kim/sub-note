@@ -1,6 +1,6 @@
 "use server";
 
-import { db, subNotes } from "@/src/db";
+import { db, subNotes } from "@/db";
 import { eq, desc, and, like } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
