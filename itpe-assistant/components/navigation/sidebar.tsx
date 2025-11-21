@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   Settings,
 } from "lucide-react";
+import { AuthButton } from "@/components/auth/auth-button";
 
 const navigationItems = [
   {
@@ -99,7 +100,11 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-stone-200 p-4">
+        <div className="border-t border-stone-200 p-4 space-y-2">
+          <div className="flex items-center justify-between px-3">
+            <span className="text-xs text-stone-500">Account</span>
+            <AuthButton />
+          </div>
           <Link
             href="/settings"
             className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 transition-all hover:bg-stone-100/60 hover:text-stone-900"
