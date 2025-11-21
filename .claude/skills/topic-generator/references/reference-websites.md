@@ -7,14 +7,142 @@
 
 ## 우선순위 체계
 
-1. **1순위**: 공식 문서 (Official Documentation)
-2. **2순위**: IT 전문 위키 및 표준 문서
-3. **3순위**: 주요 IT 기업 기술 블로그
-4. **4순위**: 학술 자료 및 커뮤니티
+1. **1순위**: 정부기관 정책 문서 (출제 트렌드 반영)
+2. **2순위**: 공식 문서 및 최신 표준 (Official Documentation & Standards)
+3. **3순위**: IT 전문 위키 및 실무 벤치마크
+4. **4순위**: 주요 IT 기업 기술 블로그 (실무 사례)
+5. **5순위**: 학술 자료 및 커뮤니티
 
-## 1순위: 공식 문서 (Official Documentation)
+## 핵심 조사 원칙 (출제 패턴 분석 기반)
 
-### 1.1 클라우드 플랫폼
+### "왜 출제되었는가?" 관점
+- **표면 키워드 X**: BPFDoor 악성코드 (일회성)
+- **근본 기술 O**: eBPF 프로그래밍 모델 (파생 기술)
+- **출제 배경 분석**: RAG 유행 → 벡터 DB → HNSW 알고리즘
+- **정책-출제 연결**: 정부 정책 발표 후 6-12개월 이내 출제
+
+### 실무 중심 접근
+- **성능 수치**: Before/After ROI, 벤치마크 데이터
+- **도입 사례**: A 공공기관, B 기업 구체적 사례
+- **비용 절감**: 정량적 효과 (40% 절감, 3배 향상 등)
+
+## 1순위: 정부기관 정책 문서 (출제 트렌드의 핵심)
+
+### 정부 정책 → 출제 패턴 연결
+
+**핵심 원칙**: 정보관리기술사는 국가사업 제안서/발주 시 기술 자문 역할
+→ 정부 정책 방향 = 출제 트렌드
+
+### 1.1 행정안전부 (MOIS)
+- **URL**: https://www.mois.go.kr/
+- **핵심 정책**:
+  - 2025 공공기관 100% 클라우드 전환
+  - N2SF (National Network Security Framework) 도입
+  - CSAP (Cloud Security Assurance Program)
+- **출제 연계**:
+  - 137회 N2SF 출제 → 138회 구현 상세 예상
+  - 클라우드 전환 전략, 하이브리드 운영
+- **활용**: 공공 클라우드, 망분리 대체, 보안 인증
+
+### 1.2 한국지능정보사회진흥원 (NIA)
+- **URL**: https://www.nia.or.kr/
+- **핵심 정책**:
+  - 2025 초거대 AI 생태계 구축
+  - 버티컬 AI 데이터 구축 사업
+  - AI 애자일 혁신서비스 개발 지원
+- **출제 연계**:
+  - 버티컬 AI 데이터 구축 전략 (138회 예상 ★★★★★)
+  - LLMOps 파이프라인 (136, 137회 MCP 연속 출제 → 운영 확장)
+  - 초거대 AI 인프라 아키텍처
+- **활용**: AI 데이터 품질 관리, 도메인 특화 AI, LLM 운영
+
+### 1.3 과학기술정보통신부 (MSIT)
+- **URL**: https://www.msit.go.kr/
+- **핵심 정책**:
+  - AI 기본법 하위법령 정비 (2025)
+  - 국가 AI 컴퓨팅 센터 구축
+  - 양자 기술 국가 전략
+- **출제 연계**:
+  - NIST PQC 표준 (Kyber, Dilithium) (135회 양자 암호 심화 ★★★★☆)
+  - AI 신뢰성 확보 기술 (XAI, Fairness)
+  - 양자 컴퓨팅 활용 시나리오
+- **활용**: PQC 마이그레이션, AI 거버넌스, 양자내성암호
+
+### 1.4 한국인터넷진흥원 (KISA)
+- **URL**: https://www.kisa.or.kr/
+- **핵심 가이드**:
+  - ISMS-P 클라우드 보안 인증 강화
+  - 소프트웨어 보안약점 진단 가이드
+  - 2025 시민 사이버보안 서비스
+- **출제 연계**:
+  - 컨테이너 보안 (eBPF 기반) (133, 137회 K8s → 보안 심화)
+  - SBOM 기반 공급망 보안 (134회 출제 → 구현 상세 재출제)
+  - 프롬프트 인젝션 방어
+- **활용**: 멀티클라우드 보안, SBOM 자동화, LLM 보안
+
+### 정부 정책 활용 전략
+
+**출제 예측 공식**:
+```
+정부 정책 발표 (2024.06) → 6~12개월 → 출제 (138회 2025.03)
+
+예시:
+- 행안부 N2SF (2024) → 137회 출제 → 138회 구현 상세
+- NIA 버티컬 AI (2025 Q1) → 138회 신규 출제 가능성 ★★★★★
+- 과기정통부 PQC (2024.08) → 138회 NIST 표준 출제
+```
+
+**모니터링 주기**:
+- 매월 4개 기관 홈페이지 확인
+- 법령 개정 추적 (AI 기본법, 클라우드 관련)
+- 사업 공고 분석 (NIA, KISA 키워드 추출)
+
+## 2순위: 공식 문서 및 최신 표준
+
+### 2.0 AI/LLM 관련 최신 문서 (2024-2025 핵심)
+
+#### NIST (미국 국립표준기술연구소)
+- **NIST PQC 표준**: https://csrc.nist.gov/projects/post-quantum-cryptography
+  - FIPS 203 (ML-KEM / Kyber)
+  - FIPS 204 (ML-DSA / Dilithium)
+  - FIPS 205 (SLH-DSA / Sphincs+)
+  - **출제 연계**: 135회 양자 암호 → 138회 NIST PQC 표준 심화
+- **NIST AI RMF**: https://www.nist.gov/itl/ai-risk-management-framework
+  - AI 위험 관리 프레임워크
+  - Trustworthy AI, Explainability
+
+#### vLLM (LLM 추론 최적화)
+- **URL**: https://docs.vllm.ai/
+- **핵심 기술**:
+  - PagedAttention 알고리즘
+  - KV Cache 메모리 최적화
+  - Continuous Batching
+- **출제 연계**: LLM 인프라, 초거대 AI 서빙
+
+#### LangChain / LlamaIndex
+- **LangChain**: https://python.langchain.com/docs/
+  - LLM 체인 구성, 에이전트 프레임워크
+  - MCP (Model Context Protocol) 연계
+- **LlamaIndex**: https://docs.llamaindex.ai/
+  - RAG 파이프라인 구축
+  - 벡터 DB 통합
+
+#### Anthropic (Claude)
+- **Claude Documentation**: https://docs.anthropic.com/
+  - MCP (Model Context Protocol) 공식 문서
+  - Function Calling, Tool Use
+  - **출제 연계**: 136, 137회 MCP 연속 출제
+
+#### OpenAI
+- **OpenAI Platform**: https://platform.openai.com/docs/
+  - GPT-4, GPT-3.5 API 가이드
+  - Function Calling 명세
+  - 프롬프트 엔지니어링 베스트 프랙티스
+- **OpenAI Cookbook**: https://cookbook.openai.com/
+  - LLM 실무 적용 사례
+  - Embedding, RAG, Fine-tuning
+
+### 2.1 클라우드 플랫폼
 
 #### Microsoft (Azure)
 - **Microsoft Learn**: https://learn.microsoft.com/ko-kr/docs/
@@ -336,10 +464,28 @@
 
 ## 토픽별 우선 참고 사이트
 
+### AI/LLM 인프라 (2024-2025 최우선)
+1. **vLLM PagedAttention**: vLLM Docs, arXiv 논문
+2. **MCP (Model Context Protocol)**: Anthropic Docs (136, 137회 연속 출제)
+3. **버티컬 AI**: NIA 정책 문서, 의료/법률/금융 도메인 사례
+4. **LLMOps**: LangSmith, LangFuse 문서
+5. **RAG 파이프라인**: LlamaIndex, LangChain
+6. **벡터 DB**: Qdrant, Milvus, FAISS 공식 문서
+7. **HNSW 알고리즘**: arXiv 논문, nmslib 문서
+
+### 보안 (PQC, 제로트러스트)
+1. **NIST PQC**: FIPS 203/204/205 표준 문서 (2024.08 발표)
+2. **N2SF**: 행안부 가이드라인 (137회 출제 → 138회 구현 예상)
+3. **제로트러스트**: NIST SP 800-207, CISA Zero Trust Maturity Model
+4. **컨테이너 보안**: Cilium (eBPF), Falco, Tetragon 문서
+5. **SBOM**: Syft, CycloneDX, SPDX 표준 (134회 출제)
+6. **프롬프트 인젝션**: KISA 가이드, OWASP LLM Top 10
+
 ### 클라우드 컴퓨팅
-1. AWS 한국어 문서, Azure 문서, GCP 문서
-2. IT 위키 "클라우드 컴퓨팅"
-3. 네이버 D2, 카카오 Tech (클라우드 전환 사례)
+1. **공공 클라우드 전환**: 행안부 2025 정책, CSAP 인증 기준
+2. AWS 한국어 문서, Azure 문서, GCP 문서
+3. IT 위키 "클라우드 컴퓨팅"
+4. 네이버 D2, 카카오 Tech (클라우드 전환 사례)
 
 ### 데이터베이스
 1. 해당 DB 공식 문서 (PostgreSQL, MySQL, MongoDB 등)
