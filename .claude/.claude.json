@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "better-auth": {
+      "transport": "http",
+      "url": "https://mcp.chonkie.ai/better-auth/better-auth-builder/mcp"
+    }
+  }
+}
