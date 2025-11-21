@@ -1,65 +1,204 @@
-import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { BookOpen, FileText, Sparkles, TrendingUp, Clock, Target } from "lucide-react";
+import Link from "next/link";
 
-export default function Home() {
+export default function Dashboard() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">
+          Welcome back
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Continue your journey to becoming an IT Professional Engineer
+        </p>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">My Sub-notes</CardTitle>
+            <BookOpen className="h-4 w-4 text-accent" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-serif">24</div>
+            <p className="text-xs text-muted-foreground">+3 this week</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Study Hours</CardTitle>
+            <Clock className="h-4 w-4 text-accent" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-serif">32.5</div>
+            <p className="text-xs text-muted-foreground">This month</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg. Score</CardTitle>
+            <Target className="h-4 w-4 text-accent" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-serif">78</div>
+            <p className="text-xs text-muted-foreground">+5 from last month</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Topics Covered</CardTitle>
+            <TrendingUp className="h-4 w-4 text-accent" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-serif">142</div>
+            <p className="text-xs text-muted-foreground">Out of 500+</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Recent Activity */}
+        <Card className="shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-xl">Recent Sub-notes</CardTitle>
+            <CardDescription>Your latest study materials</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              { title: "OAuth 2.0 Grant Types", category: "보안", status: "completed" },
+              { title: "Kubernetes Architecture", category: "클라우드", status: "in_review" },
+              { title: "Zero Trust Security", category: "보안", status: "draft" },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between p-3 rounded-lg border border-border bg-card/50 transition-smooth hover:bg-card hover:shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center">
+                    <FileText className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">{item.category}</p>
+                  </div>
+                </div>
+                <Badge
+                  variant={
+                    item.status === "completed"
+                      ? "default"
+                      : item.status === "in_review"
+                        ? "secondary"
+                        : "outline"
+                  }
+                  className="text-xs"
+                >
+                  {item.status}
+                </Badge>
+              </div>
+            ))}
+            <Link href="/sub-notes">
+              <Button variant="outline" className="w-full mt-2">
+                View All Sub-notes
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* AI Suggestions */}
+        <Card className="shadow-sm border-accent/30">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-accent" />
+              AI Suggestions
+            </CardTitle>
+            <CardDescription>Recommended topics to study next</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              {
+                title: "API Gateway Patterns",
+                rationale: "Trending in recent exams",
+                priority: "high",
+              },
+              {
+                title: "Service Mesh Architecture",
+                rationale: "Related to your weak areas",
+                priority: "medium",
+              },
+              {
+                title: "Container Security Best Practices",
+                rationale: "Complements your recent studies",
+                priority: "medium",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="p-3 rounded-lg border border-accent/20 bg-accent/5 transition-smooth hover:bg-accent/10"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <p className="font-medium text-sm">{item.title}</p>
+                  <Badge
+                    variant={item.priority === "high" ? "default" : "secondary"}
+                    className="text-xs"
+                  >
+                    {item.priority}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground">{item.rationale}</p>
+              </div>
+            ))}
+            <Link href="/ai-suggestions">
+              <Button className="w-full mt-2 bg-primary hover:bg-primary/90">
+                Explore All Suggestions
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <Card className="shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-xl">Quick Actions</CardTitle>
+          <CardDescription>Common tasks to help you study efficiently</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <Link href="/sub-notes/new">
+              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
+                <BookOpen className="h-5 w-5" />
+                <span>Create Sub-note</span>
+              </Button>
+            </Link>
+            <Link href="/topics">
+              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
+                <FileText className="h-5 w-5" />
+                <span>Browse Topics</span>
+              </Button>
+            </Link>
+            <Link href="/evaluations/new">
+              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
+                <Target className="h-5 w-5" />
+                <span>Request Evaluation</span>
+              </Button>
+            </Link>
+            <Link href="/community">
+              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
+                <Sparkles className="h-5 w-5" />
+                <span>Community Notes</span>
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
