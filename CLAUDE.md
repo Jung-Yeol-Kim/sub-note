@@ -35,6 +35,39 @@ topic-comparer      # Compare multiple answer versions
 | **study-planner** | Create personalized study plans | Planning study schedule |
 | **trend-topic-predictor** | Predict likely exam topics | Strategic exam preparation |
 
+### Using the Web Interface (itpe-assistant)
+
+This repository includes a **Next.js web application** for a more interactive study experience:
+
+```bash
+# Navigate to the web app directory
+cd itpe-assistant
+
+# Install dependencies (first time only)
+pnpm install
+
+# Start the development server
+pnpm dev
+
+# Open http://localhost:3000 in your browser
+```
+
+**Features:**
+- **Interactive AI Chat**: Converse with AI assistants (Claude, GPT) for real-time study help
+- **Visual Interface**: Browse sub-notes, view diagrams, and organize study materials
+- **Integrated Skills**: Access all Claude Code skills through a web UI
+- **Study Dashboard**: Track progress, view analytics, and manage study plans
+
+**Tech Stack:**
+- Next.js 16 (React 19)
+- AI SDK (Anthropic & OpenAI support)
+- Tailwind CSS + Radix UI components
+- TypeScript
+
+**When to Use:**
+- **CLI (Claude Code)**: For generating content, analyzing exams, automating workflows
+- **Web App**: For interactive study sessions, browsing materials, visual learning
+
 ## Common Workflows
 
 ### 1. Creating a New Sub-note
@@ -87,6 +120,28 @@ topic-comparer      # Compare multiple answer versions
 4. "Compare this with my previous answer"
    → Uses topic-comparer skill
    → Shows progress and differences
+```
+
+### 4. Using the Web Interface for Interactive Study
+
+```markdown
+1. Start the web app:
+   cd itpe-assistant && pnpm dev
+
+2. Interactive Learning:
+   → Browse sub-notes with visual UI
+   → Chat with AI for real-time explanations
+   → View diagrams and tables in formatted layout
+
+3. Practice Sessions:
+   → Use web interface for mock exams
+   → Submit answers through web form
+   → Get instant feedback with visual highlights
+
+4. Progress Tracking:
+   → View study statistics on dashboard
+   → Track completed topics and weak areas
+   → Visualize learning trends over time
 ```
 
 ## Working with Claude
@@ -171,6 +226,15 @@ sub-note/
 │   ├── mock-exam-generator/ # Practice question generation
 │   ├── study-planner/       # Study plan creation
 │   └── trend-topic-predictor/ # Topic prediction
+
+├── itpe-assistant/          # Web Application (Next.js)
+│   ├── app/                 # Next.js App Router pages
+│   ├── components/          # React components
+│   │   ├── ai-elements/     # AI chat components
+│   │   └── ui/              # Reusable UI components
+│   ├── lib/                 # Utility functions
+│   ├── public/              # Static assets
+│   └── package.json         # Dependencies & scripts
 
 ├── scripts/                 # Exam analysis tools
 │   ├── exam_data_helper.py  # Input exam data
@@ -282,6 +346,23 @@ ls .claude/skills/
 cat .claude/skills/[skill-name]/skill.md
 ```
 
+### Web App Issues
+```bash
+# Check Node.js version
+node --version  # Should be v18 or higher
+
+# Install dependencies
+cd itpe-assistant && pnpm install
+
+# Clear cache and rebuild
+rm -rf .next node_modules
+pnpm install
+pnpm dev
+
+# Check port availability
+lsof -i :3000  # If port 3000 is busy
+```
+
 ### Analysis Script Issues
 ```bash
 # Check Python dependencies
@@ -313,6 +394,7 @@ When working with Claude on this repository:
 ## Resources
 
 - **README.md**: Project overview and structure
+- **itpe-assistant/README.md**: Web application setup guide
 - **scripts/README.md**: Detailed guide for analysis scripts
 - **.claude/skills/**: Individual skill documentation
 - **reports/**: Past exam analysis reports
