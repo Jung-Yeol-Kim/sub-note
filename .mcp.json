@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "ai-elements": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://registry.ai-sdk.dev/api/mcp"
+      ]
+    },
+    "better-auth": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.chonkie.ai/better-auth/better-auth-builder/mcp"
+      ]
+    }
+  }
+}
