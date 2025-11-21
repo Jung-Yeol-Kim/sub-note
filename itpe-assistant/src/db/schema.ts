@@ -1,10 +1,75 @@
 import { pgTable, text, timestamp, uuid, integer, boolean, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+// Better Auth tables
+export const user = pgTable("user", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+export const session = pgTable("session", {
+  id: text("id").primaryKey(),
+  expiresAt: timestamp("expires_at").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});
+
+export const account = pgTable("account", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+export const verification = pgTable("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
 // User's personal sub-notes
 export const subNotes = pgTable("sub_notes", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id").notNull(), // Will integrate with auth later
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   content: text("content").notNull(), // Markdown content
   category: text("category"), // e.g., "네트워크", "보안", "데이터베이스"
@@ -38,7 +103,9 @@ export const examTopics = pgTable("exam_topics", {
 export const sharedSubNotes = pgTable("shared_sub_notes", {
   id: uuid("id").primaryKey().defaultRandom(),
   originalSubNoteId: uuid("original_sub_note_id").references(() => subNotes.id),
-  userId: text("user_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   userName: text("user_name"),
   title: text("title").notNull(),
   content: text("content").notNull(),
@@ -75,7 +142,9 @@ export const aiTopicSuggestions = pgTable("ai_topic_suggestions", {
 export const aiEvaluations = pgTable("ai_evaluations", {
   id: uuid("id").primaryKey().defaultRandom(),
   subNoteId: uuid("sub_note_id").references(() => subNotes.id),
-  userId: text("user_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   model: text("model").notNull(), // e.g., "claude-3-5-sonnet"
 
   // Scores based on 6 evaluation criteria
@@ -102,7 +171,9 @@ export const aiEvaluations = pgTable("ai_evaluations", {
 // Study sessions tracking
 export const studySessions = pgTable("study_sessions", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   subNoteId: uuid("sub_note_id").references(() => subNotes.id),
   duration: integer("duration"), // in minutes
   activityType: text("activity_type"), // "writing", "reviewing", "practicing"
@@ -111,7 +182,20 @@ export const studySessions = pgTable("study_sessions", {
 });
 
 // Relations
-export const subNotesRelations = relations(subNotes, ({ many }) => ({
+export const userRelations = relations(user, ({ many }) => ({
+  subNotes: many(subNotes),
+  sessions: many(session),
+  accounts: many(account),
+  sharedSubNotes: many(sharedSubNotes),
+  aiEvaluations: many(aiEvaluations),
+  studySessions: many(studySessions),
+}));
+
+export const subNotesRelations = relations(subNotes, ({ many, one }) => ({
+  user: one(user, {
+    fields: [subNotes.userId],
+    references: [user.id],
+  }),
   evaluations: many(aiEvaluations),
   studySessions: many(studySessions),
   sharedVersions: many(sharedSubNotes),
