@@ -207,7 +207,7 @@ export default function AISuggestionsPage() {
                 </span>
               </PromptInputTools>
               <PromptInputSubmit
-                disabled={isLoading || !input.trim()}
+                disabled={isLoading || !input?.trim()}
                 status={isLoading ? "streaming" : undefined}
               >
                 {isLoading ? (
