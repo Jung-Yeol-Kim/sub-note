@@ -62,24 +62,35 @@ export default function AISuggestionsPage() {
 
   const { messages, isLoading, append } = useChat({
     api: "/api/ai-recommendations",
-    body: {
-      model: selectedModel,
-    },
   });
 
   const handleQuickPrompt = (prompt: string) => {
-    append({
-      role: "user",
-      content: prompt,
-    });
+    append(
+      {
+        role: "user",
+        content: prompt,
+      },
+      {
+        body: {
+          model: selectedModel,
+        },
+      }
+    );
   };
 
   const handleFormSubmit = (message: { text: string; files: any[] }) => {
     if (message.text.trim()) {
-      append({
-        role: "user",
-        content: message.text,
-      });
+      append(
+        {
+          role: "user",
+          content: message.text,
+        },
+        {
+          body: {
+            model: selectedModel,
+          },
+        }
+      );
     }
   };
 
