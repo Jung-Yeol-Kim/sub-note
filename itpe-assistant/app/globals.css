@@ -61,70 +61,70 @@
   --radius: 0.5rem;
 
   /* Scholar's Spectrum - Vibrant & Dynamic */
-  --background: #fdfcfa; /* Soft white with warmth */
-  --foreground: #1a1614; /* Rich black */
+  --background: hsl(30 33% 98%); /* Soft white with warmth */
+  --foreground: hsl(20 14% 9%); /* Rich black */
 
-  --card: #ffffff;
-  --card-foreground: #1a1614;
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(20 14% 9%);
 
-  --popover: #ffffff;
-  --popover-foreground: #1a1614;
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(20 14% 9%);
 
   /* Deep Teal Primary - Knowledge & Clarity */
-  --primary: #0d7c7c; /* Rich teal */
-  --primary-foreground: #f0fdfd;
+  --primary: hsl(180 80% 27%); /* Rich teal */
+  --primary-foreground: hsl(180 71% 96%);
 
   /* Royal Purple Secondary - Wisdom & Mastery */
-  --secondary: #6366f1; /* Vibrant indigo */
-  --secondary-foreground: #fafafa;
+  --secondary: hsl(239 84% 67%); /* Vibrant indigo */
+  --secondary-foreground: hsl(0 0% 98%);
 
-  --muted: #f5f3f0;
-  --muted-foreground: #6b6560;
+  --muted: hsl(30 25% 95%);
+  --muted-foreground: hsl(20 9% 40%);
 
   /* Amber Accent - Energy & Focus */
-  --accent: #f59e0b; /* Vibrant amber */
-  --accent-foreground: #1a1614;
+  --accent: hsl(38 92% 50%); /* Vibrant amber */
+  --accent-foreground: hsl(20 14% 9%);
 
-  --destructive: #dc2626; /* Bright red */
+  --destructive: hsl(0 72% 51%); /* Bright red */
 
   /* Additional Semantic Colors */
-  --success: #10b981; /* Emerald green */
-  --success-foreground: #f0fdf4;
+  --success: hsl(158 64% 52%); /* Emerald green */
+  --success-foreground: hsl(152 81% 96%);
 
-  --warning: #f59e0b; /* Amber */
-  --warning-foreground: #1a1614;
+  --warning: hsl(38 92% 50%); /* Amber */
+  --warning-foreground: hsl(20 14% 9%);
 
-  --info: #3b82f6; /* Blue */
-  --info-foreground: #eff6ff;
+  --info: hsl(221 83% 53%); /* Blue */
+  --info-foreground: hsl(214 100% 97%);
 
   /* Highlight Colors for Study Context */
-  --highlight-pink: #ec4899; /* Hot pink for important items */
-  --highlight-cyan: #06b6d4; /* Cyan for links/references */
-  --highlight-violet: #8b5cf6; /* Purple for advanced topics */
-  --highlight-lime: #84cc16; /* Lime for new concepts */
+  --highlight-pink: hsl(330 81% 60%); /* Hot pink for important items */
+  --highlight-cyan: hsl(188 94% 43%); /* Cyan for links/references */
+  --highlight-violet: hsl(258 90% 66%); /* Purple for advanced topics */
+  --highlight-lime: hsl(78 73% 44%); /* Lime for new concepts */
 
-  --border: #e7e5e4;
-  --input: #e7e5e4;
-  --ring: #0d7c7c;
+  --border: hsl(20 6% 90%);
+  --input: hsl(20 6% 90%);
+  --ring: hsl(180 80% 27%);
 
   /* Vibrant Chart Colors - Full Spectrum */
-  --chart-1: #0d7c7c; /* Teal */
-  --chart-2: #f59e0b; /* Amber */
-  --chart-3: #ec4899; /* Pink */
-  --chart-4: #8b5cf6; /* Violet */
-  --chart-5: #10b981; /* Emerald */
-  --chart-6: #3b82f6; /* Blue */
-  --chart-7: #f43f5e; /* Rose */
-  --chart-8: #06b6d4; /* Cyan */
+  --chart-1: hsl(180 80% 27%); /* Teal */
+  --chart-2: hsl(38 92% 50%); /* Amber */
+  --chart-3: hsl(330 81% 60%); /* Pink */
+  --chart-4: hsl(258 90% 66%); /* Violet */
+  --chart-5: hsl(158 64% 52%); /* Emerald */
+  --chart-6: hsl(221 83% 53%); /* Blue */
+  --chart-7: hsl(347 77% 50%); /* Rose */
+  --chart-8: hsl(188 94% 43%); /* Cyan */
 
-  --sidebar: #fafaf9;
-  --sidebar-foreground: #1a1614;
-  --sidebar-primary: #0d7c7c;
-  --sidebar-primary-foreground: #f0fdfd;
-  --sidebar-accent: #f5f3f0;
-  --sidebar-accent-foreground: #1a1614;
-  --sidebar-border: #e7e5e4;
-  --sidebar-ring: #0d7c7c;
+  --sidebar: hsl(60 9% 98%);
+  --sidebar-foreground: hsl(20 14% 9%);
+  --sidebar-primary: hsl(180 80% 27%);
+  --sidebar-primary-foreground: hsl(180 71% 96%);
+  --sidebar-accent: hsl(30 25% 95%);
+  --sidebar-accent-foreground: hsl(20 14% 9%);
+  --sidebar-border: hsl(20 6% 90%);
+  --sidebar-ring: hsl(180 80% 27%);
 }
 
 .dark {
@@ -197,12 +197,12 @@
 
 /* Theme Color Variations */
 .theme-slate {
-  --primary: 215 16% 47%;
-  --primary-foreground: 210 40% 98%;
-  --ring: 215 16% 47%;
-  --chart-1: 215 16% 47%;
-  --sidebar-primary: 215 16% 47%;
-  --sidebar-ring: 215 16% 47%;
+  --primary: hsl(215 16% 47%);
+  --primary-foreground: hsl(210 40% 98%);
+  --ring: hsl(215 16% 47%);
+  --chart-1: hsl(215 16% 47%);
+  --sidebar-primary: hsl(215 16% 47%);
+  --sidebar-ring: hsl(215 16% 47%);
 }
 
 .theme-slate.dark {
@@ -215,12 +215,12 @@
 }
 
 .theme-rose {
-  --primary: 346 77% 50%;
-  --primary-foreground: 355 100% 97%;
-  --ring: 346 77% 50%;
-  --chart-1: 346 77% 50%;
-  --sidebar-primary: 346 77% 50%;
-  --sidebar-ring: 346 77% 50%;
+  --primary: hsl(346 77% 50%);
+  --primary-foreground: hsl(355 100% 97%);
+  --ring: hsl(346 77% 50%);
+  --chart-1: hsl(346 77% 50%);
+  --sidebar-primary: hsl(346 77% 50%);
+  --sidebar-ring: hsl(346 77% 50%);
 }
 
 .theme-rose.dark {
@@ -233,12 +233,12 @@
 }
 
 .theme-blue {
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --ring: 221 83% 53%;
-  --chart-1: 221 83% 53%;
-  --sidebar-primary: 221 83% 53%;
-  --sidebar-ring: 221 83% 53%;
+  --primary: hsl(221 83% 53%);
+  --primary-foreground: hsl(210 40% 98%);
+  --ring: hsl(221 83% 53%);
+  --chart-1: hsl(221 83% 53%);
+  --sidebar-primary: hsl(221 83% 53%);
+  --sidebar-ring: hsl(221 83% 53%);
 }
 
 .theme-blue.dark {
@@ -251,12 +251,12 @@
 }
 
 .theme-green {
-  --primary: 142 71% 45%;
-  --primary-foreground: 144 61% 96%;
-  --ring: 142 71% 45%;
-  --chart-1: 142 71% 45%;
-  --sidebar-primary: 142 71% 45%;
-  --sidebar-ring: 142 71% 45%;
+  --primary: hsl(142 71% 45%);
+  --primary-foreground: hsl(144 61% 96%);
+  --ring: hsl(142 71% 45%);
+  --chart-1: hsl(142 71% 45%);
+  --sidebar-primary: hsl(142 71% 45%);
+  --sidebar-ring: hsl(142 71% 45%);
 }
 
 .theme-green.dark {
@@ -269,12 +269,12 @@
 }
 
 .theme-orange {
-  --primary: 25 95% 53%;
-  --primary-foreground: 33 100% 96%;
-  --ring: 25 95% 53%;
-  --chart-1: 25 95% 53%;
-  --sidebar-primary: 25 95% 53%;
-  --sidebar-ring: 25 95% 53%;
+  --primary: hsl(25 95% 53%);
+  --primary-foreground: hsl(33 100% 96%);
+  --ring: hsl(25 95% 53%);
+  --chart-1: hsl(25 95% 53%);
+  --sidebar-primary: hsl(25 95% 53%);
+  --sidebar-ring: hsl(25 95% 53%);
 }
 
 .theme-orange.dark {
@@ -287,12 +287,12 @@
 }
 
 .theme-violet {
-  --primary: 262 83% 58%;
-  --primary-foreground: 270 100% 98%;
-  --ring: 262 83% 58%;
-  --chart-1: 262 83% 58%;
-  --sidebar-primary: 262 83% 58%;
-  --sidebar-ring: 262 83% 58%;
+  --primary: hsl(262 83% 58%);
+  --primary-foreground: hsl(270 100% 98%);
+  --ring: hsl(262 83% 58%);
+  --chart-1: hsl(262 83% 58%);
+  --sidebar-primary: hsl(262 83% 58%);
+  --sidebar-ring: hsl(262 83% 58%);
 }
 
 .theme-violet.dark {
@@ -305,12 +305,12 @@
 }
 
 .theme-yellow {
-  --primary: 48 96% 53%;
-  --primary-foreground: 26 83% 14%;
-  --ring: 48 96% 53%;
-  --chart-1: 48 96% 53%;
-  --sidebar-primary: 48 96% 53%;
-  --sidebar-ring: 48 96% 53%;
+  --primary: hsl(48 96% 53%);
+  --primary-foreground: hsl(26 83% 14%);
+  --ring: hsl(48 96% 53%);
+  --chart-1: hsl(48 96% 53%);
+  --sidebar-primary: hsl(48 96% 53%);
+  --sidebar-ring: hsl(48 96% 53%);
 }
 
 .theme-yellow.dark {
