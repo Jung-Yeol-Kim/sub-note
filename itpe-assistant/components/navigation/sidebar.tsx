@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ColorPicker } from "@/components/color-picker";
 
 const navigationItems = [
   {
@@ -119,6 +120,7 @@ export function Sidebar() {
               <Settings className="h-4 w-4 text-sidebar-foreground/60" />
               <span>설정</span>
             </Link>
+            <ColorPicker />
             <ThemeToggle />
           </div>
         </div>

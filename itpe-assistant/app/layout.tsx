@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Sidebar } from "@/components/navigation/sidebar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ThemeColorProvider } from "@/hooks/use-theme-color";
 import { MainWrapper } from "@/components/layout/main-wrapper";
 import "./globals.css";
 
@@ -36,10 +37,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <MainWrapper>{children}</MainWrapper>
-          </div>
+          <ThemeColorProvider>
+            <div className="flex min-h-screen">
+              <Sidebar />
+              <MainWrapper>{children}</MainWrapper>
+            </div>
+          </ThemeColorProvider>
         </ThemeProvider>
       </body>
     </html>

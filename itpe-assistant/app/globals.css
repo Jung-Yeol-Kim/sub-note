@@ -195,6 +195,133 @@
   --sidebar-ring: oklch(0.70 0.15 200);
 }
 
+/* Theme Color Variations */
+.theme-slate {
+  --primary: 215 16% 47%;
+  --primary-foreground: 210 40% 98%;
+  --ring: 215 16% 47%;
+  --chart-1: 215 16% 47%;
+  --sidebar-primary: 215 16% 47%;
+  --sidebar-ring: 215 16% 47%;
+}
+
+.theme-slate.dark {
+  --primary: oklch(0.65 0.05 250);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.65 0.05 250);
+  --chart-1: oklch(0.65 0.05 250);
+  --sidebar-primary: oklch(0.65 0.05 250);
+  --sidebar-ring: oklch(0.65 0.05 250);
+}
+
+.theme-rose {
+  --primary: 346 77% 50%;
+  --primary-foreground: 355 100% 97%;
+  --ring: 346 77% 50%;
+  --chart-1: 346 77% 50%;
+  --sidebar-primary: 346 77% 50%;
+  --sidebar-ring: 346 77% 50%;
+}
+
+.theme-rose.dark {
+  --primary: oklch(0.65 0.24 10);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.65 0.24 10);
+  --chart-1: oklch(0.65 0.24 10);
+  --sidebar-primary: oklch(0.65 0.24 10);
+  --sidebar-ring: oklch(0.65 0.24 10);
+}
+
+.theme-blue {
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --ring: 221 83% 53%;
+  --chart-1: 221 83% 53%;
+  --sidebar-primary: 221 83% 53%;
+  --sidebar-ring: 221 83% 53%;
+}
+
+.theme-blue.dark {
+  --primary: oklch(0.70 0.20 240);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.70 0.20 240);
+  --chart-1: oklch(0.70 0.20 240);
+  --sidebar-primary: oklch(0.70 0.20 240);
+  --sidebar-ring: oklch(0.70 0.20 240);
+}
+
+.theme-green {
+  --primary: 142 71% 45%;
+  --primary-foreground: 144 61% 96%;
+  --ring: 142 71% 45%;
+  --chart-1: 142 71% 45%;
+  --sidebar-primary: 142 71% 45%;
+  --sidebar-ring: 142 71% 45%;
+}
+
+.theme-green.dark {
+  --primary: oklch(0.68 0.20 155);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.68 0.20 155);
+  --chart-1: oklch(0.68 0.20 155);
+  --sidebar-primary: oklch(0.68 0.20 155);
+  --sidebar-ring: oklch(0.68 0.20 155);
+}
+
+.theme-orange {
+  --primary: 25 95% 53%;
+  --primary-foreground: 33 100% 96%;
+  --ring: 25 95% 53%;
+  --chart-1: 25 95% 53%;
+  --sidebar-primary: 25 95% 53%;
+  --sidebar-ring: 25 95% 53%;
+}
+
+.theme-orange.dark {
+  --primary: oklch(0.75 0.18 60);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.75 0.18 60);
+  --chart-1: oklch(0.75 0.18 60);
+  --sidebar-primary: oklch(0.75 0.18 60);
+  --sidebar-ring: oklch(0.75 0.18 60);
+}
+
+.theme-violet {
+  --primary: 262 83% 58%;
+  --primary-foreground: 270 100% 98%;
+  --ring: 262 83% 58%;
+  --chart-1: 262 83% 58%;
+  --sidebar-primary: 262 83% 58%;
+  --sidebar-ring: 262 83% 58%;
+}
+
+.theme-violet.dark {
+  --primary: oklch(0.68 0.22 290);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --ring: oklch(0.68 0.22 290);
+  --chart-1: oklch(0.68 0.22 290);
+  --sidebar-primary: oklch(0.68 0.22 290);
+  --sidebar-ring: oklch(0.68 0.22 290);
+}
+
+.theme-yellow {
+  --primary: 48 96% 53%;
+  --primary-foreground: 26 83% 14%;
+  --ring: 48 96% 53%;
+  --chart-1: 48 96% 53%;
+  --sidebar-primary: 48 96% 53%;
+  --sidebar-ring: 48 96% 53%;
+}
+
+.theme-yellow.dark {
+  --primary: oklch(0.78 0.18 90);
+  --primary-foreground: oklch(0.15 0.025 250);
+  --ring: oklch(0.78 0.18 90);
+  --chart-1: oklch(0.78 0.18 90);
+  --sidebar-primary: oklch(0.78 0.18 90);
+  --sidebar-ring: oklch(0.78 0.18 90);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
