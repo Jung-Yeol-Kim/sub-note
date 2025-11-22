@@ -17,32 +17,32 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigationItems = [
   {
-    title: "Dashboard",
+    title: "대시보드",
     href: "/",
     icon: LayoutDashboard,
   },
   {
-    title: "My Sub-notes",
+    title: "내 서브노트",
     href: "/sub-notes",
     icon: BookOpen,
   },
   {
-    title: "Exam Topics",
+    title: "시험 주제",
     href: "/topics",
     icon: FileText,
   },
   {
-    title: "Community",
+    title: "커뮤니티",
     href: "/community",
     icon: Users,
   },
   {
-    title: "AI Suggestions",
+    title: "AI 추천",
     href: "/ai-suggestions",
     icon: Sparkles,
   },
   {
-    title: "Evaluations",
+    title: "평가",
     href: "/evaluations",
     icon: ClipboardCheck,
   },
@@ -103,7 +103,7 @@ export function Sidebar() {
         {/* Footer */}
         <div className="border-t border-sidebar-border p-4 space-y-2">
           <div className="flex items-center justify-between px-3">
-            <span className="text-xs text-sidebar-foreground/60">Account</span>
+            <span className="text-xs text-sidebar-foreground/60">계정</span>
             <AuthButton />
           </div>
           <div className="flex items-center justify-between gap-2">
@@ -112,7 +112,7 @@ export function Sidebar() {
               className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
               <Settings className="h-4 w-4 text-sidebar-foreground/60" />
-              <span>Settings</span>
+              <span>설정</span>
             </Link>
             <ThemeToggle />
           </div>

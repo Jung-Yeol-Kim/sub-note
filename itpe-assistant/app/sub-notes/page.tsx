@@ -59,9 +59,9 @@ const subNotes = [
 const categories = ["전체", "보안", "클라우드", "데이터베이스", "네트워크", "아키텍처"];
 const statuses = [
   { value: "all", label: "전체" },
-  { value: "draft", label: "Draft" },
-  { value: "in_review", label: "In Review" },
-  { value: "completed", label: "Completed" },
+  { value: "draft", label: "작성 중" },
+  { value: "in_review", label: "검토 중" },
+  { value: "completed", label: "완료" },
 ];
 
 export default function SubNotesPage() {
@@ -70,15 +70,15 @@ export default function SubNotesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">My Sub-notes</h1>
+          <h1 className="text-3xl font-bold tracking-tight">내 서브노트</h1>
           <p className="text-muted-foreground">
-            Manage your study materials and track your progress
+            학습 자료 관리 및 진행 상황 추적
           </p>
         </div>
         <Link href="/sub-notes/new">
           <Button className="bg-primary hover:bg-primary/90">
             <Plus className="mr-2 h-4 w-4" />
-            Create Sub-note
+            서브노트 작성
           </Button>
         </Link>
       </div>
@@ -91,14 +91,14 @@ export default function SubNotesPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search sub-notes..."
+                  placeholder="서브노트 검색..."
                   className="pl-9"
                 />
               </div>
             </div>
             <Select defaultValue="all">
               <SelectTrigger className="w-full md:w-[180px]">
-                <SelectValue placeholder="Category" />
+                <SelectValue placeholder="카테고리" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
@@ -110,7 +110,7 @@ export default function SubNotesPage() {
             </Select>
             <Select defaultValue="all">
               <SelectTrigger className="w-full md:w-[180px]">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder="상태" />
               </SelectTrigger>
               <SelectContent>
                 {statuses.map((status) => (
@@ -149,7 +149,7 @@ export default function SubNotesPage() {
                         }
                         className="text-xs"
                       >
-                        {note.status}
+                        {note.status === "completed" ? "완료" : note.status === "in_review" ? "검토 중" : "작성 중"}
                       </Badge>
                     </div>
                   </div>
