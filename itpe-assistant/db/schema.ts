@@ -343,3 +343,205 @@ export const commentLikesRelations = relations(commentLikes, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// ===== MENTORING SYSTEM TABLES =====
+
+// User settings for mentoring dashboard
+export const userSettings = pgTable("user_settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  examDate: timestamp("exam_date"), // D-Day target
+  dailyGoalMinutes: integer("daily_goal_minutes").default(120), // 2 hours default
+  weeklyTopicsGoal: integer("weekly_topics_goal").default(5),
+  studyStartDate: timestamp("study_start_date").defaultNow(),
+  totalTopicsTarget: integer("total_topics_target").default(500),
+  preferences: jsonb("preferences"), // Notification settings, etc.
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Daily check-ins and progress tracking
+export const dailyCheckIns = pgTable("daily_check_ins", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  checkInDate: timestamp("check_in_date").notNull().defaultNow(),
+  studyMinutes: integer("study_minutes").default(0),
+  topicsCompleted: integer("topics_completed").default(0),
+  mood: text("mood"), // "great", "good", "okay", "struggling"
+  notes: text("notes"),
+  achievements: text("achievements").array(), // Daily achievements
+  challenges: text("challenges"), // What was difficult today
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Weekly study plans
+export const weeklyPlans = pgTable("weekly_plans", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  weekStartDate: timestamp("week_start_date").notNull(),
+  weekEndDate: timestamp("week_end_date").notNull(),
+  goals: text("goals").array(), // Weekly goals
+  plannedTopics: text("planned_topics").array(), // Topic IDs to cover
+  status: text("status").default("active"), // active, completed, abandoned
+  completionRate: integer("completion_rate").default(0), // 0-100
+  review: text("review"), // Weekly retrospective
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Mock exam questions
+export const mockExams = pgTable("mock_exams", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  description: text("description"),
+  questions: jsonb("questions").notNull(), // Array of questions
+  timeLimit: integer("time_limit").notNull(), // in minutes
+  difficulty: text("difficulty"), // "beginner", "intermediate", "advanced", "actual"
+  category: text("category"),
+  tags: text("tags").array(),
+  isPublic: boolean("is_public").default(false),
+  createdBy: text("created_by").references(() => user.id),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Mock exam attempts
+export const mockExamAttempts = pgTable("mock_exam_attempts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  mockExamId: uuid("mock_exam_id")
+    .notNull()
+    .references(() => mockExams.id, { onDelete: "cascade" }),
+  answers: jsonb("answers").notNull(), // User's answers
+  timeSpent: integer("time_spent"), // in seconds
+  score: integer("score"), // 0-100
+  aiEvaluationId: uuid("ai_evaluation_id").references(() => aiEvaluations.id),
+  feedback: text("feedback"), // Overall feedback
+  detailedResults: jsonb("detailed_results"), // Per-question analysis
+  status: text("status").default("in_progress"), // in_progress, completed, abandoned
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  completedAt: timestamp("completed_at"),
+});
+
+// Spaced repetition review schedule
+export const reviewSchedule = pgTable("review_schedule", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  subNoteId: uuid("sub_note_id")
+    .notNull()
+    .references(() => subNotes.id, { onDelete: "cascade" }),
+  nextReviewDate: timestamp("next_review_date").notNull(),
+  interval: integer("interval").notNull().default(1), // Days until next review
+  easeFactor: integer("ease_factor").default(250), // 250 = 2.5 (SM-2 algorithm)
+  repetitions: integer("repetitions").default(0),
+  lastReviewDate: timestamp("last_review_date"),
+  lastReviewQuality: integer("last_review_quality"), // 0-5 scale
+  status: text("status").default("scheduled"), // scheduled, reviewed, skipped
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Study streaks and milestones
+export const studyStreaks = pgTable("study_streaks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  currentStreak: integer("current_streak").default(0),
+  longestStreak: integer("longest_streak").default(0),
+  lastStudyDate: timestamp("last_study_date"),
+  totalStudyDays: integer("total_study_days").default(0),
+  milestones: jsonb("milestones"), // Achievement data
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Mentoring system relations
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(user, {
+    fields: [userSettings.userId],
+    references: [user.id],
+  }),
+}));
+
+export const dailyCheckInsRelations = relations(dailyCheckIns, ({ one }) => ({
+  user: one(user, {
+    fields: [dailyCheckIns.userId],
+    references: [user.id],
+  }),
+}));
+
+export const weeklyPlansRelations = relations(weeklyPlans, ({ one }) => ({
+  user: one(user, {
+    fields: [weeklyPlans.userId],
+    references: [user.id],
+  }),
+}));
+
+export const mockExamsRelations = relations(mockExams, ({ one, many }) => ({
+  creator: one(user, {
+    fields: [mockExams.createdBy],
+    references: [user.id],
+  }),
+  attempts: many(mockExamAttempts),
+}));
+
+export const mockExamAttemptsRelations = relations(mockExamAttempts, ({ one }) => ({
+  user: one(user, {
+    fields: [mockExamAttempts.userId],
+    references: [user.id],
+  }),
+  mockExam: one(mockExams, {
+    fields: [mockExamAttempts.mockExamId],
+    references: [mockExams.id],
+  }),
+  aiEvaluation: one(aiEvaluations, {
+    fields: [mockExamAttempts.aiEvaluationId],
+    references: [aiEvaluations.id],
+  }),
+}));
+
+export const reviewScheduleRelations = relations(reviewSchedule, ({ one }) => ({
+  user: one(user, {
+    fields: [reviewSchedule.userId],
+    references: [user.id],
+  }),
+  subNote: one(subNotes, {
+    fields: [reviewSchedule.subNoteId],
+    references: [subNotes.id],
+  }),
+}));
+
+export const studyStreaksRelations = relations(studyStreaks, ({ one }) => ({
+  user: one(user, {
+    fields: [studyStreaks.userId],
+    references: [user.id],
+  }),
+}));

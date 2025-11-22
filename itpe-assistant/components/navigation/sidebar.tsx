@@ -11,6 +11,8 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   Settings,
+  Award,
+  GraduationCap,
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -21,6 +23,12 @@ const navigationItems = [
     title: "대시보드",
     href: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "멘토링",
+    href: "/mentoring",
+    icon: Award,
+    highlight: true, // New feature highlight
   },
   {
     title: "내 서브노트",
@@ -86,7 +94,7 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative",
                   isActive
                     ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
                     : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -101,6 +109,9 @@ export function Sidebar() {
                   )}
                 />
                 <span>{item.title}</span>
+                {item.highlight && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent animate-pulse" />
+                )}
               </Link>
             );
           })}
