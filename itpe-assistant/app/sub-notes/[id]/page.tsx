@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Trash2, Share2, Sparkles } from "lucide-react";
+import { ArrowLeft, Edit, Trash2, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { ShareButton } from "@/components/community/share-button";
 
 // Mock data - will be replaced with actual database query
 const getSubNote = (id: string) => ({
@@ -67,10 +68,10 @@ export default function SubNoteDetailPage({ params }: { params: { id: string } }
           </Button>
         </Link>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Share2 className="mr-2 h-4 w-4" />
-            Share
-          </Button>
+          <ShareButton
+            subNoteId={note.id}
+            subNoteTitle={note.title}
+          />
           <Link href={`/sub-notes/${note.id}/edit`}>
             <Button variant="outline" size="sm">
               <Edit className="mr-2 h-4 w-4" />

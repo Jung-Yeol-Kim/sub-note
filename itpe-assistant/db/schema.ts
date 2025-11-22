@@ -189,6 +189,10 @@ export const userRelations = relations(user, ({ many }) => ({
   sharedSubNotes: many(sharedSubNotes),
   aiEvaluations: many(aiEvaluations),
   studySessions: many(studySessions),
+  comments: many(comments),
+  sharedSubNoteLikes: many(sharedSubNoteLikes),
+  bookmarks: many(bookmarks),
+  commentLikes: many(commentLikes),
 }));
 
 export const subNotesRelations = relations(subNotes, ({ many, one }) => ({
@@ -208,16 +212,134 @@ export const aiEvaluationsRelations = relations(aiEvaluations, ({ one }) => ({
   }),
 }));
 
-export const sharedSubNotesRelations = relations(sharedSubNotes, ({ one }) => ({
+export const sharedSubNotesRelations = relations(sharedSubNotes, ({ one, many }) => ({
   originalSubNote: one(subNotes, {
     fields: [sharedSubNotes.originalSubNoteId],
     references: [subNotes.id],
   }),
+  user: one(user, {
+    fields: [sharedSubNotes.userId],
+    references: [user.id],
+  }),
+  comments: many(comments),
+  likes: many(sharedSubNoteLikes),
+  bookmarks: many(bookmarks),
 }));
 
 export const studySessionsRelations = relations(studySessions, ({ one }) => ({
   subNote: one(subNotes, {
     fields: [studySessions.subNoteId],
     references: [subNotes.id],
+  }),
+}));
+
+// Community comments
+export const comments = pgTable("comments", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sharedSubNoteId: uuid("shared_sub_note_id")
+    .notNull()
+    .references(() => sharedSubNotes.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  userName: text("user_name"),
+  userImage: text("user_image"),
+  content: text("content").notNull(),
+  parentCommentId: uuid("parent_comment_id"), // For nested replies
+  likes: integer("likes").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// User likes on shared sub-notes
+export const sharedSubNoteLikes = pgTable("shared_sub_note_likes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sharedSubNoteId: uuid("shared_sub_note_id")
+    .notNull()
+    .references(() => sharedSubNotes.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// User bookmarks
+export const bookmarks = pgTable("bookmarks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sharedSubNoteId: uuid("shared_sub_note_id")
+    .notNull()
+    .references(() => sharedSubNotes.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Comment likes
+export const commentLikes = pgTable("comment_likes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  commentId: uuid("comment_id")
+    .notNull()
+    .references(() => comments.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Relations for new tables
+export const commentsRelations = relations(comments, ({ one, many }) => ({
+  sharedSubNote: one(sharedSubNotes, {
+    fields: [comments.sharedSubNoteId],
+    references: [sharedSubNotes.id],
+  }),
+  user: one(user, {
+    fields: [comments.userId],
+    references: [user.id],
+  }),
+  parentComment: one(comments, {
+    fields: [comments.parentCommentId],
+    references: [comments.id],
+    relationName: "replies",
+  }),
+  replies: many(comments, {
+    relationName: "replies",
+  }),
+  likes: many(commentLikes),
+}));
+
+export const sharedSubNoteLikesRelations = relations(sharedSubNoteLikes, ({ one }) => ({
+  sharedSubNote: one(sharedSubNotes, {
+    fields: [sharedSubNoteLikes.sharedSubNoteId],
+    references: [sharedSubNotes.id],
+  }),
+  user: one(user, {
+    fields: [sharedSubNoteLikes.userId],
+    references: [user.id],
+  }),
+}));
+
+export const bookmarksRelations = relations(bookmarks, ({ one }) => ({
+  sharedSubNote: one(sharedSubNotes, {
+    fields: [bookmarks.sharedSubNoteId],
+    references: [sharedSubNotes.id],
+  }),
+  user: one(user, {
+    fields: [bookmarks.userId],
+    references: [user.id],
+  }),
+}));
+
+export const commentLikesRelations = relations(commentLikes, ({ one }) => ({
+  comment: one(comments, {
+    fields: [commentLikes.commentId],
+    references: [comments.id],
+  }),
+  user: one(user, {
+    fields: [commentLikes.userId],
+    references: [user.id],
   }),
 }));
