@@ -51,6 +51,11 @@ const navigationItems = [
 export function Sidebar() {
   const pathname = usePathname();
 
+  // Don't render sidebar on login page
+  if (pathname === "/login") {
+    return null;
+  }
+
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-sidebar-border bg-sidebar backdrop-blur supports-[backdrop-filter]:bg-sidebar/95">
       <div className="flex h-full flex-col">
