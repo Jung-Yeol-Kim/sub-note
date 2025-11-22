@@ -10,10 +10,10 @@ export default function Dashboard() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          Welcome back
+          환영합니다
         </h1>
         <p className="text-lg text-muted-foreground">
-          Continue your journey to becoming an IT Professional Engineer
+          정보관리기술사 합격을 위한 여정을 계속하세요
         </p>
       </div>
 
@@ -21,45 +21,45 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Sub-notes</CardTitle>
+            <CardTitle className="text-sm font-medium">내 서브노트</CardTitle>
             <BookOpen className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold font-serif">24</div>
-            <p className="text-xs text-muted-foreground">+3 this week</p>
+            <p className="text-xs text-muted-foreground">이번 주 +3</p>
           </CardContent>
         </Card>
 
         <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Study Hours</CardTitle>
+            <CardTitle className="text-sm font-medium">학습 시간</CardTitle>
             <Clock className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold font-serif">32.5</div>
-            <p className="text-xs text-muted-foreground">This month</p>
+            <p className="text-xs text-muted-foreground">이번 달</p>
           </CardContent>
         </Card>
 
         <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Score</CardTitle>
+            <CardTitle className="text-sm font-medium">평균 점수</CardTitle>
             <Target className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold font-serif">78</div>
-            <p className="text-xs text-muted-foreground">+5 from last month</p>
+            <p className="text-xs text-muted-foreground">지난 달 대비 +5</p>
           </CardContent>
         </Card>
 
         <Card className="border-accent/20 shadow-sm transition-smooth hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Topics Covered</CardTitle>
+            <CardTitle className="text-sm font-medium">학습한 주제</CardTitle>
             <TrendingUp className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold font-serif">142</div>
-            <p className="text-xs text-muted-foreground">Out of 500+</p>
+            <p className="text-xs text-muted-foreground">총 500개 이상 중</p>
           </CardContent>
         </Card>
       </div>
@@ -68,8 +68,8 @@ export default function Dashboard() {
         {/* Recent Activity */}
         <Card className="shadow-sm">
           <CardHeader>
-            <CardTitle className="text-xl">Recent Sub-notes</CardTitle>
-            <CardDescription>Your latest study materials</CardDescription>
+            <CardTitle className="text-xl">최근 서브노트</CardTitle>
+            <CardDescription>최근 학습 자료</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {[
@@ -100,13 +100,13 @@ export default function Dashboard() {
                   }
                   className="text-xs"
                 >
-                  {item.status}
+                  {item.status === "completed" ? "완료" : item.status === "in_review" ? "검토 중" : "작성 중"}
                 </Badge>
               </div>
             ))}
             <Link href="/sub-notes">
               <Button variant="outline" className="w-full mt-2">
-                View All Sub-notes
+                모든 서브노트 보기
               </Button>
             </Link>
           </CardContent>
@@ -117,25 +117,25 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-accent" />
-              AI Suggestions
+              AI 추천
             </CardTitle>
-            <CardDescription>Recommended topics to study next</CardDescription>
+            <CardDescription>다음에 학습할 추천 주제</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {[
               {
                 title: "API Gateway Patterns",
-                rationale: "Trending in recent exams",
+                rationale: "최근 시험에서 출제 증가",
                 priority: "high",
               },
               {
                 title: "Service Mesh Architecture",
-                rationale: "Related to your weak areas",
+                rationale: "취약 분야 관련",
                 priority: "medium",
               },
               {
                 title: "Container Security Best Practices",
-                rationale: "Complements your recent studies",
+                rationale: "최근 학습 내용과 관련",
                 priority: "medium",
               },
             ].map((item, i) => (
@@ -149,7 +149,7 @@ export default function Dashboard() {
                     variant={item.priority === "high" ? "default" : "secondary"}
                     className="text-xs"
                   >
-                    {item.priority}
+                    {item.priority === "high" ? "높음" : "보통"}
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">{item.rationale}</p>
@@ -157,7 +157,7 @@ export default function Dashboard() {
             ))}
             <Link href="/ai-suggestions">
               <Button className="w-full mt-2 bg-primary hover:bg-primary/90">
-                Explore All Suggestions
+                모든 추천 보기
               </Button>
             </Link>
           </CardContent>
@@ -167,33 +167,33 @@ export default function Dashboard() {
       {/* Quick Actions */}
       <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-xl">Quick Actions</CardTitle>
-          <CardDescription>Common tasks to help you study efficiently</CardDescription>
+          <CardTitle className="text-xl">빠른 작업</CardTitle>
+          <CardDescription>효율적인 학습을 위한 주요 작업</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Link href="/sub-notes/new">
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <BookOpen className="h-5 w-5" />
-                <span>Create Sub-note</span>
+                <span>서브노트 작성</span>
               </Button>
             </Link>
             <Link href="/topics">
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <FileText className="h-5 w-5" />
-                <span>Browse Topics</span>
+                <span>주제 탐색</span>
               </Button>
             </Link>
             <Link href="/evaluations/new">
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <Target className="h-5 w-5" />
-                <span>Request Evaluation</span>
+                <span>평가 요청</span>
               </Button>
             </Link>
             <Link href="/community">
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <Sparkles className="h-5 w-5" />
-                <span>Community Notes</span>
+                <span>커뮤니티 노트</span>
               </Button>
             </Link>
           </div>
