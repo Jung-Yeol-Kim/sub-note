@@ -193,6 +193,9 @@ export const userRelations = relations(user, ({ many }) => ({
   sharedSubNoteLikes: many(sharedSubNoteLikes),
   bookmarks: many(bookmarks),
   commentLikes: many(commentLikes),
+  writingChallenges: many(writingChallenges),
+  writingAnalytics: many(writingAnalytics),
+  writingStreaks: many(writingStreaks),
 }));
 
 export const subNotesRelations = relations(subNotes, ({ many, one }) => ({
@@ -680,3 +683,150 @@ export const slumpDetection = pgTable("slump_detection", {
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
+// === Phase 4: Writing Practice Mode ===
+
+// Writing challenges - Daily writing practice tracking
+export const writingChallenges = pgTable("writing_challenges", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  subNoteId: uuid("sub_note_id").references(() => subNotes.id),
+  examTopicId: uuid("exam_topic_id").references(() => examTopics.id),
+
+  // Challenge details
+  challengeDate: timestamp("challenge_date").notNull(), // Date of challenge
+  topic: text("topic").notNull(), // Topic name
+  content: text("content"), // User's written answer
+  wordCount: integer("word_count").default(0),
+  timeSpent: integer("time_spent"), // in seconds
+
+  // Challenge type
+  challengeType: text("challenge_type").notNull().default("daily"), // daily, random, timed
+  difficulty: integer("difficulty"), // 1-5
+
+  // Completion status
+  isCompleted: boolean("is_completed").notNull().default(false),
+  completedAt: timestamp("completed_at"),
+
+  // AI evaluation reference
+  evaluationId: uuid("evaluation_id").references(() => aiEvaluations.id),
+  quickScore: integer("quick_score"), // Quick self-assessment 1-5
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Writing analytics - Pattern analysis and insights
+export const writingAnalytics = pgTable("writing_analytics", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  // Analysis period
+  analysisDate: timestamp("analysis_date").notNull(),
+  periodStart: timestamp("period_start").notNull(),
+  periodEnd: timestamp("period_end").notNull(),
+
+  // Writing patterns
+  totalChallenges: integer("total_challenges").default(0),
+  completedChallenges: integer("completed_challenges").default(0),
+  averageWordCount: integer("average_word_count").default(0),
+  averageTimeSpent: integer("average_time_spent").default(0), // in seconds
+
+  // Quality metrics
+  averageScore: integer("average_score").default(0), // 0-100
+  improvementRate: integer("improvement_rate").default(0), // percentage
+  consistencyScore: integer("consistency_score").default(0), // 0-100
+
+  // Common patterns
+  strengths: text("strengths").array(),
+  weaknesses: text("weaknesses").array(),
+  frequentMistakes: text("frequent_mistakes").array(),
+  improvedAreas: text("improved_areas").array(),
+
+  // Category performance
+  categoryScores: jsonb("category_scores"), // { "네트워크": 85, "보안": 78, ... }
+
+  // Writing style metrics
+  averageSentenceLength: integer("average_sentence_length"),
+  vocabularyRichness: integer("vocabulary_richness"), // 0-100
+  structuralConsistency: integer("structural_consistency"), // 0-100
+  keywordUsageRate: integer("keyword_usage_rate"), // 0-100
+
+  // Recommendations
+  recommendations: text("recommendations").array(),
+  focusAreas: text("focus_areas").array(),
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Writing streaks - Gamification and motivation
+export const writingStreaks = pgTable("writing_streaks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  // Current streak
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  lastActivityDate: timestamp("last_activity_date"),
+
+  // Milestones
+  totalDaysActive: integer("total_days_active").notNull().default(0),
+  totalChallengesCompleted: integer("total_challenges_completed").notNull().default(0),
+
+  // Achievements
+  achievements: text("achievements").array(), // ["7_day_streak", "30_day_streak", "100_challenges"]
+  level: integer("level").notNull().default(1),
+  experiencePoints: integer("experience_points").notNull().default(0),
+
+  // Weekly goals
+  weeklyGoal: integer("weekly_goal").default(5), // challenges per week
+  weeklyProgress: integer("weekly_progress").default(0),
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Relations for writing practice tables
+export const writingChallengesRelations = relations(writingChallenges, ({ one }) => ({
+  user: one(user, {
+    fields: [writingChallenges.userId],
+    references: [user.id],
+  }),
+  subNote: one(subNotes, {
+    fields: [writingChallenges.subNoteId],
+    references: [subNotes.id],
+  }),
+  examTopic: one(examTopics, {
+    fields: [writingChallenges.examTopicId],
+    references: [examTopics.id],
+  }),
+  evaluation: one(aiEvaluations, {
+    fields: [writingChallenges.evaluationId],
+    references: [aiEvaluations.id],
+  }),
+}));
+
+export const writingAnalyticsRelations = relations(writingAnalytics, ({ one }) => ({
+  user: one(user, {
+    fields: [writingAnalytics.userId],
+    references: [user.id],
+  }),
+}));
+
+export const writingStreaksRelations = relations(writingStreaks, ({ one }) => ({
+  user: one(user, {
+    fields: [writingStreaks.userId],
+    references: [user.id],
+  }),
+}));
