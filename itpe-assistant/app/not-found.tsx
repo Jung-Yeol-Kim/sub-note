@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,12 +41,10 @@ export default function NotFound() {
             <Button
               variant="outline"
               className="flex-1"
-              asChild
+              onClick={() => window.history.back()}
             >
-              <Link href="javascript:history.back()">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                이전 페이지
-              </Link>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              이전 페이지
             </Button>
             <Button
               className="flex-1 bg-primary hover:bg-primary/90"

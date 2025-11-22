@@ -18,11 +18,13 @@ import {
 } from "@/components/ai-elements/message";
 import {
   PromptInput,
+  PromptInputBody,
   PromptInputTextarea,
   PromptInputFooter,
   PromptInputSubmit,
   PromptInputTools,
   PromptInputButton,
+  type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 import {
   Select,
@@ -59,16 +61,16 @@ const QUICK_PROMPTS = [
 
 export default function AISuggestionsPage() {
   const [selectedModel, setSelectedModel] = useState<"claude" | "gpt">("claude");
+  const [input, setInput] = useState("");
 
-  const { messages, isLoading, append } = useChat({
+  const { messages, status, sendMessage } = useChat({
     api: "/api/ai-recommendations",
   });
 
   const handleQuickPrompt = (prompt: string) => {
-    append(
+    sendMessage(
       {
-        role: "user",
-        content: prompt,
+        text: prompt,
       },
       {
         body: {
@@ -78,20 +80,26 @@ export default function AISuggestionsPage() {
     );
   };
 
-  const handleFormSubmit = (message: { text: string; files: any[] }) => {
-    if (message.text.trim()) {
-      append(
-        {
-          role: "user",
-          content: message.text,
-        },
-        {
-          body: {
-            model: selectedModel,
-          },
-        }
-      );
+  const handleSubmit = (message: PromptInputMessage) => {
+    const hasText = Boolean(message.text);
+    const hasAttachments = Boolean(message.files?.length);
+
+    if (!(hasText || hasAttachments)) {
+      return;
     }
+
+    sendMessage(
+      {
+        text: message.text || "Sent with attachments",
+        files: message.files,
+      },
+      {
+        body: {
+          model: selectedModel,
+        },
+      }
+    );
+    setInput("");
   };
 
   return (
@@ -190,7 +198,7 @@ export default function AISuggestionsPage() {
                     </MessageContent>
                   </Message>
                 ))}
-                {isLoading && (
+                {status === "streaming" && (
                   <Message from="assistant">
                     <MessageContent>
                       <div className="flex items-center gap-2 text-muted-foreground">
@@ -208,11 +216,14 @@ export default function AISuggestionsPage() {
 
         {/* Input Area */}
         <div className="border-t border-border bg-card p-4">
-          <PromptInput onSubmit={handleFormSubmit}>
-            <PromptInputTextarea
-              placeholder="학습하고 싶은 주제나 질문을 입력하세요..."
-              className="min-h-[60px]"
-            />
+          <PromptInput onSubmit={handleSubmit}>
+            <PromptInputBody>
+              <PromptInputTextarea
+                placeholder="학습하고 싶은 주제나 질문을 입력하세요..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              />
+            </PromptInputBody>
             <PromptInputFooter>
               <PromptInputTools>
                 <span className="text-xs text-muted-foreground">
@@ -220,10 +231,10 @@ export default function AISuggestionsPage() {
                 </span>
               </PromptInputTools>
               <PromptInputSubmit
-                disabled={isLoading}
-                status={isLoading ? "streaming" : undefined}
+                disabled={!input.trim() && !status}
+                status={status}
               >
-                {isLoading ? (
+                {status === "streaming" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <Send className="h-4 w-4" />
