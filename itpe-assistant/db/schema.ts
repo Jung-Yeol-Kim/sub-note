@@ -193,6 +193,9 @@ export const userRelations = relations(user, ({ many }) => ({
   sharedSubNoteLikes: many(sharedSubNoteLikes),
   bookmarks: many(bookmarks),
   commentLikes: many(commentLikes),
+  writingChallenges: many(writingChallenges),
+  writingAnalytics: many(writingAnalytics),
+  writingStreaks: many(writingStreaks),
 }));
 
 export const subNotesRelations = relations(subNotes, ({ many, one }) => ({
@@ -340,6 +343,448 @@ export const commentLikesRelations = relations(commentLikes, ({ one }) => ({
   }),
   user: one(user, {
     fields: [commentLikes.userId],
+    references: [user.id],
+  }),
+}));
+
+// ====== Phase 1: Mentoring Dashboard ======
+
+// Study goals - 학습 목표 설정
+export const studyGoals = pgTable("study_goals", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  examDate: timestamp("exam_date"), // 목표 시험 날짜
+  targetScore: integer("target_score"), // 목표 점수
+  dailyStudyMinutes: integer("daily_study_minutes").default(120), // 일일 학습 시간 목표 (분)
+  weeklyTopicsGoal: integer("weekly_topics_goal").default(5), // 주간 주제 목표 수
+  motivation: text("motivation"), // 학습 동기
+  currentLevel: text("current_level"), // 현재 수준 (beginner, intermediate, advanced)
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Weekly plans - 주간 학습 플랜
+export const weeklyPlans = pgTable("weekly_plans", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  weekNumber: integer("week_number").notNull(), // 주차 (1, 2, 3...)
+  year: integer("year").notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  goalTopics: text("goal_topics").array(), // 목표 주제 목록
+  goalStudyMinutes: integer("goal_study_minutes").default(840), // 주간 목표 학습 시간
+  actualStudyMinutes: integer("actual_study_minutes").default(0),
+  completedTopics: text("completed_topics").array().default([]),
+  status: text("status").default("active"), // active, completed, abandoned
+  reflection: text("reflection"), // 주간 회고
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Daily check-ins - 매일 체크인
+export const dailyCheckIns = pgTable("daily_check_ins", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  date: timestamp("date").notNull(),
+  studyMinutes: integer("study_minutes").default(0), // 실제 학습 시간
+  topicsStudied: text("topics_studied").array().default([]), // 학습한 주제
+  mood: text("mood"), // happy, neutral, tired, stressed, motivated
+  energyLevel: integer("energy_level"), // 1-5
+  notes: text("notes"), // 오늘의 메모
+  challenges: text("challenges").array(), // 오늘의 어려움
+  achievements: text("achievements").array(), // 오늘의 성취
+  tomorrowPlan: text("tomorrow_plan"), // 내일 계획
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Learning streaks - 연속 학습 기록
+export const learningStreaks = pgTable("learning_streaks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  currentStreak: integer("current_streak").default(0), // 현재 연속 일수
+  longestStreak: integer("longest_streak").default(0), // 최장 연속 일수
+  lastCheckInDate: timestamp("last_check_in_date"),
+  totalCheckIns: integer("total_check_ins").default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// ====== Phase 2: Mock Exam System ======
+
+// Mock exam sessions - 모의고사 세션
+export const mockExamSessions = pgTable("mock_exam_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  examType: text("exam_type").notNull(), // full (전체), partial (부분), random (랜덤)
+  selectedTopics: text("selected_topics").array(), // 선택된 주제 ID들
+  questionsCount: integer("questions_count").notNull(),
+  timeLimit: integer("time_limit"), // 제한 시간 (분)
+  status: text("status").default("not_started"), // not_started, in_progress, completed, abandoned
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  totalScore: integer("total_score"), // 총점
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Mock exam answers - 모의고사 답안
+export const mockExamAnswers = pgTable("mock_exam_answers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sessionId: uuid("session_id")
+    .notNull()
+    .references(() => mockExamSessions.id, { onDelete: "cascade" }),
+  topicId: uuid("topic_id").references(() => examTopics.id),
+  questionText: text("question_text").notNull(),
+  answerContent: text("answer_content"), // 작성한 답안
+  timeSpent: integer("time_spent"), // 소요 시간 (초)
+  aiScore: integer("ai_score"), // AI 평가 점수
+  aiFeedback: jsonb("ai_feedback"), // AI 피드백 상세
+  strengths: text("strengths").array(),
+  weaknesses: text("weaknesses").array(),
+  suggestions: text("suggestions").array(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// ====== Phase 3: Spaced Repetition System ======
+
+// Review schedule - 복습 스케줄 (간격 반복)
+export const reviewSchedule = pgTable("review_schedule", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  subNoteId: uuid("sub_note_id")
+    .notNull()
+    .references(() => subNotes.id, { onDelete: "cascade" }),
+  repetitionNumber: integer("repetition_number").default(0), // 반복 횟수
+  easeFactor: integer("ease_factor").default(250), // 난이도 계수 (250 = 2.5)
+  interval: integer("interval").default(1), // 다음 복습까지 일수
+  nextReviewDate: timestamp("next_review_date").notNull(),
+  lastReviewedAt: timestamp("last_reviewed_at"),
+  reviewQuality: integer("review_quality"), // 마지막 복습 품질 (0-5)
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+
+// ====== Phase 5: Community Mentoring ======
+
+// Study groups - 스터디 그룹
+export const studyGroups = pgTable("study_groups", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  description: text("description"),
+  ownerId: text("owner_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  memberCount: integer("member_count").default(1),
+  maxMembers: integer("max_members").default(10),
+  targetExamDate: timestamp("target_exam_date"),
+  meetingSchedule: text("meeting_schedule"), // 정기 모임 일정
+  focusAreas: text("focus_areas").array(), // 집중 분야
+  difficulty: text("difficulty"), // beginner, intermediate, advanced
+  isPublic: boolean("is_public").default(true),
+  status: text("status").default("active"), // active, inactive, completed
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Study group members - 스터디 그룹 멤버
+export const studyGroupMembers = pgTable("study_group_members", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  groupId: uuid("group_id")
+    .notNull()
+    .references(() => studyGroups.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  role: text("role").default("member"), // owner, mentor, member
+  joinedAt: timestamp("joined_at").notNull().defaultNow(),
+  status: text("status").default("active"), // active, inactive, left
+});
+
+// Mentor-mentee relationships - 멘토-멘티 관계
+export const mentorMentee = pgTable("mentor_mentee", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  mentorId: text("mentor_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  menteeId: text("mentee_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  status: text("status").default("active"), // active, pending, completed, cancelled
+  startDate: timestamp("start_date").notNull().defaultNow(),
+  endDate: timestamp("end_date"),
+  focusAreas: text("focus_areas").array(),
+  meetingFrequency: text("meeting_frequency"), // weekly, biweekly, monthly
+  notes: text("notes"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Mentoring sessions - 멘토링 세션
+export const mentoringSessions = pgTable("mentoring_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  relationshipId: uuid("relationship_id")
+    .notNull()
+    .references(() => mentorMentee.id, { onDelete: "cascade" }),
+  sessionDate: timestamp("session_date").notNull(),
+  duration: integer("duration"), // 분
+  topics: text("topics").array(),
+  mentorNotes: text("mentor_notes"),
+  menteeNotes: text("mentee_notes"),
+  actionItems: text("action_items").array(),
+  completed: boolean("completed").default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// ====== Phase 6: Psychological Support ======
+
+// Milestones - 학습 마일스톤
+export const milestones = pgTable("milestones", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // study_streak, topics_completed, exam_score, total_hours
+  title: text("title").notNull(),
+  description: text("description"),
+  targetValue: integer("target_value"),
+  currentValue: integer("current_value").default(0),
+  achieved: boolean("achieved").default(false),
+  achievedAt: timestamp("achieved_at"),
+  icon: text("icon"), // 아이콘 이름
+  reward: text("reward"), // 달성 시 보상 메시지
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Encouragement messages - 격려 메시지 로그
+export const encouragementMessages = pgTable("encouragement_messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  message: text("message").notNull(),
+  type: text("type").notNull(), // motivation, celebration, support, reminder
+  context: text("context"), // 메시지 생성 컨텍스트
+  shownAt: timestamp("shown_at").notNull().defaultNow(),
+  userReaction: text("user_reaction"), // helpful, not_helpful, ignored
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Slump detection - 슬럼프 감지
+export const slumpDetection = pgTable("slump_detection", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  detectedAt: timestamp("detected_at").notNull().defaultNow(),
+  severity: text("severity"), // mild, moderate, severe
+  indicators: jsonb("indicators"), // 슬럼프 지표들
+  suggestedActions: text("suggested_actions").array(),
+  resolved: boolean("resolved").default(false),
+  resolvedAt: timestamp("resolved_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+// === Phase 4: Writing Practice Mode ===
+
+// Writing challenges - Daily writing practice tracking
+export const writingChallenges = pgTable("writing_challenges", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  subNoteId: uuid("sub_note_id").references(() => subNotes.id),
+  examTopicId: uuid("exam_topic_id").references(() => examTopics.id),
+
+  // Challenge details
+  challengeDate: timestamp("challenge_date").notNull(), // Date of challenge
+  topic: text("topic").notNull(), // Topic name
+  content: text("content"), // User's written answer
+  wordCount: integer("word_count").default(0),
+  timeSpent: integer("time_spent"), // in seconds
+
+  // Challenge type
+  challengeType: text("challenge_type").notNull().default("daily"), // daily, random, timed
+  difficulty: integer("difficulty"), // 1-5
+
+  // Completion status
+  isCompleted: boolean("is_completed").notNull().default(false),
+  completedAt: timestamp("completed_at"),
+
+  // AI evaluation reference
+  evaluationId: uuid("evaluation_id").references(() => aiEvaluations.id),
+  quickScore: integer("quick_score"), // Quick self-assessment 1-5
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Writing analytics - Pattern analysis and insights
+export const writingAnalytics = pgTable("writing_analytics", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  // Analysis period
+  analysisDate: timestamp("analysis_date").notNull(),
+  periodStart: timestamp("period_start").notNull(),
+  periodEnd: timestamp("period_end").notNull(),
+
+  // Writing patterns
+  totalChallenges: integer("total_challenges").default(0),
+  completedChallenges: integer("completed_challenges").default(0),
+  averageWordCount: integer("average_word_count").default(0),
+  averageTimeSpent: integer("average_time_spent").default(0), // in seconds
+
+  // Quality metrics
+  averageScore: integer("average_score").default(0), // 0-100
+  improvementRate: integer("improvement_rate").default(0), // percentage
+  consistencyScore: integer("consistency_score").default(0), // 0-100
+
+  // Common patterns
+  strengths: text("strengths").array(),
+  weaknesses: text("weaknesses").array(),
+  frequentMistakes: text("frequent_mistakes").array(),
+  improvedAreas: text("improved_areas").array(),
+
+  // Category performance
+  categoryScores: jsonb("category_scores"), // { "네트워크": 85, "보안": 78, ... }
+
+  // Writing style metrics
+  averageSentenceLength: integer("average_sentence_length"),
+  vocabularyRichness: integer("vocabulary_richness"), // 0-100
+  structuralConsistency: integer("structural_consistency"), // 0-100
+  keywordUsageRate: integer("keyword_usage_rate"), // 0-100
+
+  // Recommendations
+  recommendations: text("recommendations").array(),
+  focusAreas: text("focus_areas").array(),
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Writing streaks - Gamification and motivation
+export const writingStreaks = pgTable("writing_streaks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+
+  // Current streak
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  lastActivityDate: timestamp("last_activity_date"),
+
+  // Milestones
+  totalDaysActive: integer("total_days_active").notNull().default(0),
+  totalChallengesCompleted: integer("total_challenges_completed").notNull().default(0),
+
+  // Achievements
+  achievements: text("achievements").array(), // ["7_day_streak", "30_day_streak", "100_challenges"]
+  level: integer("level").notNull().default(1),
+  experiencePoints: integer("experience_points").notNull().default(0),
+
+  // Weekly goals
+  weeklyGoal: integer("weekly_goal").default(5), // challenges per week
+  weeklyProgress: integer("weekly_progress").default(0),
+
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+// Relations for writing practice tables
+export const writingChallengesRelations = relations(writingChallenges, ({ one }) => ({
+  user: one(user, {
+    fields: [writingChallenges.userId],
+    references: [user.id],
+  }),
+  subNote: one(subNotes, {
+    fields: [writingChallenges.subNoteId],
+    references: [subNotes.id],
+  }),
+  examTopic: one(examTopics, {
+    fields: [writingChallenges.examTopicId],
+    references: [examTopics.id],
+  }),
+  evaluation: one(aiEvaluations, {
+    fields: [writingChallenges.evaluationId],
+    references: [aiEvaluations.id],
+  }),
+}));
+
+export const writingAnalyticsRelations = relations(writingAnalytics, ({ one }) => ({
+  user: one(user, {
+    fields: [writingAnalytics.userId],
+    references: [user.id],
+  }),
+}));
+
+export const writingStreaksRelations = relations(writingStreaks, ({ one }) => ({
+  user: one(user, {
+    fields: [writingStreaks.userId],
     references: [user.id],
   }),
 }));
