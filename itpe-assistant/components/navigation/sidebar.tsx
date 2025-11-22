@@ -11,6 +11,10 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   Settings,
+  Target,
+  RefreshCw,
+  PenTool,
+  UsersRound,
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,9 +22,29 @@ import { ColorPicker } from "@/components/color-picker";
 
 const navigationItems = [
   {
-    title: "대시보드",
-    href: "/",
-    icon: LayoutDashboard,
+    title: "멘토링",
+    href: "/mentoring",
+    icon: Target,
+  },
+  {
+    title: "모의고사",
+    href: "/mock-exam",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "스마트 복습",
+    href: "/review",
+    icon: RefreshCw,
+  },
+  {
+    title: "쓰기 챌린지",
+    href: "/writing-challenge",
+    icon: PenTool,
+  },
+  {
+    title: "스터디 그룹",
+    href: "/study-groups",
+    icon: UsersRound,
   },
   {
     title: "내 서브노트",
@@ -41,11 +65,6 @@ const navigationItems = [
     title: "AI 추천",
     href: "/ai-suggestions",
     icon: Sparkles,
-  },
-  {
-    title: "평가",
-    href: "/evaluations",
-    icon: ClipboardCheck,
   },
 ];
 
