@@ -502,48 +502,6 @@ export const reviewSchedule = pgTable("review_schedule", {
     .$onUpdate(() => new Date()),
 });
 
-// ====== Phase 4: Writing Practice ======
-
-// Writing challenges - 매일 쓰기 챌린지
-export const writingChallenges = pgTable("writing_challenges", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  date: timestamp("date").notNull(),
-  topicId: uuid("topic_id").references(() => examTopics.id),
-  topicTitle: text("topic_title").notNull(),
-  answer: text("answer"),
-  timeSpent: integer("time_spent"), // 소요 시간 (분)
-  wordCount: integer("word_count"),
-  completed: boolean("completed").default(false),
-  quality: integer("quality"), // AI 평가 품질 (0-100)
-  feedback: jsonb("feedback"), // AI 피드백
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at")
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-});
-
-// Writing patterns analysis - 쓰기 패턴 분석
-export const writingPatterns = pgTable("writing_patterns", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  analyzedAt: timestamp("analyzed_at").notNull().defaultNow(),
-  totalWritingSessions: integer("total_writing_sessions"),
-  averageWordCount: integer("average_word_count"),
-  averageTimeSpent: integer("average_time_spent"),
-  commonStrengths: text("common_strengths").array(),
-  commonWeaknesses: text("common_weaknesses").array(),
-  improvementAreas: text("improvement_areas").array(),
-  writingStyle: text("writing_style"), // concise, detailed, structured, etc.
-  consistencyScore: integer("consistency_score"), // 0-100
-  patternData: jsonb("pattern_data"), // 상세 패턴 데이터
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-});
 
 // ====== Phase 5: Community Mentoring ======
 

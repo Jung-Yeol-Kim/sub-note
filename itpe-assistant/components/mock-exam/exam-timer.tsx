@@ -118,13 +118,6 @@ export function ExamTimer({
         <Progress
           value={progressPercentage}
           className="h-2"
-          indicatorClassName={
-            isCriticalTime
-              ? "bg-destructive"
-              : isWarningTime
-                ? "bg-warning"
-                : "bg-accent"
-          }
         />
 
         <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
