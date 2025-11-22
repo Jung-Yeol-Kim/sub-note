@@ -17,6 +17,9 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-chart-8: var(--chart-8);
+  --color-chart-7: var(--chart-7);
+  --color-chart-6: var(--chart-6);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -38,6 +41,16 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-highlight-pink: var(--highlight-pink);
+  --color-highlight-cyan: var(--highlight-cyan);
+  --color-highlight-violet: var(--highlight-violet);
+  --color-highlight-lime: var(--highlight-lime);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -47,81 +60,139 @@
 :root {
   --radius: 0.5rem;
 
-  /* Study Atelier Theme - Warm & Academic */
-  --background: #fcfaf7; /* Warm cream */
-  --foreground: #2d2520; /* Deep brown */
+  /* Scholar's Spectrum - Vibrant & Dynamic */
+  --background: #fdfcfa; /* Soft white with warmth */
+  --foreground: #1a1614; /* Rich black */
 
   --card: #ffffff;
-  --card-foreground: #2d2520;
+  --card-foreground: #1a1614;
 
   --popover: #ffffff;
-  --popover-foreground: #2d2520;
+  --popover-foreground: #1a1614;
 
-  --primary: #3d5a4c; /* Forest green */
-  --primary-foreground: #f5e6d3;
+  /* Deep Teal Primary - Knowledge & Clarity */
+  --primary: #0d7c7c; /* Rich teal */
+  --primary-foreground: #f0fdfd;
 
-  --secondary: #e8dcc8; /* Warm sand */
-  --secondary-foreground: #3d5a4c;
+  /* Royal Purple Secondary - Wisdom & Mastery */
+  --secondary: #6366f1; /* Vibrant indigo */
+  --secondary-foreground: #fafafa;
 
-  --muted: #f4ede4;
-  --muted-foreground: #6b5d52;
+  --muted: #f5f3f0;
+  --muted-foreground: #6b6560;
 
-  --accent: #c49a6c; /* Warm bronze/gold */
-  --accent-foreground: #2d2520;
+  /* Amber Accent - Energy & Focus */
+  --accent: #f59e0b; /* Vibrant amber */
+  --accent-foreground: #1a1614;
 
-  --destructive: #b94a48;
-  --border: #e8dcc8;
-  --input: #e8dcc8;
-  --ring: #3d5a4c;
+  --destructive: #dc2626; /* Bright red */
 
-  --chart-1: #3d5a4c;
-  --chart-2: #c49a6c;
-  --chart-3: #8b7355;
-  --chart-4: #5a7a68;
-  --chart-5: #a67c52;
+  /* Additional Semantic Colors */
+  --success: #10b981; /* Emerald green */
+  --success-foreground: #f0fdf4;
 
-  --sidebar: #faf8f5;
-  --sidebar-foreground: #2d2520;
-  --sidebar-primary: #3d5a4c;
-  --sidebar-primary-foreground: #f5e6d3;
-  --sidebar-accent: #f4ede4;
-  --sidebar-accent-foreground: #3d5a4c;
-  --sidebar-border: #e8dcc8;
-  --sidebar-ring: #3d5a4c;
+  --warning: #f59e0b; /* Amber */
+  --warning-foreground: #1a1614;
+
+  --info: #3b82f6; /* Blue */
+  --info-foreground: #eff6ff;
+
+  /* Highlight Colors for Study Context */
+  --highlight-pink: #ec4899; /* Hot pink for important items */
+  --highlight-cyan: #06b6d4; /* Cyan for links/references */
+  --highlight-violet: #8b5cf6; /* Purple for advanced topics */
+  --highlight-lime: #84cc16; /* Lime for new concepts */
+
+  --border: #e7e5e4;
+  --input: #e7e5e4;
+  --ring: #0d7c7c;
+
+  /* Vibrant Chart Colors - Full Spectrum */
+  --chart-1: #0d7c7c; /* Teal */
+  --chart-2: #f59e0b; /* Amber */
+  --chart-3: #ec4899; /* Pink */
+  --chart-4: #8b5cf6; /* Violet */
+  --chart-5: #10b981; /* Emerald */
+  --chart-6: #3b82f6; /* Blue */
+  --chart-7: #f43f5e; /* Rose */
+  --chart-8: #06b6d4; /* Cyan */
+
+  --sidebar: #fafaf9;
+  --sidebar-foreground: #1a1614;
+  --sidebar-primary: #0d7c7c;
+  --sidebar-primary-foreground: #f0fdfd;
+  --sidebar-accent: #f5f3f0;
+  --sidebar-accent-foreground: #1a1614;
+  --sidebar-border: #e7e5e4;
+  --sidebar-ring: #0d7c7c;
 }
 
 .dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
-  --card: oklch(0.216 0.006 56.043);
-  --card-foreground: oklch(0.985 0.001 106.423);
-  --popover: oklch(0.216 0.006 56.043);
-  --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.923 0.003 48.717);
-  --primary-foreground: oklch(0.216 0.006 56.043);
-  --secondary: oklch(0.268 0.007 34.298);
-  --secondary-foreground: oklch(0.985 0.001 106.423);
-  --muted: oklch(0.268 0.007 34.298);
-  --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.553 0.013 58.071);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.216 0.006 56.043);
-  --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.553 0.013 58.071);
+  /* Deep Navy Background - Night Study Mode */
+  --background: oklch(0.15 0.025 250); /* Deep blue-black */
+  --foreground: oklch(0.98 0.005 90); /* Warm white */
+
+  --card: oklch(0.22 0.03 245); /* Deeper blue-gray */
+  --card-foreground: oklch(0.98 0.005 90);
+
+  --popover: oklch(0.20 0.03 250);
+  --popover-foreground: oklch(0.98 0.005 90);
+
+  /* Bright Cyan Primary - Electric Knowledge */
+  --primary: oklch(0.75 0.15 200); /* Bright cyan */
+  --primary-foreground: oklch(0.15 0.025 250);
+
+  /* Vivid Purple Secondary - Deep Mastery */
+  --secondary: oklch(0.65 0.22 280); /* Rich purple */
+  --secondary-foreground: oklch(0.98 0.005 90);
+
+  --muted: oklch(0.28 0.02 245);
+  --muted-foreground: oklch(0.68 0.015 250);
+
+  /* Bright Amber Accent - Energetic Highlights */
+  --accent: oklch(0.78 0.18 75); /* Vibrant amber/gold */
+  --accent-foreground: oklch(0.15 0.025 250);
+
+  --destructive: oklch(0.65 0.25 25); /* Bright red-orange */
+
+  /* Semantic Colors - Dark Mode Optimized */
+  --success: oklch(0.70 0.20 155); /* Bright emerald */
+  --success-foreground: oklch(0.15 0.025 250);
+
+  --warning: oklch(0.75 0.18 75); /* Bright amber */
+  --warning-foreground: oklch(0.15 0.025 250);
+
+  --info: oklch(0.68 0.20 240); /* Bright blue */
+  --info-foreground: oklch(0.98 0.005 90);
+
+  /* Highlight Colors - Neon Study Mode */
+  --highlight-pink: oklch(0.70 0.24 340); /* Hot pink neon */
+  --highlight-cyan: oklch(0.72 0.16 200); /* Cyan electric */
+  --highlight-violet: oklch(0.68 0.22 290); /* Purple glow */
+  --highlight-lime: oklch(0.75 0.20 125); /* Lime bright */
+
+  --border: oklch(0.35 0.02 245);
+  --input: oklch(0.30 0.025 245);
+  --ring: oklch(0.75 0.15 200);
+
+  /* Vibrant Chart Colors - Night Spectrum */
+  --chart-1: oklch(0.70 0.18 195); /* Cyan */
+  --chart-2: oklch(0.75 0.18 75); /* Amber */
+  --chart-3: oklch(0.68 0.24 340); /* Pink */
+  --chart-4: oklch(0.65 0.22 280); /* Violet */
+  --chart-5: oklch(0.68 0.20 155); /* Emerald */
+  --chart-6: oklch(0.65 0.20 245); /* Blue */
+  --chart-7: oklch(0.66 0.25 15); /* Rose */
+  --chart-8: oklch(0.70 0.16 210); /* Sky */
+
+  --sidebar: oklch(0.18 0.03 248);
+  --sidebar-foreground: oklch(0.98 0.005 90);
+  --sidebar-primary: oklch(0.70 0.18 195);
+  --sidebar-primary-foreground: oklch(0.15 0.025 250);
+  --sidebar-accent: oklch(0.25 0.025 245);
+  --sidebar-accent-foreground: oklch(0.98 0.005 90);
+  --sidebar-border: oklch(0.35 0.02 245);
+  --sidebar-ring: oklch(0.70 0.15 200);
 }
 
 @layer base {
