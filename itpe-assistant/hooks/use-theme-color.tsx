@@ -46,8 +46,10 @@ export function ThemeColorProvider({
       root.classList.remove(`theme-${color.name}`);
     });
 
-    // Add current theme color class
-    root.classList.add(`theme-${themeColor}`);
+    // Add current theme color class (except for scholars-spectrum which is the default :root)
+    if (themeColor !== "scholars-spectrum") {
+      root.classList.add(`theme-${themeColor}`);
+    }
   }, [themeColor]);
 
   const value = React.useMemo(
