@@ -105,7 +105,7 @@ export async function POST(req: Request) {
       maxTokens: 4096,
     });
 
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error("AI recommendations error:", error);
     return new Response(
