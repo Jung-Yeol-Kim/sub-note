@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Sparkles, TrendingUp, Clock, Target } from "lucide-react";
+import { BookOpen, FileText, Sparkles, TrendingUp, Clock, Target, Trophy } from "lucide-react";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -178,6 +178,12 @@ export default function Dashboard() {
                 <span>서브노트 작성</span>
               </Button>
             </Link>
+            <Link href="/mock-exam/new">
+              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2 border-accent/50 hover:bg-accent/10">
+                <Trophy className="h-5 w-5 text-accent" />
+                <span>실전 모의고사</span>
+              </Button>
+            </Link>
             <Link href="/topics">
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <FileText className="h-5 w-5" />
@@ -188,12 +194,6 @@ export default function Dashboard() {
               <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
                 <Target className="h-5 w-5" />
                 <span>평가 요청</span>
-              </Button>
-            </Link>
-            <Link href="/community">
-              <Button variant="outline" className="w-full h-auto py-4 flex flex-col gap-2">
-                <Sparkles className="h-5 w-5" />
-                <span>커뮤니티 노트</span>
               </Button>
             </Link>
           </div>

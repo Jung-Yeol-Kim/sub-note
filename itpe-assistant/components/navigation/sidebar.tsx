@@ -11,6 +11,7 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   Settings,
+  Target,
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -26,6 +27,11 @@ const navigationItems = [
     title: "내 서브노트",
     href: "/sub-notes",
     icon: BookOpen,
+  },
+  {
+    title: "실전 모의고사",
+    href: "/mock-exam",
+    icon: Target,
   },
   {
     title: "시험 주제",
