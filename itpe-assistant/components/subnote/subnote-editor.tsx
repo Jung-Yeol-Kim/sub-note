@@ -60,22 +60,39 @@ export function SubNoteEditor({ initialData, onChange, onSave }: SubNoteEditorPr
   const [keywordInput, setKeywordInput] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
+  // Notify parent of changes
   useEffect(() => {
     onChange?.(formData);
+  }, [formData, onChange]);
 
-    // Update estimated lines
+  // Update estimated lines when sections change (not when format changes)
+  useEffect(() => {
     if (formData.sections) {
       const estimatedLines = calculateEstimatedLines(formData as StandardSubNote);
-      setFormData(prev => ({
-        ...prev,
-        format: {
-          ...prev.format!,
-          estimatedLines,
-          pageCount: estimatedLines > 25 ? 2 : 1,
-        },
-      }));
+      const pageCount = estimatedLines > 25 ? 2 : 1;
+
+      // Only update if the values actually changed
+      if (
+        formData.format?.estimatedLines !== estimatedLines ||
+        formData.format?.pageCount !== pageCount
+      ) {
+        setFormData(prev => ({
+          ...prev,
+          format: {
+            ...prev.format!,
+            estimatedLines,
+            pageCount,
+          },
+        }));
+      }
     }
-  }, [formData, onChange]);
+  }, [
+    formData.sections?.definition.content,
+    formData.sections?.definition.keywords,
+    formData.sections?.explanation.subsections,
+    formData.format?.estimatedLines,
+    formData.format?.pageCount,
+  ]);
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags?.includes(tagInput.trim())) {
