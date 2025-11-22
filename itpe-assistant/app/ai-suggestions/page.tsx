@@ -60,7 +60,7 @@ const QUICK_PROMPTS = [
 export default function AISuggestionsPage() {
   const [selectedModel, setSelectedModel] = useState<"claude" | "gpt">("claude");
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
+  const { messages, isLoading, append } = useChat({
     api: "/api/ai-recommendations",
     body: {
       model: selectedModel,
@@ -72,6 +72,15 @@ export default function AISuggestionsPage() {
       role: "user",
       content: prompt,
     });
+  };
+
+  const handleFormSubmit = (message: { text: string; files: any[] }) => {
+    if (message.text.trim()) {
+      append({
+        role: "user",
+        content: message.text,
+      });
+    }
   };
 
   return (
@@ -188,15 +197,8 @@ export default function AISuggestionsPage() {
 
         {/* Input Area */}
         <div className="border-t border-border bg-card p-4">
-          <PromptInput
-            onSubmit={(message, event) => {
-              event.preventDefault();
-              handleSubmit(event as any);
-            }}
-          >
+          <PromptInput onSubmit={handleFormSubmit}>
             <PromptInputTextarea
-              value={input}
-              onChange={handleInputChange}
               placeholder="학습하고 싶은 주제나 질문을 입력하세요..."
               className="min-h-[60px]"
             />
@@ -207,7 +209,7 @@ export default function AISuggestionsPage() {
                 </span>
               </PromptInputTools>
               <PromptInputSubmit
-                disabled={isLoading || !input?.trim()}
+                disabled={isLoading}
                 status={isLoading ? "streaming" : undefined}
               >
                 {isLoading ? (
