@@ -1,6 +1,5 @@
 "use client";
 
-import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon } from "lucide-react";
 import type React from "react";
@@ -19,7 +18,6 @@ export function AuthPage() {
 		<main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
 			<div className="relative hidden h-full flex-col border-r bg-secondary p-10 lg:flex dark:bg-secondary/20">
 				<div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-				<Logo className="mr-auto h-5" />
 
 				<div className="z-10 mt-auto">
 					<blockquote className="space-y-2">
@@ -52,7 +50,6 @@ export function AuthPage() {
 					</a>
 				</Button>
 				<div className="mx-auto space-y-4 sm:w-sm">
-					<Logo className="h-5 lg:hidden" />
 					<div className="flex flex-col space-y-1">
 						<h1 className="font-bold text-2xl tracking-wide">
 							ITPE Assistant에 오신 것을 환영합니다
