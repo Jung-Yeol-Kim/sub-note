@@ -123,9 +123,6 @@ const Example = () => {
   // Use the AI SDK useChat hook
   const { messages, isLoading, append, input, setInput } = useChat({
     api: "/api/chat",
-    body: {
-      model: selectedModel,
-    },
   });
 
   const handleSubmit = (message: PromptInputMessage) => {
@@ -142,19 +139,35 @@ const Example = () => {
       });
     }
 
-    append({
-      role: "user",
-      content: message.text || "Sent with attachments",
-    });
+    append(
+      {
+        role: "user",
+        content: message.text || "Sent with attachments",
+      },
+      {
+        body: {
+          model: selectedModel,
+          webSearch: useWebSearch,
+        },
+      }
+    );
 
     setInput("");
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    append({
-      role: "user",
-      content: suggestion,
-    });
+    append(
+      {
+        role: "user",
+        content: suggestion,
+      },
+      {
+        body: {
+          model: selectedModel,
+          webSearch: useWebSearch,
+        },
+      }
+    );
   };
 
   return (
