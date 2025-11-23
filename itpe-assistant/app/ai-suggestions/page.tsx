@@ -60,7 +60,7 @@ const QUICK_PROMPTS = [
 ];
 
 export default function AISuggestionsPage() {
-  const [selectedModel, setSelectedModel] = useState<"claude" | "gpt">("claude");
+  const [selectedModel, setSelectedModel] = useState<string>("claude-sonnet-4-20250514");
   const [input, setInput] = useState("");
 
   const { messages, status, sendMessage } = useChat({
@@ -127,20 +127,33 @@ export default function AISuggestionsPage() {
           <span className="text-sm text-muted-foreground">AI 모델:</span>
           <Select
             value={selectedModel}
-            onValueChange={(value) => setSelectedModel(value as "claude" | "gpt")}
+            onValueChange={(value) => setSelectedModel(value)}
           >
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[220px]">
               <SelectValue placeholder="모델 선택" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="claude">
+              <SelectItem value="claude-sonnet-4-20250514">
                 <div className="flex items-center gap-2">
                   <span>Claude Sonnet 4</span>
+                  <Badge variant="secondary" className="text-xs">최신</Badge>
                 </div>
               </SelectItem>
-              <SelectItem value="gpt">
+              <SelectItem value="claude-haiku-4-5">
+                <div className="flex items-center gap-2">
+                  <span>Claude Haiku 4.5</span>
+                  <Badge variant="secondary" className="text-xs">빠름</Badge>
+                </div>
+              </SelectItem>
+              <SelectItem value="gpt-4o">
                 <div className="flex items-center gap-2">
                   <span>GPT-4o</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="gpt-5-mini">
+                <div className="flex items-center gap-2">
+                  <span>GPT-5 Mini</span>
+                  <Badge variant="secondary" className="text-xs">저렴</Badge>
                 </div>
               </SelectItem>
             </SelectContent>
