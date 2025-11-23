@@ -35,7 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 // Quick prompt suggestions
 const QUICK_PROMPTS = [
@@ -207,13 +207,24 @@ export default function AISuggestionsPage() {
                 {messages.map((message) => (
                   <MessageBranch key={message.id} defaultBranch={0}>
                     <MessageBranchContent>
-                      <Message from={message.role}>
-                        <MessageContent>
-                          <MessageResponse>
-                            {message.content}
-                          </MessageResponse>
-                        </MessageContent>
-                      </Message>
+                      {message.parts.map((part, i) => {
+                        switch (part.type) {
+                          case 'text':
+                            return (
+                              <Fragment key={`${message.id}-${i}`}>
+                                <Message from={message.role}>
+                                  <MessageContent>
+                                    <MessageResponse>
+                                      {part.text}
+                                    </MessageResponse>
+                                  </MessageContent>
+                                </Message>
+                              </Fragment>
+                            );
+                          default:
+                            return null;
+                        }
+                      })}
                     </MessageBranchContent>
                   </MessageBranch>
                 ))}
