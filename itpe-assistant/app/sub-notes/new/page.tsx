@@ -18,6 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createSubNoteWithAuth } from "../actions";
 
 type EditorMode = "structured" | "freeform";
 
@@ -25,45 +28,67 @@ export default function NewSubNotePage() {
   const router = useRouter();
   const [editorMode, setEditorMode] = useState<EditorMode>("structured");
   const [showSyllabus, setShowSyllabus] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // For freeform mode
+  const [freeformTitle, setFreeformTitle] = useState("");
   const [freeformContent, setFreeformContent] = useState("");
   const [freeformSheet, setFreeformSheet] = useState<AnswerSheet | null>(null);
 
   const handleSave = async (data: StandardSubNote) => {
-    // Convert to markdown for storage
-    const markdown = standardSubNoteToMarkdown(data);
+    setIsSaving(true);
+    try {
+      // Convert to markdown for storage
+      const markdown = standardSubNoteToMarkdown(data);
 
-    // TODO: Implement save logic with server action
-    console.log("Saving structured sub-note:", data);
-    console.log("Markdown:", markdown);
+      const result = await createSubNoteWithAuth({
+        title: data.title,
+        content: markdown,
+        category: data.syllabusMapping.categoryName,
+        tags: data.tags,
+        status: data.study?.status || "draft",
+        difficulty: data.difficulty,
+      });
 
-    // router.push("/sub-notes");
+      if (result.success) {
+        router.push("/sub-notes");
+      } else {
+        alert(`저장 실패: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error saving sub-note:", error);
+      alert("서브노트 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleFreeformSave = async () => {
     if (!freeformSheet) return;
+    if (!freeformTitle.trim()) {
+      alert("제목을 입력해주세요.");
+      return;
+    }
 
-    // TODO: Implement save logic with server action
-    console.log("Saving freeform sub-note:");
-    console.log("Content:", freeformContent);
-    console.log("Answer sheet:", freeformSheet);
-    console.log("Format valid:", freeformSheet.isValid);
-    console.log("Lines:", freeformSheet.totalLines);
-    console.log("Cells:", freeformSheet.totalCells);
+    setIsSaving(true);
+    try {
+      const result = await createSubNoteWithAuth({
+        title: freeformTitle,
+        content: freeformContent,
+        status: "draft",
+      });
 
-    // Data to save:
-    // {
-    //   title: "...",  // Get from user input
-    //   content: freeformContent,
-    //   structuredAnswer: freeformSheet,
-    //   lineCount: freeformSheet.totalLines,
-    //   cellCount: freeformSheet.totalCells,
-    //   isValidFormat: freeformSheet.isValid,
-    //   formatWarnings: freeformSheet.validationWarnings,
-    // }
-
-    // router.push("/sub-notes");
+      if (result.success) {
+        router.push("/sub-notes");
+      } else {
+        alert(`저장 실패: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Error saving freeform sub-note:", error);
+      alert("서브노트 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -115,18 +140,37 @@ export default function NewSubNotePage() {
             <SubNoteEditor onSave={handleSave} />
           ) : (
             <div className="space-y-4">
-              {/* Save button for freeform mode */}
-              <div className="flex justify-end">
-                <Button
-                  onClick={handleFreeformSave}
-                  disabled={!freeformSheet?.isValid}
-                  size="lg"
-                >
-                  <Save className="mr-2 h-4 w-4" />
-                  저장
-                  {!freeformSheet?.isValid && " (규격 오류 확인 필요)"}
-                </Button>
-              </div>
+              {/* Title input and save button for freeform mode */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>서브노트 정보</CardTitle>
+                  <CardDescription>
+                    서브노트 제목을 입력하고 자유 형식으로 작성하세요
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="freeform-title">제목</Label>
+                    <Input
+                      id="freeform-title"
+                      placeholder="예: OAuth 2.0 인증 프로토콜"
+                      value={freeformTitle}
+                      onChange={(e) => setFreeformTitle(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button
+                      onClick={handleFreeformSave}
+                      disabled={!freeformSheet?.isValid || !freeformTitle.trim() || isSaving}
+                      size="lg"
+                    >
+                      <Save className="mr-2 h-4 w-4" />
+                      {isSaving ? "저장 중..." : "저장"}
+                      {!freeformSheet?.isValid && " (규격 오류 확인 필요)"}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Answer Sheet Editor */}
               <AnswerSheetEditor

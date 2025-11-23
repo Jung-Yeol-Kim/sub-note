@@ -3,6 +3,8 @@
 import { db, subNotes } from "@/db";
 import { eq, desc, and, like } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export type SubNoteInput = {
   title: string;
@@ -79,6 +81,19 @@ export async function createSubNote(userId: string, data: SubNoteInput) {
     console.error("Error creating sub-note:", error);
     return { success: false, error: "Failed to create sub-note" };
   }
+}
+
+// Create a new sub-note (auth-aware version)
+export async function createSubNoteWithAuth(data: SubNoteInput) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  return createSubNote(session.user.id, data);
 }
 
 // Update an existing sub-note
