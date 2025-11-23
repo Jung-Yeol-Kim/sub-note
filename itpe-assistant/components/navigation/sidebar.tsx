@@ -15,6 +15,7 @@ import {
   RefreshCw,
   PenTool,
   UsersRound,
+  GraduationCap,
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -50,6 +51,11 @@ const navigationItems = [
     title: "내 서브노트",
     href: "/sub-notes",
     icon: BookOpen,
+  },
+  {
+    title: "샘플 답안",
+    href: "/examples",
+    icon: GraduationCap,
   },
   {
     title: "시험 주제",
