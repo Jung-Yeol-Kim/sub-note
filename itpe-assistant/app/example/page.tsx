@@ -1,14 +1,6 @@
 "use client";
 
 import {
-  MessageBranch,
-  MessageBranchContent,
-  MessageBranchNext,
-  MessageBranchPage,
-  MessageBranchPrevious,
-  MessageBranchSelector,
-} from "@/components/ai-elements/message";
-import {
   Conversation,
   ConversationContent,
   ConversationScrollButton,
@@ -175,26 +167,20 @@ const Example = () => {
       <Conversation>
         <ConversationContent>
           {messages.map((message) => (
-            <MessageBranch key={message.id} defaultBranch={0}>
-              <MessageBranchContent>
-                {message.parts.map((part, i) => {
-                  switch (part.type) {
-                    case 'text':
-                      return (
-                        <Fragment key={`${message.id}-${i}`}>
-                          <Message from={message.role}>
-                            <MessageContent>
-                              <MessageResponse>{part.text}</MessageResponse>
-                            </MessageContent>
-                          </Message>
-                        </Fragment>
-                      );
-                    default:
-                      return null;
-                  }
-                })}
-              </MessageBranchContent>
-            </MessageBranch>
+            <Fragment key={message.id}>
+              {message.parts.map((part, i) => {
+                if (part.type === 'text') {
+                  return (
+                    <Message key={`${message.id}-${i}`} from={message.role}>
+                      <MessageContent>
+                        <MessageResponse>{part.text}</MessageResponse>
+                      </MessageContent>
+                    </Message>
+                  );
+                }
+                return null;
+              })}
+            </Fragment>
           ))}
         </ConversationContent>
         <ConversationScrollButton />
