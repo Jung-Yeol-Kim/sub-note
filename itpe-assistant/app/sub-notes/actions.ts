@@ -22,15 +22,29 @@ export async function getSubNotes(userId: string, filters?: {
   search?: string;
 }) {
   try {
-    let query = db
+    // Build where conditions
+    const conditions = [eq(subNotes.userId, userId)];
+
+    if (filters?.category) {
+      conditions.push(eq(subNotes.category, filters.category));
+    }
+
+    if (filters?.status) {
+      conditions.push(eq(subNotes.status, filters.status));
+    }
+
+    if (filters?.search) {
+      conditions.push(
+        like(subNotes.title, `%${filters.search}%`)
+      );
+    }
+
+    const results = await db
       .select()
       .from(subNotes)
-      .where(eq(subNotes.userId, userId))
+      .where(and(...conditions))
       .orderBy(desc(subNotes.updatedAt));
 
-    // TODO: Add filters when conditions are implemented
-    // For now, return all sub-notes
-    const results = await query;
     return { success: true, data: results };
   } catch (error) {
     console.error("Error fetching sub-notes:", error);
