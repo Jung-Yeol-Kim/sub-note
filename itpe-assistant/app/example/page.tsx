@@ -175,11 +175,15 @@ const Example = () => {
       <Conversation>
         <ConversationContent>
           {messages.map((message) => (
-            <Message from={message.role} key={message.id}>
-              <MessageContent>
-                <MessageResponse>{message.content}</MessageResponse>
-              </MessageContent>
-            </Message>
+            <MessageBranch key={message.id} defaultBranch={0}>
+              <MessageBranchContent>
+                <Message from={message.role}>
+                  <MessageContent>
+                    <MessageResponse>{message.content}</MessageResponse>
+                  </MessageContent>
+                </Message>
+              </MessageBranchContent>
+            </MessageBranch>
           ))}
         </ConversationContent>
         <ConversationScrollButton />
