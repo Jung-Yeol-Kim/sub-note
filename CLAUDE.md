@@ -6,6 +6,23 @@
 
 This repository is optimized for use with **Claude Code**, featuring custom skills and workflows to help prepare for the Korean IT Professional Examination. Claude can assist with topic generation, answer grading, keyword analysis, exam analysis, and more.
 
+### Mentoring-Centered Learning Philosophy
+
+The platform is built around insights from actual exam passers who emphasized:
+- **Mentoring is Essential**: Very difficult to pass alone
+- **Daily Writing Practice**: 2+ months of daily practice is the key to success
+- **Structured Feedback**: Specific guidance to improve from 4 points to 5 points
+- **Long-term Mindset**: Psychological support and encouragement matter
+- **Smart Review**: Spaced repetition prevents burnout and ensures retention
+
+The system integrates these principles through:
+- Mentoring dashboard with D-Day tracking and learning streaks
+- Daily writing challenges with 30-day goals
+- Mock exam system with immediate AI feedback
+- Spaced repetition review algorithm
+- Community study groups and mentor matching
+- Psychological support (encouragement, milestones, slump detection)
+
 ## Quick Start
 
 ### Using Claude Code Skills
@@ -34,6 +51,9 @@ topic-comparer      # Compare multiple answer versions
 | **mock-exam-generator** | Generate realistic practice questions | Creating practice exams |
 | **study-planner** | Create personalized study plans | Planning study schedule |
 | **trend-topic-predictor** | Predict likely exam topics | Strategic exam preparation |
+| **skill-creator** | Guide for creating new custom skills | When you need specialized workflows |
+| **frontend-design** | Create distinctive, production-grade frontend interfaces | Building web UI components |
+| **document-skills** | Work with PDF, DOCX, PPTX, XLSX files | Processing office documents |
 
 ### Using the Web Interface (itpe-assistant)
 
@@ -53,15 +73,22 @@ pnpm dev
 ```
 
 **Features:**
-- **Interactive AI Chat**: Converse with AI assistants (Claude, GPT) for real-time study help
-- **Visual Interface**: Browse sub-notes, view diagrams, and organize study materials
-- **Integrated Skills**: Access all Claude Code skills through a web UI
-- **Study Dashboard**: Track progress, view analytics, and manage study plans
+- **Mentoring Dashboard**: D-Day counter, learning streaks, weekly plans, daily check-ins
+- **Mock Exam System**: Timer-based practice with immediate AI feedback (6 evaluation criteria)
+- **Smart Review**: Spaced repetition algorithm for optimal retention
+- **Daily Writing Challenge**: Build consistent writing habits with 30-day streaks
+- **Study Groups**: Community learning, mentor-mentee matching
+- **Psychological Support**: Encouragement messages, milestones, slump detection
+- **Interactive AI Chat**: Real-time conversation with Claude and GPT models
+- **Sub-notes Management**: Full CRUD with category organization
+- **AI Evaluations**: Detailed feedback on your answers
 
 **Tech Stack:**
-- Next.js 16 (React 19)
-- AI SDK (Anthropic & OpenAI support)
-- Tailwind CSS + Radix UI components
+- Next.js 16 (React 19) with App Router
+- PostgreSQL (Neon) + Drizzle ORM
+- AI SDK (Anthropic Claude & OpenAI)
+- Tailwind CSS 4 + Radix UI components
+- Better Auth for authentication
 - TypeScript
 
 **When to Use:**
@@ -75,7 +102,7 @@ pnpm dev
 ```markdown
 1. Ask Claude: "Generate a sub-note for [topic name]"
    → Uses topic-generator skill
-   → Saves to sub-notes/ai/
+   → Saves to sub-notes/ai/ or category folders
 
 2. Review and grade: "Grade this answer"
    → Uses grading skill
@@ -85,7 +112,9 @@ pnpm dev
    → Uses keyword-analyzer skill
    → Identifies missing critical terms
 
-4. Refine and save to sub-notes/human/
+4. Refine and categorize:
+   → Move to appropriate category (02_소프트웨어공학, 05_정보보안, etc.)
+   → Or keep in sub-notes/ai/ for further refinement
 ```
 
 ### 2. Analyzing Past Exam Questions
@@ -128,20 +157,36 @@ pnpm dev
 1. Start the web app:
    cd itpe-assistant && pnpm dev
 
-2. Interactive Learning:
-   → Browse sub-notes with visual UI
-   → Chat with AI for real-time explanations
-   → View diagrams and tables in formatted layout
+2. Mentoring Dashboard (/mentoring):
+   → Track D-Day countdown to exam
+   → Monitor learning streaks and consistency
+   → Set weekly goals and daily check-ins
+   → View encouragement messages
+   → Celebrate milestones
 
-3. Practice Sessions:
-   → Use web interface for mock exams
-   → Submit answers through web form
-   → Get instant feedback with visual highlights
+3. Mock Exam Practice (/mock-exam):
+   → Take timed practice exams (4-hour full or partial)
+   → Write answers in real-time
+   → Get immediate AI feedback with 6 evaluation criteria
+   → Track improvement over time
 
-4. Progress Tracking:
-   → View study statistics on dashboard
-   → Track completed topics and weak areas
-   → Visualize learning trends over time
+4. Smart Review (/review):
+   → Follow spaced repetition schedule
+   → Review topics at optimal intervals
+   → Random review mode for variety
+   → Track memory retention rates
+
+5. Daily Writing Challenge (/writing-challenge):
+   → Practice writing daily (20-minute sessions)
+   → Build 30-day streaks
+   → Analyze writing patterns
+   → Get quality feedback from AI
+
+6. Community Learning (/study-groups):
+   → Join study groups by target exam date
+   → Find mentors or become one
+   → Schedule regular study sessions
+   → Share progress with peers
 ```
 
 ## Working with Claude
@@ -225,32 +270,68 @@ sub-note/
 │   ├── template-selector/   # Template recommendation
 │   ├── mock-exam-generator/ # Practice question generation
 │   ├── study-planner/       # Study plan creation
-│   └── trend-topic-predictor/ # Topic prediction
+│   ├── trend-topic-predictor/ # Topic prediction
+│   ├── skill-creator/       # Create custom skills
+│   ├── frontend-design/     # Frontend UI generation
+│   └── document-skills/     # PDF, DOCX, PPTX, XLSX tools
+│       ├── pdf/
+│       ├── docx/
+│       ├── pptx/
+│       └── xlsx/
 
 ├── itpe-assistant/          # Web Application (Next.js)
 │   ├── app/                 # Next.js App Router pages
+│   │   ├── mentoring/       # Mentoring dashboard
+│   │   ├── mock-exam/       # Mock exam system
+│   │   ├── review/          # Smart review (spaced repetition)
+│   │   ├── writing-challenge/ # Daily writing challenge
+│   │   ├── study-groups/    # Community & mentoring
+│   │   ├── sub-notes/       # Sub-notes CRUD
+│   │   ├── topics/          # Exam topics
+│   │   ├── community/       # Shared notes
+│   │   └── ai-suggestions/  # AI topic recommendations
 │   ├── components/          # React components
 │   │   ├── ai-elements/     # AI chat components
-│   │   └── ui/              # Reusable UI components
-│   ├── lib/                 # Utility functions
+│   │   ├── dashboard/       # Dashboard widgets
+│   │   ├── navigation/      # Sidebar & nav
+│   │   ├── mock-exam/       # Mock exam components
+│   │   ├── auth/            # Authentication
+│   │   └── ui/              # Reusable UI (shadcn)
+│   ├── db/                  # Database schema (Drizzle)
+│   ├── lib/                 # Utility functions & types
+│   ├── hooks/               # React hooks
 │   ├── public/              # Static assets
 │   └── package.json         # Dependencies & scripts
 
 ├── scripts/                 # Exam analysis tools
 │   ├── exam_data_helper.py  # Input exam data
 │   ├── analyze.py           # Analyze & match to syllabus
-│   └── report_generator.py  # Generate markdown reports
+│   ├── report_generator.py  # Generate markdown reports
+│   ├── parse_exam_txt.py    # Parse exam text files
+│   ├── analyze_exam_trends.py # Trend analysis
+│   ├── analyze_tech_keywords.py # Keyword frequency
+│   ├── analyze_duplicates.py # Find duplicate questions
+│   └── add_exam_data.py     # Batch add exam data
 
 ├── data/                    # Analysis data
 │   ├── syllabus/            # Official exam syllabus
-│   └── exam_results/        # Analysis results (JSON)
+│   ├── exam_results/        # Analysis results (JSON)
+│   ├── 샘플_답안/           # Sample answers
+│   ├── exam.txt             # Raw exam data
+│   ├── 정보관리기술사_출제기준.pdf # Official syllabus PDF
+│   ├── 답안지(표).pdf       # Answer sheet template
+│   └── 깍두기_19칸.pdf      # Practice grid template
 
 ├── reports/                 # Generated analysis reports
-├── sub-notes/
+├── sub-notes/               # Topic sub-notes by category
 │   ├── ai/                  # AI-generated answers
-│   └── human/               # Human-refined answers
+│   ├── 02_소프트웨어공학/   # Software Engineering
+│   ├── 04_컴퓨터시스템및정보통신/ # Computer Systems & Telecom
+│   ├── 05_정보보안/         # Information Security
+│   └── 06_최신기술/         # Latest Technologies
 
-└── study-plan/              # Study schedules and plans
+├── study-plan/              # Study schedules and plans
+└── docs/                    # Documentation
 ```
 
 ## Answer Format Requirements
@@ -354,6 +435,12 @@ node --version  # Should be v18 or higher
 # Install dependencies
 cd itpe-assistant && pnpm install
 
+# Database setup
+pnpm db:push      # Push schema to database
+pnpm db:studio    # Open database GUI
+pnpm db:generate  # Generate migration files
+pnpm db:migrate   # Run migrations
+
 # Clear cache and rebuild
 rm -rf .next node_modules
 pnpm install
@@ -381,23 +468,124 @@ ls data/exam_results/
 **Instead of:** "Analyze the exam"
 **Try:** "Analyze exam round 135, match questions to syllabus categories, and identify trending topics in the security domain"
 
+## Development Conventions
+
+### Sub-notes Organization
+
+**Category Structure**:
+- `02_소프트웨어공학/` - Software Engineering topics
+- `04_컴퓨터시스템및정보통신/` - Computer Systems & Telecommunications
+- `05_정보보안/` - Information Security
+- `06_최신기술/` - Latest Technologies
+- `ai/` - AI-generated answers for review
+
+**File Naming**: Use descriptive names in Korean (e.g., `OAuth_2.0_인증.md`)
+
+### Web App Development
+
+**Component Organization**:
+- `components/ui/` - Reusable shadcn components
+- `components/dashboard/` - Dashboard-specific widgets
+- `components/[feature]/` - Feature-specific components
+- `app/[route]/` - Page components and server actions
+
+**Database Operations**:
+- Use server actions in `app/[route]/actions.ts`
+- Define schema in `db/schema.ts`
+- Use Drizzle ORM for type-safe queries
+
+**Styling**:
+- Tailwind CSS 4 with "Study Atelier" theme
+- Warm cream backgrounds (#fcfaf7)
+- Forest green accents (#3d5a4c)
+- Bronze/gold highlights (#c49a6c)
+- Crimson Pro for headings, Geist Sans for body
+
+### Analysis Scripts
+
+**Data Flow**:
+1. Input raw exam data via `exam_data_helper.py`
+2. Analyze with `analyze.py` → outputs JSON to `data/exam_results/`
+3. Generate reports with `report_generator.py` → outputs MD to `reports/`
+
+**Python Version**: Python 3.x required for all scripts
+
 ## Contributing
 
 When working with Claude on this repository:
 
 1. **Generate** new sub-notes in `sub-notes/ai/`
-2. **Refine** and personalize in `sub-notes/human/`
+2. **Categorize** refined notes into appropriate category folders
 3. **Analyze** exam data using scripts
 4. **Update** study plans based on progress
 5. **Commit** changes with clear messages
 
+### Git Workflow
+- Branch naming: Use descriptive names (e.g., `feature/mock-exam`, `fix/db-schema`)
+- Commit messages: Clear, concise, in English or Korean
+- For web app: Test locally before committing
+
 ## Resources
 
-- **README.md**: Project overview and structure
+### Documentation
+- **README.md**: Project overview and structure (Korean)
+- **CLAUDE.md**: This file - comprehensive AI assistant guide
 - **itpe-assistant/README.md**: Web application setup guide
 - **scripts/README.md**: Detailed guide for analysis scripts
+- **IMPLEMENTATION_SUMMARY.md**: Mentoring platform implementation details
+- **INTEGRATION_COMPLETE.md**: Web app integration completion notes
+- **USECHAT_GUIDE.md**: Guide for using AI chat features
 - **.claude/skills/**: Individual skill documentation
-- **reports/**: Past exam analysis reports
+
+### Analysis & Reports
+- **reports/**: Past exam analysis reports (markdown)
+- **data/exam_results/**: Detailed analysis data (JSON)
+- **data/샘플_답안/**: Sample answer sheets
+
+### Templates & References
+- **data/답안지(표).pdf**: Official answer sheet template
+- **data/깍두기_19칸.pdf**: Practice grid template (19 boxes)
+- **data/정보관리기술사_출제기준.pdf**: Official exam syllabus
+
+## AI Assistant Best Practices
+
+When working with this codebase as an AI assistant:
+
+### Understanding Context
+- **Read before writing**: Always read existing files before modifying
+- **Check categories**: Determine which category (02, 04, 05, 06) a topic belongs to
+- **Review templates**: Check `data/샘플_답안/` for reference formats
+- **Understand current state**: Use `scripts/analyze.py` output to see what's been analyzed
+
+### Generating Content
+- **Topic answers**: Follow the strict format (Definition → Explanation with diagram/table → Considerations)
+- **Korean style**: Use 조사 생략 (omit particles), professional technical tone
+- **Diagrams**: Create clear ASCII diagrams showing relationships
+- **Tables**: Always use 3-column format (구분 | 세부 항목 | 설명)
+
+### Code Modifications
+- **Web app changes**:
+  - Update schema in `db/schema.ts` first
+  - Create server actions in `actions.ts`
+  - Test with `pnpm dev` before committing
+- **Python scripts**: Maintain compatibility with existing JSON formats
+- **Skills**: Follow the skill template structure from `skill-creator`
+
+### File Operations
+- **Preserve formatting**: Maintain existing indentation and style
+- **Categorize correctly**: Place sub-notes in appropriate category folders
+- **Update indexes**: If adding significant content, update README files
+
+### Analysis Tasks
+- **Use existing scripts**: Don't recreate analysis tools that already exist
+- **JSON format**: Maintain consistency with existing `data/exam_results/` structure
+- **Korean file names**: Keep Korean naming in `data/` and `sub-notes/`
+
+### Communication
+- **Be bilingual**: Support both Korean and English naturally
+- **Explain choices**: When categorizing or structuring, explain reasoning
+- **Offer alternatives**: Provide multiple approaches when applicable
+- **Reference files**: Always include file paths when discussing specific content
 
 ## Contact & Feedback
 
