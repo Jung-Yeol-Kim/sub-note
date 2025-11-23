@@ -1,6 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
-import { streamText, convertToCoreMessages } from "ai";
+import { streamText, convertToCoreMessages, convertToModelMessages, LanguageModel } from "ai";
 
 export const runtime = "edge";
 export const maxDuration = 30;
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     const { messages, model = "claude-sonnet-4-20250514" } = await req.json();
 
     // Select AI model based on model ID
-    let selectedModel;
+    let selectedModel: LanguageModel;
 
     if (model.startsWith("gpt")) {
       selectedModel = openai(model);
@@ -106,9 +106,8 @@ export async function POST(req: Request) {
     const result = streamText({
       model: selectedModel,
       system: SYSTEM_PROMPT,
-      messages: convertToCoreMessages(messages),
+      messages: convertToModelMessages(messages),
       temperature: 0.7,
-      maxTokens: 4096,
     });
 
     return result.toUIMessageStreamResponse();

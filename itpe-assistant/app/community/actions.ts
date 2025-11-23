@@ -30,7 +30,33 @@ export async function getSharedSubNotes(options?: {
     offset = 0,
   } = options || {};
 
-  let query = db
+  // Build filter conditions
+  const conditions = [eq(sharedSubNotes.isPublic, true)];
+
+  if (category) {
+    conditions.push(eq(sharedSubNotes.category, category));
+  }
+
+  if (search) {
+    const searchCondition = or(
+      ilike(sharedSubNotes.title, `%${search}%`),
+      ilike(sharedSubNotes.content, `%${search}%`)
+    );
+    if (searchCondition) {
+      conditions.push(searchCondition);
+    }
+  }
+
+  // Determine sort order
+  const orderByClause =
+    sortBy === "popular"
+      ? desc(sharedSubNotes.likes)
+      : sortBy === "views"
+        ? desc(sharedSubNotes.views)
+        : desc(sharedSubNotes.createdAt);
+
+  // Build and execute query
+  const results = await db
     .select({
       id: sharedSubNotes.id,
       title: sharedSubNotes.title,
@@ -47,41 +73,10 @@ export async function getSharedSubNotes(options?: {
       updatedAt: sharedSubNotes.updatedAt,
     })
     .from(sharedSubNotes)
-    .where(eq(sharedSubNotes.isPublic, true));
-
-  // Apply filters
-  const conditions = [eq(sharedSubNotes.isPublic, true)];
-
-  if (category) {
-    conditions.push(eq(sharedSubNotes.category, category));
-  }
-
-  if (search) {
-    conditions.push(
-      or(
-        ilike(sharedSubNotes.title, `%${search}%`),
-        ilike(sharedSubNotes.content, `%${search}%`)
-      )!
-    );
-  }
-
-  query = query.where(and(...conditions));
-
-  // Apply sorting
-  switch (sortBy) {
-    case "popular":
-      query = query.orderBy(desc(sharedSubNotes.likes));
-      break;
-    case "views":
-      query = query.orderBy(desc(sharedSubNotes.views));
-      break;
-    case "latest":
-    default:
-      query = query.orderBy(desc(sharedSubNotes.createdAt));
-      break;
-  }
-
-  const results = await query.limit(limit).offset(offset);
+    .where(and(...conditions))
+    .orderBy(orderByClause)
+    .limit(limit)
+    .offset(offset);
 
   return results;
 }

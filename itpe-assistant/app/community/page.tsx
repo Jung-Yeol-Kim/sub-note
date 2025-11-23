@@ -212,18 +212,19 @@ export default async function CommunityPage({
                   <Badge variant="secondary" className="text-xs">
                     {note.category || "미분류"}
                   </Badge>
-                  {note.difficulty && (
+                  {typeof note.difficulty === "number" && (
                     <div className="flex items-center gap-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <div
-                          key={i}
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            i < note.difficulty
-                              ? "bg-accent"
-                              : "bg-muted"
-                          }`}
-                        />
-                      ))}
+                      {Array.from({ length: 5 }).map((_, i) => {
+                        const filled = i < (note.difficulty as number);
+                        return (
+                          <div
+                            key={i}
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              filled ? "bg-accent" : "bg-muted"
+                            }`}
+                          />
+                        );
+                      })}
                     </div>
                   )}
                 </div>

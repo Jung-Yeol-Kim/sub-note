@@ -384,4 +384,106 @@
   .transition-smooth {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  /* Answer Sheet Grid - 19 columns */
+  .grid-cols-19 {
+    grid-template-columns: repeat(19, minmax(0, 1fr));
+  }
+
+  /* Answer Sheet - 22 rows */
+  .grid-rows-22 {
+    grid-template-rows: repeat(22, minmax(0, 1fr));
+  }
+}
+
+/* Print Styles for Answer Sheet */
+@media print {
+  /* Hide UI elements */
+  @page {
+    size: A4;
+    margin: 1.5cm 1cm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide navigation, sidebar, and other UI elements */
+  nav,
+  aside,
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .print::backdrop,
+  button:not(.print-button),
+  [role="complementary"] {
+    display: none !important;
+  }
+
+  /* Show only main content */
+  main {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Answer Sheet specific styles */
+  .answer-sheet-viewer-container,
+  .answer-sheet-container {
+    box-shadow: none !important;
+    border: none !important;
+    page-break-inside: avoid;
+  }
+
+  /* Ensure grid borders are visible */
+  .answer-sheet-viewer,
+  .answer-sheet-grid {
+    border: 2px solid #000 !important;
+    background: white !important;
+  }
+
+  /* Make scoring area visible */
+  .scoring-area,
+  .scoring-column {
+    background: #f5f5f5 !important;
+    border-right: 2px solid #000 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Line numbers and grid lines */
+  .line-number,
+  .grid-line,
+  .answer-line {
+    border-color: #999 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Text should be black */
+  .line-text,
+  .answer-sheet-textarea {
+    color: #000 !important;
+  }
+
+  /* Cell markers */
+  .cell-marker,
+  .grid-cell {
+    border-color: #e0e0e0 !important;
+  }
+
+  /* Prevent page breaks inside answer lines */
+  .answer-line,
+  .grid-line {
+    page-break-inside: avoid;
+  }
+
+  /* Cards should not have shadows or backgrounds */
+  .card,
+  [class*="card"] {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    background: white !important;
+  }
 }

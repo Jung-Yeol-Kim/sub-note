@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { SubNoteEditor } from "@/components/subnote/subnote-editor";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
 import { StandardSubNote, standardSubNoteToMarkdown } from "@/lib/types/subnote";
-import { AnswerSheetEditor } from "@/components/answer-sheet/answer-sheet-editor";
+import { GridOverlayEditor } from "@/components/answer-sheet/grid-overlay-editor";
 import { parseAnswerSheet, type AnswerSheet } from "@/lib/types/answer-sheet";
 import {
   Select,
@@ -172,15 +172,14 @@ export default function NewSubNotePage() {
                 </CardContent>
               </Card>
 
-              {/* Answer Sheet Editor */}
-              <AnswerSheetEditor
+              {/* Answer Sheet Grid Editor */}
+              <GridOverlayEditor
                 initialContent={freeformContent}
                 onChange={(content, sheet) => {
                   setFreeformContent(content);
                   setFreeformSheet(sheet);
                 }}
-                showGridPreview={true}
-                showStatistics={true}
+                showPrintButton={false}
               />
             </div>
           )}

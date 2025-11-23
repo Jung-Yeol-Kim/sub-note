@@ -348,8 +348,8 @@ export default function EvaluationDetailPage() {
             <div key={index} className="space-y-3 p-4 rounded-lg border border-orange-200 dark:border-orange-900 bg-card">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">{weakness.aspect}</h4>
-                <Badge variant={priorityColors[weakness.priority]}>
-                  우선순위: {priorityLabels[weakness.priority]}
+                <Badge variant={priorityColors[weakness.priority as keyof typeof priorityColors]}>
+                  우선순위: {priorityLabels[weakness.priority as keyof typeof priorityLabels]}
                 </Badge>
               </div>
 

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Trash2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { ShareButton } from "@/components/community/share-button";
+import { AnswerSheetViewer } from "@/components/answer-sheet/answer-sheet-viewer";
 
 // Mock data - will be replaced with actual database query
 const getSubNote = (id: string) => ({
@@ -115,11 +116,12 @@ export default function SubNoteDetailPage({ params }: { params: { id: string } }
               </div>
             </CardHeader>
             <CardContent>
-              <div className="prose prose-stone max-w-none">
-                <pre className="whitespace-pre-wrap font-sans text-sm leading-7">
-                  {note.content}
-                </pre>
-              </div>
+              {/* Answer Sheet Viewer - displays content in exam format */}
+              <AnswerSheetViewer
+                content={note.content}
+                showHeader={false}
+                showPrintButton={true}
+              />
             </CardContent>
           </Card>
         </div>

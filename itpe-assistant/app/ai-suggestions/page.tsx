@@ -1,15 +1,22 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Send, Loader2, TrendingUp, Calendar, Target, Lightbulb } from "lucide-react";
+import { DefaultChatTransport } from "ai";
+import {
+  Calendar,
+  Lightbulb,
+  Loader2,
+  Send,
+  Sparkles,
+  Target,
+  TrendingUp,
+} from "lucide-react";
+import { Fragment, useState } from "react";
 import {
   Conversation,
   ConversationContent,
-  ConversationScrollButton,
   ConversationEmptyState,
+  ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import {
   Message,
@@ -19,13 +26,22 @@ import {
 import {
   PromptInput,
   PromptInputBody,
-  PromptInputTextarea,
-  PromptInputFooter,
-  PromptInputSubmit,
-  PromptInputTools,
   PromptInputButton,
+  PromptInputFooter,
   type PromptInputMessage,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -33,19 +49,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Fragment, useState } from "react";
 
 // Quick prompt suggestions
 const QUICK_PROMPTS = [
   {
     icon: TrendingUp,
     label: "최신 트렌드 분석",
-    prompt: "2026년 2월 시험을 대비하여 현재 시점에서 가장 출제 가능성이 높은 최신 기술 트렌드 5가지를 분석해주세요.",
+    prompt:
+      "2026년 2월 시험을 대비하여 현재 시점에서 가장 출제 가능성이 높은 최신 기술 트렌드 5가지를 분석해주세요.",
   },
   {
     icon: Target,
     label: "약점 보완 전략",
-    prompt: "정보보안 분야에서 자주 출제되지만 학습이 부족한 주제들을 추천해주세요.",
+    prompt:
+      "정보보안 분야에서 자주 출제되지만 학습이 부족한 주제들을 추천해주세요.",
   },
   {
     icon: Calendar,
@@ -55,16 +72,21 @@ const QUICK_PROMPTS = [
   {
     icon: Lightbulb,
     label: "고득점 전략",
-    prompt: "최근 출제 경향을 분석하여 고득점을 위한 전략적 학습 주제를 추천해주세요.",
+    prompt:
+      "최근 출제 경향을 분석하여 고득점을 위한 전략적 학습 주제를 추천해주세요.",
   },
 ];
 
 export default function AISuggestionsPage() {
-  const [selectedModel, setSelectedModel] = useState<string>("claude-sonnet-4-20250514");
+  const [selectedModel, setSelectedModel] = useState<string>(
+    "claude-sonnet-4-20250514",
+  );
   const [input, setInput] = useState("");
 
   const { messages, status, sendMessage } = useChat({
-    api: "/api/ai-recommendations",
+    transport: new DefaultChatTransport({
+      api: "/api/ai-recommendations",
+    }),
   });
 
   const handleQuickPrompt = (prompt: string) => {
@@ -76,7 +98,7 @@ export default function AISuggestionsPage() {
         body: {
           model: selectedModel,
         },
-      }
+      },
     );
   };
 
@@ -97,7 +119,7 @@ export default function AISuggestionsPage() {
         body: {
           model: selectedModel,
         },
-      }
+      },
     );
     setInput("");
   };
@@ -136,13 +158,17 @@ export default function AISuggestionsPage() {
               <SelectItem value="claude-sonnet-4-20250514">
                 <div className="flex items-center gap-2">
                   <span>Claude Sonnet 4</span>
-                  <Badge variant="secondary" className="text-xs">최신</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    최신
+                  </Badge>
                 </div>
               </SelectItem>
               <SelectItem value="claude-haiku-4-5">
                 <div className="flex items-center gap-2">
                   <span>Claude Haiku 4.5</span>
-                  <Badge variant="secondary" className="text-xs">빠름</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    빠름
+                  </Badge>
                 </div>
               </SelectItem>
               <SelectItem value="gpt-4o">
@@ -153,7 +179,9 @@ export default function AISuggestionsPage() {
               <SelectItem value="gpt-5-mini">
                 <div className="flex items-center gap-2">
                   <span>GPT-5 Mini</span>
-                  <Badge variant="secondary" className="text-xs">저렴</Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    저렴
+                  </Badge>
                 </div>
               </SelectItem>
             </SelectContent>
@@ -205,13 +233,14 @@ export default function AISuggestionsPage() {
                 {messages.map((message) => (
                   <Fragment key={message.id}>
                     {message.parts.map((part, i) => {
-                      if (part.type === 'text') {
+                      if (part.type === "text") {
                         return (
-                          <Message key={`${message.id}-${i}`} from={message.role}>
+                          <Message
+                            key={`${message.id}-${i}`}
+                            from={message.role}
+                          >
                             <MessageContent>
-                              <MessageResponse>
-                                {part.text}
-                              </MessageResponse>
+                              <MessageResponse>{part.text}</MessageResponse>
                             </MessageContent>
                           </Message>
                         );

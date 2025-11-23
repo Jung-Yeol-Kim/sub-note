@@ -102,7 +102,6 @@ ${context.slumpDetected ? "- 슬럼프 감지됨" : ""}
       model: anthropic("claude-3-5-haiku-20241022"), // 빠른 모델 사용
       prompt,
       temperature: 0.8,
-      maxTokens: 150,
     });
 
     return text.trim();

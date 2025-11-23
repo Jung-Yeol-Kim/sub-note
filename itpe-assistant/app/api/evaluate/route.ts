@@ -181,7 +181,6 @@ ${answer}
       system: GRADING_SYSTEM_PROMPT,
       prompt: evaluationPrompt,
       temperature: 0.3, // Lower temperature for more consistent grading
-      maxTokens: 4096,
     });
 
     // Parse JSON response

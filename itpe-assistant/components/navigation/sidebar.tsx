@@ -54,7 +54,7 @@ const navigationItems = [
   },
   {
     title: "샘플 답안",
-    href: "/examples",
+    href: "/samples",
     icon: GraduationCap,
   },
   {

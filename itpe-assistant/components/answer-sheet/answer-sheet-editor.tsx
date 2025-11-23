@@ -48,7 +48,8 @@ export function AnswerSheetEditor({
     const newSheet = parseAnswerSheet(content);
     setSheet(newSheet);
     onChange?.(content, newSheet);
-  }, [content, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content]);
 
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
