@@ -15,6 +15,8 @@ import {
   Message,
   MessageContent,
   MessageResponse,
+  MessageBranch,
+  MessageBranchContent,
 } from "@/components/ai-elements/message";
 import {
   PromptInput,
@@ -203,23 +205,31 @@ export default function AISuggestionsPage() {
             ) : (
               <>
                 {messages.map((message) => (
-                  <Message key={message.id} from={message.role}>
-                    <MessageContent>
-                      <MessageResponse>
-                        {message.content}
-                      </MessageResponse>
-                    </MessageContent>
-                  </Message>
+                  <MessageBranch key={message.id} defaultBranch={0}>
+                    <MessageBranchContent>
+                      <Message from={message.role}>
+                        <MessageContent>
+                          <MessageResponse>
+                            {message.content}
+                          </MessageResponse>
+                        </MessageContent>
+                      </Message>
+                    </MessageBranchContent>
+                  </MessageBranch>
                 ))}
                 {status === "streaming" && (
-                  <Message from="assistant">
-                    <MessageContent>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="text-sm">AI가 분석 중입니다...</span>
-                      </div>
-                    </MessageContent>
-                  </Message>
+                  <MessageBranch defaultBranch={0}>
+                    <MessageBranchContent>
+                      <Message from="assistant">
+                        <MessageContent>
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-sm">AI가 분석 중입니다...</span>
+                          </div>
+                        </MessageContent>
+                      </Message>
+                    </MessageBranchContent>
+                  </MessageBranch>
                 )}
               </>
             )}
