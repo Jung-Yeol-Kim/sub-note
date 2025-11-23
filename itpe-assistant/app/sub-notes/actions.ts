@@ -3,6 +3,8 @@
 import { db, subNotes } from "@/db";
 import { eq, desc, and, like } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export type SubNoteInput = {
   title: string;
@@ -20,15 +22,29 @@ export async function getSubNotes(userId: string, filters?: {
   search?: string;
 }) {
   try {
-    let query = db
+    // Build where conditions
+    const conditions = [eq(subNotes.userId, userId)];
+
+    if (filters?.category) {
+      conditions.push(eq(subNotes.category, filters.category));
+    }
+
+    if (filters?.status) {
+      conditions.push(eq(subNotes.status, filters.status));
+    }
+
+    if (filters?.search) {
+      conditions.push(
+        like(subNotes.title, `%${filters.search}%`)
+      );
+    }
+
+    const results = await db
       .select()
       .from(subNotes)
-      .where(eq(subNotes.userId, userId))
+      .where(and(...conditions))
       .orderBy(desc(subNotes.updatedAt));
 
-    // TODO: Add filters when conditions are implemented
-    // For now, return all sub-notes
-    const results = await query;
     return { success: true, data: results };
   } catch (error) {
     console.error("Error fetching sub-notes:", error);
@@ -79,6 +95,19 @@ export async function createSubNote(userId: string, data: SubNoteInput) {
     console.error("Error creating sub-note:", error);
     return { success: false, error: "Failed to create sub-note" };
   }
+}
+
+// Create a new sub-note (auth-aware version)
+export async function createSubNoteWithAuth(data: SubNoteInput) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  return createSubNote(session.user.id, data);
 }
 
 // Update an existing sub-note
