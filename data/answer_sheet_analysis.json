@@ -1,0 +1,338 @@
+[
+  {
+    "filename": "1교시_DB_옵티마이저.pdf",
+    "total_lines": 1,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "Sample answer text...",
+        "cells": 11,
+        "is_valid": true
+      }
+    ],
+    "violations": [],
+    "warnings": [],
+    "is_valid": true,
+    "statistics": {
+      "max_cells_in_line": 11,
+      "avg_cells_per_line": 11.0,
+      "total_cells": 11
+    }
+  },
+  {
+    "filename": "1교시_SW_ISO21500.pdf",
+    "total_lines": 1,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "Sample answer text...",
+        "cells": 11,
+        "is_valid": true
+      }
+    ],
+    "violations": [],
+    "warnings": [],
+    "is_valid": true,
+    "statistics": {
+      "max_cells_in_line": 11,
+      "avg_cells_per_line": 11.0,
+      "total_cells": 11
+    }
+  },
+  {
+    "filename": "1교시_보안_Purdue모델.pdf",
+    "total_lines": 21,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "가. DHCP의 선보정",
+        "cells": 9,
+        "is_valid": true
+      },
+      {
+        "line_number": 3,
+        "content": "정의",
+        "cells": 2,
+        "is_valid": true
+      },
+      {
+        "line_number": 4,
+        "content": "로컬  DHCP 서버                        가단",
+        "cells": 22,
+        "is_valid": false
+      },
+      {
+        "line_number": 5,
+        "content": "DHCP OFFER               - 외장 시간 축약",
+        "cells": 21,
+        "is_valid": false
+      },
+      {
+        "line_number": 6,
+        "content": "DHCP RESPONSE            Ip를 대여하여",
+        "cells": 19,
+        "is_valid": true
+      },
+      {
+        "line_number": 7,
+        "content": "DHCP ACK                 시정확 정가",
+        "cells": 18,
+        "is_valid": true
+      },
+      {
+        "line_number": 9,
+        "content": "- Client와 나이간  REQUEST을 연결",
+        "cells": 17,
+        "is_valid": true
+      },
+      {
+        "line_number": 11,
+        "content": "암버(?) PURBUE 모델",
+        "cells": 10,
+        "is_valid": true
+      },
+      {
+        "line_number": 13,
+        "content": "답례)",
+        "cells": 3,
+        "is_valid": true
+      },
+      {
+        "line_number": 14,
+        "content": "1. Iso62443, PURDUR망 정의",
+        "cells": 13,
+        "is_valid": true
+      },
+      {
+        "line_number": 15,
+        "content": "(-  ICS악처(?)선을 위여  IT, IDM로,OT",
+        "cells": 19,
+        "is_valid": true
+      },
+      {
+        "line_number": 16,
+        "content": "를 컴던하여  구성값인 제통된 보아모델",
+        "cells": 19,
+        "is_valid": true
+      },
+      {
+        "line_number": 18,
+        "content": "2. Purdue 모델의 구면조 및 컴면로",
+        "cells": 17,
+        "is_valid": true
+      },
+      {
+        "line_number": 20,
+        "content": "1) Purdue 모델의 구성조",
+        "cells": 12,
+        "is_valid": true
+      },
+      {
+        "line_number": 22,
+        "content": "구문  컴면조                    선영",
+        "cells": 18,
+        "is_valid": true
+      },
+      {
+        "line_number": 23,
+        "content": "IT    - 외부 N/W              - 옥시보 권리",
+        "cells": 22,
+        "is_valid": false
+      },
+      {
+        "line_number": 24,
+        "content": "즈며  - SCM,ERP               - 비리보 모델",
+        "cells": 22,
+        "is_valid": false
+      },
+      {
+        "line_number": 26,
+        "content": "IDM로즈며- IT,OT 차단        - 보여 안전 관리",
+        "cells": 23,
+        "is_valid": false
+      },
+      {
+        "line_number": 28,
+        "content": "- SCADA,DCS            - 옹장 식로리",
+        "cells": 18,
+        "is_valid": true
+      },
+      {
+        "line_number": 29,
+        "content": "OT    - PMI Controller       - 나딜 가여",
+        "cells": 20,
+        "is_valid": false
+      },
+      {
+        "line_number": 30,
+        "content": "즈며  - Pump,Actuator        - 안역 식어",
+        "cells": 20,
+        "is_valid": false
+      }
+    ],
+    "violations": [
+      "Line 4: 22칸 (최대 19칸 초과)",
+      "Line 5: 21칸 (최대 19칸 초과)",
+      "Line 23: 22칸 (최대 19칸 초과)",
+      "Line 24: 22칸 (최대 19칸 초과)",
+      "Line 26: 23칸 (최대 19칸 초과)",
+      "Line 29: 20칸 (최대 19칸 초과)",
+      "Line 30: 20칸 (최대 19칸 초과)"
+    ],
+    "warnings": [
+      "Line 6: 19칸 (19칸에 근접)",
+      "Line 7: 18칸 (19칸에 근접)",
+      "Line 15: 19칸 (19칸에 근접)",
+      "Line 16: 19칸 (19칸에 근접)",
+      "Line 22: 18칸 (19칸에 근접)",
+      "Line 28: 18칸 (19칸에 근접)"
+    ],
+    "is_valid": false,
+    "statistics": {
+      "max_cells_in_line": 23,
+      "avg_cells_per_line": 16.4,
+      "total_cells": 344
+    }
+  },
+  {
+    "filename": "2교시_DB_NoSQL.pdf",
+    "total_lines": 1,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "Sample answer text...",
+        "cells": 11,
+        "is_valid": true
+      }
+    ],
+    "violations": [],
+    "warnings": [],
+    "is_valid": true,
+    "statistics": {
+      "max_cells_in_line": 11,
+      "avg_cells_per_line": 11.0,
+      "total_cells": 11
+    }
+  },
+  {
+    "filename": "2교시_네트워크_QoS.pdf",
+    "total_lines": 1,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "Sample answer text...",
+        "cells": 11,
+        "is_valid": true
+      }
+    ],
+    "violations": [],
+    "warnings": [],
+    "is_valid": true,
+    "statistics": {
+      "max_cells_in_line": 11,
+      "avg_cells_per_line": 11.0,
+      "total_cells": 11
+    }
+  },
+  {
+    "filename": "2교시_보안_디지털포렌식.pdf",
+    "total_lines": 14,
+    "lines_analysis": [
+      {
+        "line_number": 1,
+        "content": "가(6) 디지덜 포렌식이 대하여,",
+        "cells": 15,
+        "is_valid": true
+      },
+      {
+        "line_number": 2,
+        "content": "(나) 정차, (다) 가술 선영",
+        "cells": 13,
+        "is_valid": true
+      },
+      {
+        "line_number": 4,
+        "content": "답)",
+        "cells": 2,
+        "is_valid": true
+      },
+      {
+        "line_number": 5,
+        "content": "1. 디지덜 덩젝 즐가 착복, 디지덜 포렌식 가단영",
+        "cells": 23,
+        "is_valid": false
+      },
+      {
+        "line_number": 7,
+        "content": "[가단영]",
+        "cells": 4,
+        "is_valid": true
+      },
+      {
+        "line_number": 8,
+        "content": "예청, 폰선, 옴저 일석",
+        "cells": 11,
+        "is_valid": true
+      },
+      {
+        "line_number": 9,
+        "content": "제자  팎선  옐저  충더  보선",
+        "cells": 14,
+        "is_valid": true
+      },
+      {
+        "line_number": 12,
+        "content": "- 암속석 영향한 속인, 못선, 보차상 창영",
+        "cells": 20,
+        "is_valid": false
+      },
+      {
+        "line_number": 13,
+        "content": "우자구산선 구전과 공축(?)돈물",
+        "cells": 15,
+        "is_valid": true
+      },
+      {
+        "line_number": 15,
+        "content": "2. 디지덜 포렌식의 전차 선영",
+        "cells": 14,
+        "is_valid": true
+      },
+      {
+        "line_number": 17,
+        "content": "1) 디지덜 포렌식의 전차각요",
+        "cells": 14,
+        "is_valid": true
+      },
+      {
+        "line_number": 19,
+        "content": "① ②  ③    ④    ⑤",
+        "cells": 8,
+        "is_valid": true
+      },
+      {
+        "line_number": 20,
+        "content": "속자 즐가 도려/ 결층/ 얼선",
+        "cells": 13,
+        "is_valid": true
+      },
+      {
+        "line_number": 21,
+        "content": "구비 속인 일즐  중자  차정",
+        "cells": 13,
+        "is_valid": true
+      }
+    ],
+    "violations": [
+      "Line 5: 23칸 (최대 19칸 초과)",
+      "Line 12: 20칸 (최대 19칸 초과)"
+    ],
+    "warnings": [],
+    "is_valid": false,
+    "statistics": {
+      "max_cells_in_line": 23,
+      "avg_cells_per_line": 12.8,
+      "total_cells": 179
+    }
+  }
+]

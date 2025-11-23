@@ -4,18 +4,20 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Alert } from "@/components/ui/alert";
-import { Save, FileText, CheckCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Save, FileText, CheckCircle, AlertTriangle } from "lucide-react";
 import type { ExamQuestion, ExamAnswer } from "@/lib/types/mock-exam";
 import { countWords } from "@/lib/types/mock-exam";
+import { parseAnswerSheet, formatValidationMessages, type AnswerSheet } from "@/lib/types/answer-sheet";
 
 interface ExamAnswerEditorProps {
   question: ExamQuestion;
   answer: ExamAnswer | null;
-  onAnswerChange: (content: string) => void;
+  onAnswerChange: (content: string, sheet?: AnswerSheet) => void;
   onAutoSave?: (answer: ExamAnswer) => void;
   autoSaveInterval?: number; // in milliseconds
   readOnly?: boolean;
+  showFormatValidation?: boolean; // Show 22×19 format validation
 }
 
 export function ExamAnswerEditor({
@@ -25,6 +27,7 @@ export function ExamAnswerEditor({
   onAutoSave,
   autoSaveInterval = 30000, // 30 seconds
   readOnly = false,
+  showFormatValidation = true,
 }: ExamAnswerEditorProps) {
   const [content, setContent] = useState(answer?.content || "");
   const [lastSaved, setLastSaved] = useState<Date | null>(
@@ -32,9 +35,22 @@ export function ExamAnswerEditor({
   );
   const [isSaving, setIsSaving] = useState(false);
 
+  // Answer sheet validation
+  const [answerSheet, setAnswerSheet] = useState<AnswerSheet>(() =>
+    parseAnswerSheet(content)
+  );
+
   const characterCount = content.length;
   const wordCount = countWords(content);
   const hasContent = content.trim().length > 0;
+
+  // Update answer sheet when content changes
+  useEffect(() => {
+    if (showFormatValidation) {
+      const sheet = parseAnswerSheet(content);
+      setAnswerSheet(sheet);
+    }
+  }, [content, showFormatValidation]);
 
   // Auto-save functionality
   const performAutoSave = useCallback(() => {

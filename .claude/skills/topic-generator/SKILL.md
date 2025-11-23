@@ -76,6 +76,45 @@ When user requests an answer for a specific topic:
 - **Keyword-focused**: Emphasize technical terms
 - **Noun-form endings**: End definitions with nouns
 - **1-page constraint**: Compress to essential content
+- **22줄 × 19칸 규격**: Follow official answer sheet format (see below)
+
+## Answer Sheet Format (22줄 × 19칸) ⭐ NEW
+
+**Official Format Rules:**
+- Maximum **22 lines (rows)**
+- Maximum **19 cells per line (columns)**
+- Cell counting: 한글 1자=1칸, 영문/숫자 2자=1칸, 특수문자 2자=1칸
+
+**Format Compliance Guidelines:**
+
+1. **Line Management**
+   - Keep answers within 18-20 lines (buffer for safety)
+   - Break long lines before reaching 19 cells
+   - Use concise language to fit within limits
+
+2. **Cell Counting Examples**
+   ```
+   "OAuth 2.0 인증" = 6칸 (OAuth=2.5칸, 2.0=1칸, 인증=2칸)
+   "정보보안" = 4칸 (4 한글)
+   "API Gateway" = 5칸 (10 영문 / 2 = 5칸)
+   ```
+
+3. **Line Breaking Strategy**
+   - Break after diagram labels
+   - Break between table rows naturally
+   - Keep related content together
+   - Use bullet points to save cells
+
+4. **Content Compression**
+   - Omit particles rigorously
+   - Use abbreviations where appropriate
+   - Prioritize keywords over explanatory text
+   - Combine related points into single lines
+
+5. **Validation**
+   - After generating, mentally count cells per line
+   - If a line exceeds 17 cells, consider breaking it
+   - Aim for average 14-16 cells per line
 
 ## Structure Template
 

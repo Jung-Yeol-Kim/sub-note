@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SubNoteEditor } from "@/components/subnote/subnote-editor";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
 import { StandardSubNote, standardSubNoteToMarkdown } from "@/lib/types/subnote";
+import { AnswerSheetEditor } from "@/components/answer-sheet/answer-sheet-editor";
+import { parseAnswerSheet, type AnswerSheet } from "@/lib/types/answer-sheet";
 import {
   Select,
   SelectContent,
@@ -17,20 +19,49 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-type EditorMode = "structured" | "markdown";
+type EditorMode = "structured" | "freeform";
 
 export default function NewSubNotePage() {
   const router = useRouter();
   const [editorMode, setEditorMode] = useState<EditorMode>("structured");
   const [showSyllabus, setShowSyllabus] = useState(false);
 
+  // For freeform mode
+  const [freeformContent, setFreeformContent] = useState("");
+  const [freeformSheet, setFreeformSheet] = useState<AnswerSheet | null>(null);
+
   const handleSave = async (data: StandardSubNote) => {
     // Convert to markdown for storage
     const markdown = standardSubNoteToMarkdown(data);
 
     // TODO: Implement save logic with server action
-    console.log("Saving sub-note:", data);
+    console.log("Saving structured sub-note:", data);
     console.log("Markdown:", markdown);
+
+    // router.push("/sub-notes");
+  };
+
+  const handleFreeformSave = async () => {
+    if (!freeformSheet) return;
+
+    // TODO: Implement save logic with server action
+    console.log("Saving freeform sub-note:");
+    console.log("Content:", freeformContent);
+    console.log("Answer sheet:", freeformSheet);
+    console.log("Format valid:", freeformSheet.isValid);
+    console.log("Lines:", freeformSheet.totalLines);
+    console.log("Cells:", freeformSheet.totalCells);
+
+    // Data to save:
+    // {
+    //   title: "...",  // Get from user input
+    //   content: freeformContent,
+    //   structuredAnswer: freeformSheet,
+    //   lineCount: freeformSheet.totalLines,
+    //   cellCount: freeformSheet.totalCells,
+    //   isValidFormat: freeformSheet.isValid,
+    //   formatWarnings: freeformSheet.validationWarnings,
+    // }
 
     // router.push("/sub-notes");
   };
@@ -66,12 +97,12 @@ export default function NewSubNotePage() {
             value={editorMode}
             onValueChange={(value) => setEditorMode(value as EditorMode)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[200px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="structured">구조화 에디터</SelectItem>
-              <SelectItem value="markdown">마크다운 에디터</SelectItem>
+              <SelectItem value="freeform">자유 형식 (22×19 규격)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -83,20 +114,31 @@ export default function NewSubNotePage() {
           {editorMode === "structured" ? (
             <SubNoteEditor onSave={handleSave} />
           ) : (
-            <Card>
-              <CardHeader>
-                <CardTitle>마크다운 에디터</CardTitle>
-                <CardDescription>
-                  마크다운 형식으로 자유롭게 작성하세요
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  마크다운 에디터는 곧 지원될 예정입니다.
-                  현재는 구조화 에디터를 사용해주세요.
-                </p>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              {/* Save button for freeform mode */}
+              <div className="flex justify-end">
+                <Button
+                  onClick={handleFreeformSave}
+                  disabled={!freeformSheet?.isValid}
+                  size="lg"
+                >
+                  <Save className="mr-2 h-4 w-4" />
+                  저장
+                  {!freeformSheet?.isValid && " (규격 오류 확인 필요)"}
+                </Button>
+              </div>
+
+              {/* Answer Sheet Editor */}
+              <AnswerSheetEditor
+                initialContent={freeformContent}
+                onChange={(content, sheet) => {
+                  setFreeformContent(content);
+                  setFreeformSheet(sheet);
+                }}
+                showGridPreview={true}
+                showStatistics={true}
+              />
+            </div>
           )}
         </div>
 

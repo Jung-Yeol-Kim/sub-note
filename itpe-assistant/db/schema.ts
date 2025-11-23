@@ -77,6 +77,14 @@ export const subNotes = pgTable("sub_notes", {
   status: text("status").notNull().default("draft"), // draft, in_review, completed
   difficulty: integer("difficulty"), // 1-5 scale
   lastReviewedAt: timestamp("last_reviewed_at"),
+
+  // Answer sheet format validation (22줄 × 19칸)
+  structuredAnswer: jsonb("structured_answer"), // Parsed AnswerSheet object from lib/types/answer-sheet
+  lineCount: integer("line_count"), // Total lines in answer
+  cellCount: integer("cell_count"), // Total cells used
+  isValidFormat: boolean("is_valid_format").default(true), // Meets 22×19 format requirements
+  formatWarnings: text("format_warnings").array(), // Format warnings (e.g., "Line 5 exceeds 19 cells")
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -470,6 +478,14 @@ export const mockExamAnswers = pgTable("mock_exam_answers", {
   strengths: text("strengths").array(),
   weaknesses: text("weaknesses").array(),
   suggestions: text("suggestions").array(),
+
+  // Answer sheet format validation (22줄 × 19칸)
+  structuredAnswer: jsonb("structured_answer"), // Parsed AnswerSheet object
+  lineCount: integer("line_count"), // Total lines
+  cellCount: integer("cell_count"), // Total cells
+  isValidFormat: boolean("is_valid_format").default(true), // Meets 22×19 format
+  formatWarnings: text("format_warnings").array(), // Format warnings
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()
