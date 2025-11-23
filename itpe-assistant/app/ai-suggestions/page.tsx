@@ -15,8 +15,6 @@ import {
   Message,
   MessageContent,
   MessageResponse,
-  MessageBranch,
-  MessageBranchContent,
 } from "@/components/ai-elements/message";
 import {
   PromptInput,
@@ -205,42 +203,32 @@ export default function AISuggestionsPage() {
             ) : (
               <>
                 {messages.map((message) => (
-                  <MessageBranch key={message.id} defaultBranch={0}>
-                    <MessageBranchContent>
-                      {message.parts.map((part, i) => {
-                        switch (part.type) {
-                          case 'text':
-                            return (
-                              <Fragment key={`${message.id}-${i}`}>
-                                <Message from={message.role}>
-                                  <MessageContent>
-                                    <MessageResponse>
-                                      {part.text}
-                                    </MessageResponse>
-                                  </MessageContent>
-                                </Message>
-                              </Fragment>
-                            );
-                          default:
-                            return null;
-                        }
-                      })}
-                    </MessageBranchContent>
-                  </MessageBranch>
+                  <Fragment key={message.id}>
+                    {message.parts.map((part, i) => {
+                      if (part.type === 'text') {
+                        return (
+                          <Message key={`${message.id}-${i}`} from={message.role}>
+                            <MessageContent>
+                              <MessageResponse>
+                                {part.text}
+                              </MessageResponse>
+                            </MessageContent>
+                          </Message>
+                        );
+                      }
+                      return null;
+                    })}
+                  </Fragment>
                 ))}
                 {status === "streaming" && (
-                  <MessageBranch defaultBranch={0}>
-                    <MessageBranchContent>
-                      <Message from="assistant">
-                        <MessageContent>
-                          <div className="flex items-center gap-2 text-muted-foreground">
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span className="text-sm">AI가 분석 중입니다...</span>
-                          </div>
-                        </MessageContent>
-                      </Message>
-                    </MessageBranchContent>
-                  </MessageBranch>
+                  <Message from="assistant">
+                    <MessageContent>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span className="text-sm">AI가 분석 중입니다...</span>
+                      </div>
+                    </MessageContent>
+                  </Message>
                 )}
               </>
             )}
