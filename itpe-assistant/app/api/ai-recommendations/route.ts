@@ -89,13 +89,19 @@ const SYSTEM_PROMPT = `당신은 정보관리기술사 시험의 출제 패턴�
 
 export async function POST(req: Request) {
   try {
-    const { messages, model = "claude" } = await req.json();
+    const { messages, model = "claude-sonnet-4-20250514" } = await req.json();
 
-    // Select AI model based on user preference
-    const selectedModel =
-      model === "gpt"
-        ? openai("gpt-4o")
-        : anthropic("claude-sonnet-4-20250514");
+    // Select AI model based on model ID
+    let selectedModel;
+
+    if (model.startsWith("gpt")) {
+      selectedModel = openai(model);
+    } else if (model.startsWith("claude")) {
+      selectedModel = anthropic(model);
+    } else {
+      // Default to Claude Sonnet 4
+      selectedModel = anthropic("claude-sonnet-4-20250514");
+    }
 
     const result = streamText({
       model: selectedModel,
