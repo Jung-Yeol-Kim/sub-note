@@ -8,8 +8,9 @@ import { useRouter } from "next/navigation";
 import { SubNoteEditor } from "@/components/subnote/subnote-editor";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
 import { StandardSubNote, standardSubNoteToMarkdown } from "@/lib/types/subnote";
-import { GridOverlayEditor } from "@/components/answer-sheet/grid-overlay-editor";
-import { parseAnswerSheet, type AnswerSheet } from "@/lib/types/answer-sheet";
+import { BlockEditor } from "@/components/answer-sheet/block-editor";
+import { type AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
+import { serializeAnswerSheet, prepareForStorage } from "@/lib/utils/answer-sheet-db";
 import {
   Select,
   SelectContent,
@@ -32,8 +33,7 @@ export default function NewSubNotePage() {
 
   // For freeform mode
   const [freeformTitle, setFreeformTitle] = useState("");
-  const [freeformContent, setFreeformContent] = useState("");
-  const [freeformSheet, setFreeformSheet] = useState<AnswerSheet | null>(null);
+  const [freeformDocument, setFreeformDocument] = useState<AnswerSheetDocument | null>(null);
 
   const handleSave = async (data: StandardSubNote) => {
     setIsSaving(true);
@@ -64,7 +64,7 @@ export default function NewSubNotePage() {
   };
 
   const handleFreeformSave = async () => {
-    if (!freeformSheet) return;
+    if (!freeformDocument) return;
     if (!freeformTitle.trim()) {
       alert("제목을 입력해주세요.");
       return;
@@ -72,10 +72,17 @@ export default function NewSubNotePage() {
 
     setIsSaving(true);
     try {
+      const prepared = prepareForStorage(freeformDocument);
+
       const result = await createSubNoteWithAuth({
         title: freeformTitle,
-        content: freeformContent,
+        content: JSON.stringify(serializeAnswerSheet(prepared.document)),
         status: "draft",
+        structuredAnswer: serializeAnswerSheet(prepared.document),
+        lineCount: prepared.lineCount,
+        cellCount: prepared.cellCount,
+        isValidFormat: prepared.isValidFormat,
+        formatWarnings: prepared.formatWarnings,
       });
 
       if (result.success) {
@@ -161,25 +168,21 @@ export default function NewSubNotePage() {
                   <div className="flex justify-end">
                     <Button
                       onClick={handleFreeformSave}
-                      disabled={!freeformSheet?.isValid || !freeformTitle.trim() || isSaving}
+                      disabled={!freeformDocument?.metadata.isValid || !freeformTitle.trim() || isSaving}
                       size="lg"
                     >
                       <Save className="mr-2 h-4 w-4" />
                       {isSaving ? "저장 중..." : "저장"}
-                      {!freeformSheet?.isValid && " (규격 오류 확인 필요)"}
+                      {freeformDocument && !freeformDocument.metadata.isValid && " (규격 오류 확인 필요)"}
                     </Button>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Answer Sheet Grid Editor */}
-              <GridOverlayEditor
-                initialContent={freeformContent}
-                onChange={(content, sheet) => {
-                  setFreeformContent(content);
-                  setFreeformSheet(sheet);
-                }}
-                showPrintButton={false}
+              {/* Block Editor */}
+              <BlockEditor
+                initialDocument={freeformDocument || undefined}
+                onChange={(doc) => setFreeformDocument(doc)}
               />
             </div>
           )}

@@ -390,6 +390,11 @@
     grid-template-columns: repeat(19, minmax(0, 1fr));
   }
 
+  /* Answer Sheet Grid - 20 columns */
+  .grid-cols-20 {
+    grid-template-columns: repeat(20, minmax(0, 1fr));
+  }
+
   /* Answer Sheet - 22 rows */
   .grid-rows-22 {
     grid-template-rows: repeat(22, minmax(0, 1fr));

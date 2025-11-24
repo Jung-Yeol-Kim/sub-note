@@ -8,12 +8,8 @@ import {
   FileText,
   Sparkles,
   Users,
-  ClipboardCheck,
-  LayoutDashboard,
   Settings,
   Target,
-  RefreshCw,
-  PenTool,
   UsersRound,
   GraduationCap,
 } from "lucide-react";
@@ -22,55 +18,47 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { ColorPicker } from "@/components/color-picker";
 
 const navigationItems = [
-  {
-    title: "멘토링",
-    href: "/mentoring",
-    icon: Target,
-  },
-  {
-    title: "모의고사",
-    href: "/mock-exam",
-    icon: ClipboardCheck,
-  },
-  {
-    title: "스마트 복습",
-    href: "/review",
-    icon: RefreshCw,
-  },
-  {
-    title: "쓰기 챌린지",
-    href: "/writing-challenge",
-    icon: PenTool,
-  },
-  {
-    title: "스터디 그룹",
-    href: "/study-groups",
-    icon: UsersRound,
-  },
-  {
+    {
     title: "내 서브노트",
     href: "/sub-notes",
     icon: BookOpen,
+    disabled: false,
   },
   {
     title: "샘플 답안",
     href: "/samples",
     icon: GraduationCap,
+    disabled: false,
+  },
+  {
+    title: "멘토링",
+    href: "/mentoring",
+    icon: Target,
+    disabled: true,
+  },
+  {
+    title: "스터디 그룹",
+    href: "/study-groups",
+    icon: UsersRound,
+    disabled: true,
   },
   {
     title: "시험 주제",
     href: "/topics",
     icon: FileText,
+    disabled: true,
   },
   {
     title: "커뮤니티",
     href: "/community",
     icon: Users,
+    disabled: true,
   },
   {
     title: "AI 추천",
     href: "/ai-suggestions",
     icon: Sparkles,
+    disabled: false,
   },
 ];
 
@@ -83,7 +71,7 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-sidebar-border bg-sidebar backdrop-blur supports-[backdrop-filter]:bg-sidebar/95">
+    <aside className="fixed left-0 top-0 z-40 h-screen border-r border-sidebar-border bg-sidebar backdrop-blur supports-[backdrop-filter]:bg-sidebar/95">
       <div className="flex h-full flex-col">
         {/* Logo/Header */}
         <div className="flex h-16 items-center border-b border-sidebar-border px-6">
@@ -105,6 +93,18 @@ export function Sidebar() {
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
+
+            if (item.disabled) {
+              return (
+                <div
+                  key={item.href}
+                  className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium opacity-40 cursor-not-allowed"
+                >
+                  <Icon className="h-4 w-4 text-sidebar-foreground/40" />
+                  <span className="text-sidebar-foreground/40">{item.title}</span>
+                </div>
+              );
+            }
 
             return (
               <Link
@@ -138,13 +138,10 @@ export function Sidebar() {
             <AuthButton />
           </div>
           <div className="flex items-center justify-between gap-2">
-            <Link
-              href="/settings"
-              className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-            >
-              <Settings className="h-4 w-4 text-sidebar-foreground/60" />
-              <span>설정</span>
-            </Link>
+            <div className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium opacity-40 cursor-not-allowed">
+              <Settings className="h-4 w-4 text-sidebar-foreground/40" />
+              <span className="text-sidebar-foreground/40">설정</span>
+            </div>
             <ColorPicker />
             <ThemeToggle />
           </div>

@@ -1,9 +1,10 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { MainWrapper } from "@/components/layout/main-wrapper";
 import { Sidebar } from "@/components/navigation/sidebar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ThemeColorProvider } from "@/hooks/use-theme-color";
-import { MainWrapper } from "@/components/layout/main-wrapper";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,7 +19,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ITPE Assistant - 정보관리기술사 학습 도우미",
-  description: "AI-powered study assistant for the IT Professional Examination (정보관리기술사)",
+  description:
+    "AI-powered study assistant for the IT Professional Examination (정보관리기술사)",
 };
 
 export default function RootLayout({
@@ -44,6 +46,7 @@ export default function RootLayout({
             </div>
           </ThemeColorProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

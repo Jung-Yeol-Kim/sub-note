@@ -4,59 +4,52 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Trash2, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { ShareButton } from "@/components/community/share-button";
-import { AnswerSheetViewer } from "@/components/answer-sheet/answer-sheet-viewer";
+import { AnswerSheetViewer } from "@/components/answer-sheet";
+import { devopsAnswerSheet } from "@/lib/data/devops-answer-example";
+import type { AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
 
 // Mock data - will be replaced with actual database query
-const getSubNote = (id: string) => ({
-  id,
-  title: "OAuth 2.0 Grant Types",
-  category: "보안",
-  status: "completed",
-  difficulty: 4,
-  tags: ["OAuth", "Authentication", "Security"],
-  content: `# OAuth 2.0 Grant Types
+const getSubNote = (id: string) => {
+  // ID가 "1"이면 DevOps 답안지 반환
+  if (id === "1") {
+    return {
+      id,
+      title: "DevOps",
+      category: "소프트웨어공학",
+      status: "completed",
+      difficulty: 3,
+      tags: ["DevOps", "CI/CD", "자동화"],
+      document: devopsAnswerSheet,
+      updatedAt: "2025-11-24T10:30:00Z",
+      createdAt: "2025-11-24T09:00:00Z",
+    };
+  }
 
-## 1. 정의
-OAuth 2.0은 인증 및 권한 부여를 위한 산업 표준 프로토콜로, 사용자가 비밀번호를 공유하지 않고도 제3자 애플리케이션에 리소스 접근 권한을 부여할 수 있는 프레임워크
+  // 다른 ID는 기본 빈 문서 반환
+  return {
+    id,
+    title: "Sample Sub-note",
+    category: "기타",
+    status: "draft",
+    difficulty: 2,
+    tags: [],
+    document: {
+      blocks: [],
+      totalLines: 0,
+      metadata: {
+        isValid: true,
+        validationErrors: [],
+        validationWarnings: [],
+      },
+    } as AnswerSheetDocument,
+    updatedAt: "2025-11-24T10:30:00Z",
+    createdAt: "2025-11-24T09:00:00Z",
+  };
+};
 
-### 특징
-- 토큰 기반 인증 메커니즘
-- 권한 위임 (Authorization Delegation)
-- RESTful API 지원
-
-## 2. Grant Types 설명
-
-### 1) Authorization Code Grant (권장 방식)
-가장 안전한 방식으로, 서버 사이드 애플리케이션에서 사용
-
-**흐름:**
-\`\`\`
-User → Authorization Request → Authorization Server
-Authorization Server → Authorization Code → Client
-Client → Access Token Request → Authorization Server
-Authorization Server → Access Token → Client
-\`\`\`
-
-### 2) Implicit Grant
-브라우저 기반 애플리케이션을 위한 단순화된 방식 (보안상 권장하지 않음)
-
-### 3) Resource Owner Password Credentials Grant
-신뢰할 수 있는 애플리케이션에서 사용자의 자격 증명을 직접 수집
-
-### 4) Client Credentials Grant
-Machine-to-Machine 통신에 사용
-
-## 3. 보안 고려사항
-- HTTPS 사용 필수
-- State 파라미터로 CSRF 방어
-- PKCE (Proof Key for Code Exchange) 적용
-- Token 만료 및 갱신 전략`,
-  updatedAt: "2025-11-20T10:30:00Z",
-  createdAt: "2025-11-15T14:00:00Z",
-});
-
-export default function SubNoteDetailPage({ params }: { params: { id: string } }) {
-  const note = getSubNote(params.id);
+export default async function SubNoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const note = getSubNote(id);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -116,11 +109,11 @@ export default function SubNoteDetailPage({ params }: { params: { id: string } }
               </div>
             </CardHeader>
             <CardContent>
-              {/* Answer Sheet Viewer - displays content in exam format */}
+              {/* Answer Sheet - 22 lines format with blocks */}
               <AnswerSheetViewer
-                content={note.content}
+                document={note.document}
                 showHeader={false}
-                showPrintButton={true}
+                showPrintButton={false}
               />
             </CardContent>
           </Card>
@@ -137,11 +130,11 @@ export default function SubNoteDetailPage({ params }: { params: { id: string } }
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Difficulty</p>
                 <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
+                  {[1, 2, 3, 4, 5].map((level) => (
                     <div
-                      key={i}
+                      key={`difficulty-level-${level}`}
                       className={`h-2 w-2 rounded-full ${
-                        i < note.difficulty ? "bg-accent" : "bg-muted"
+                        level <= note.difficulty ? "bg-accent" : "bg-muted"
                       }`}
                     />
                   ))}
@@ -190,3 +183,4 @@ export default function SubNoteDetailPage({ params }: { params: { id: string } }
     </div>
   );
 }
+

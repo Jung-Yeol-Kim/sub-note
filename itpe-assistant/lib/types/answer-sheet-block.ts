@@ -3,7 +3,7 @@
  * 정보관리기술사 답안지 블록 기반 구조
  */
 
-export type BlockType = 'text' | 'table';
+export type BlockType = 'text' | 'table' | 'diagram';
 
 /**
  * Base block interface
@@ -34,15 +34,67 @@ export interface TableBlock extends BaseBlock {
 }
 
 /**
+ * Diagram block - 다이어그램/흐름도
+ * 박스와 화살표로 구성된 구조도
+ */
+export interface DiagramBlock extends BaseBlock {
+  type: 'diagram';
+  nodes: DiagramNode[]; // 노드(박스) 배열
+  connections: DiagramConnection[]; // 연결선 배열
+  labels?: DiagramLabel[]; // 추가 레이블 (선택사항)
+}
+
+/**
+ * Diagram node - 다이어그램의 박스/노드
+ */
+export interface DiagramNode {
+  id: string;
+  label: string; // 노드 안의 텍스트
+  x: number; // 가로 위치 (0-19 칸)
+  y: number; // 세로 위치 (블록 내에서 0부터 시작)
+  width: number; // 너비 (칸 수)
+  height: number; // 높이 (줄 수)
+}
+
+/**
+ * Diagram connection - 노드 간 연결선
+ */
+export interface DiagramConnection {
+  from: string; // 시작 노드 ID
+  to: string; // 종료 노드 ID
+  label?: string; // 연결선 위의 레이블 (선택사항)
+  direction?: 'horizontal' | 'vertical' | 'both'; // 연결 방향
+}
+
+/**
+ * Diagram label - 추가 레이블 (화살표 위 텍스트 등)
+ */
+export interface DiagramLabel {
+  text: string;
+  x: number; // 가로 위치 (0-19 칸)
+  y: number; // 세로 위치 (블록 내에서 0부터 시작)
+}
+
+/**
  * Union type for all blocks
  */
-export type AnswerSheetBlock = TextBlock | TableBlock;
+export type AnswerSheetBlock = TextBlock | TableBlock | DiagramBlock;
+
+/**
+ * Left margin item - 왼쪽 목차 항목
+ */
+export interface LeftMarginItem {
+  line: number;        // 줄 번호 (1-22)
+  column: 1 | 2 | 3;  // 열 번호 (1=문1)/답), 2=1./2., 3=1)/2))
+  content: string;     // 표시할 내용
+}
 
 /**
  * Answer sheet document structure
  */
 export interface AnswerSheetDocument {
   blocks: AnswerSheetBlock[];
+  leftMargin?: LeftMarginItem[]; // 왼쪽 목차 (선택사항)
   totalLines: number; // 1-22
   metadata: {
     isValid: boolean;
@@ -65,7 +117,8 @@ export interface BlockValidationResult {
  */
 export const BLOCK_CONSTANTS = {
   MAX_LINES: 22,
-  MAX_CELLS_PER_LINE: 19,
+  MAX_CELLS_PER_LINE: 20,
+  LEFT_MARGIN_CELLS: 3, // 왼쪽 목차용 칸 (문1), 답1), 1. 등)
   MIN_COLUMN_WIDTH: 1,
 } as const;
 
@@ -104,6 +157,28 @@ export function createTableBlock(
     columnWidths,
     lineStart,
     lineEnd: lineStart + rows.length, // header + rows
+  };
+}
+
+/**
+ * Helper: Create new diagram block
+ */
+export function createDiagramBlock(
+  nodes: DiagramNode[],
+  connections: DiagramConnection[],
+  lineCount: number,
+  lineStart: number,
+  labels?: DiagramLabel[],
+  id?: string
+): DiagramBlock {
+  return {
+    id: id || `diagram-${Date.now()}-${Math.random()}`,
+    type: 'diagram',
+    nodes,
+    connections,
+    labels,
+    lineStart,
+    lineEnd: lineStart + lineCount - 1,
   };
 }
 

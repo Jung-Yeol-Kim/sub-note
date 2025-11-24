@@ -1,11 +1,14 @@
 "use client";
 
-import { type AnswerSheetBlock } from "@/lib/types/answer-sheet-block";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
+import type { AnswerSheetBlock, LeftMarginItem } from "@/lib/types/answer-sheet-block";
+import { LeftMarginRenderer } from "./left-margin-renderer";
 
 interface AnswerSheetGridProps {
   blocks: AnswerSheetBlock[];
   showLineNumbers?: boolean;
+  showLeftMargin?: boolean; // 왼쪽 목차 칸 표시 여부
+  leftMargin?: LeftMarginItem[]; // 왼쪽 목차 데이터
   children?: React.ReactNode;
 }
 
@@ -15,7 +18,9 @@ interface AnswerSheetGridProps {
  */
 export function AnswerSheetGrid({
   blocks,
-  showLineNumbers = true,
+  showLineNumbers = false,
+  showLeftMargin = true,
+  leftMargin = [],
   children,
 }: AnswerSheetGridProps) {
   // Create array of 22 lines
@@ -29,28 +34,54 @@ export function AnswerSheetGrid({
   };
 
   return (
-    <div className="flex justify-center p-4 bg-white">
+    <div className="flex justify-center p-4 bg-background">
       {/* A4 aspect ratio container */}
-      <div className="relative w-full max-w-[210mm] aspect-[1/1.414] border-2 border-black bg-white">
+      <div className="relative w-full max-w-[210mm] aspect-[1/1.414] border-2 border-border bg-card">
         <div className="flex h-full">
-          {/* Line numbers column */}
+          {/* Line numbers column (optional) */}
           {showLineNumbers && (
-            <div className="flex flex-col border-r-2 border-black">
+            <div className="flex flex-col border-r-2 border-border" style={{ width: '40px' }}>
               {lines.map((lineNum) => (
                 <div
                   key={lineNum}
-                  className="flex items-center justify-center text-xs text-gray-500 border-b border-dashed border-gray-300 last:border-b-0"
+                  className="flex items-center justify-center text-xs text-muted-foreground border-b border-dashed border-border/50 last:border-b-0"
                   style={{ height: `calc(100% / ${BLOCK_CONSTANTS.MAX_LINES})` }}
                 >
-                  <span className="px-2">{lineNum}</span>
+                  <span className="px-1">{lineNum}</span>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Main content area with 19-column grid */}
+          {/* Left margin column (문1), 답1), etc.) */}
+          {showLeftMargin && (
+            <div className="relative border-r-2 border-border" style={{ width: '90px' }}>
+              {/* Grid overlay for left margin - 22 rows × 3 columns (1.5:1:1 ratio) */}
+              <div className="h-full grid grid-rows-22">
+                {lines.map((lineNum) => (
+                  <div
+                    key={lineNum}
+                    className="grid border-b border-border/20 last:border-b-0"
+                    style={{ gridTemplateColumns: '1.5fr 1fr 1fr' }}
+                  >
+                    <div className="border-r border-border/10" />
+                    <div className="border-r border-border/10" />
+                    <div />
+                  </div>
+                ))}
+              </div>
+              {/* Left margin content overlay */}
+              {leftMargin.length > 0 && (
+                <div className="absolute inset-0 z-10">
+                  <LeftMarginRenderer items={leftMargin} />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Main content area with 20-column grid */}
           <div className="flex-1 relative">
-            {/* Grid overlay - 22 rows × 19 columns */}
+            {/* Grid overlay - 22 rows × 20 columns */}
             <div className="absolute inset-0 grid grid-rows-22 pointer-events-none">
               {lines.map((lineNum) => {
                 const block = getBlockForLine(lineNum);
@@ -60,13 +91,13 @@ export function AnswerSheetGrid({
                 return (
                   <div
                     key={lineNum}
-                    className="grid grid-cols-19 border-b border-dashed border-gray-300 last:border-b-0"
+                    className="grid grid-cols-20 border-b border-border/15 last:border-b-0"
                   >
                     {Array.from({ length: BLOCK_CONSTANTS.MAX_CELLS_PER_LINE }).map(
                       (_, cellIndex) => (
                         <div
                           key={cellIndex}
-                          className="border-r border-gray-100 last:border-r-0"
+                          className="border-r border-border/10 last:border-r-0"
                         />
                       )
                     )}

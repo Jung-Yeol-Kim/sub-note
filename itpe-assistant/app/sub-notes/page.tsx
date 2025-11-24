@@ -16,43 +16,11 @@ import Link from "next/link";
 const subNotes = [
   {
     id: "1",
-    title: "OAuth 2.0 Grant Types",
-    category: "보안",
-    status: "completed",
-    difficulty: 4,
-    updatedAt: "2025-11-20",
-  },
-  {
-    id: "2",
-    title: "Kubernetes Architecture",
-    category: "클라우드",
-    status: "in_review",
-    difficulty: 5,
-    updatedAt: "2025-11-19",
-  },
-  {
-    id: "3",
-    title: "Zero Trust Security Model",
-    category: "보안",
-    status: "draft",
-    difficulty: 4,
-    updatedAt: "2025-11-18",
-  },
-  {
-    id: "4",
-    title: "API Gateway Patterns",
-    category: "아키텍처",
+    title: "DevOps",
+    category: "소프트웨어공학",
     status: "completed",
     difficulty: 3,
-    updatedAt: "2025-11-17",
-  },
-  {
-    id: "5",
-    title: "Database Sharding Strategies",
-    category: "데이터베이스",
-    status: "in_review",
-    difficulty: 5,
-    updatedAt: "2025-11-16",
+    updatedAt: "2025-11-24",
   },
 ];
 
