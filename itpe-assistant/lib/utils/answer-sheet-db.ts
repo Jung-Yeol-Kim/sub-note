@@ -15,6 +15,7 @@ export function serializeAnswerSheet(
 ): Record<string, unknown> {
   return {
     blocks: document.blocks,
+    leftMargin: document.leftMargin,
     totalLines: document.totalLines,
     metadata: document.metadata,
   };
@@ -38,6 +39,7 @@ export function deserializeAnswerSheet(
 
   const document: AnswerSheetDocument = {
     blocks: obj.blocks as AnswerSheetDocument["blocks"],
+    leftMargin: obj.leftMargin as AnswerSheetDocument["leftMargin"],
     totalLines: (obj.totalLines as number) || 0,
     metadata: (obj.metadata as AnswerSheetDocument["metadata"]) || {
       isValid: true,

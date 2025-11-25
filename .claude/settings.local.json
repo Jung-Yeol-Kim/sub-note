@@ -3,7 +3,8 @@
     "allow": [
       "Bash(python scripts/parse_exam_txt.py:*)",
       "Bash(python3:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(pnpm build:*)"
     ],
     "deny": [],
     "ask": []

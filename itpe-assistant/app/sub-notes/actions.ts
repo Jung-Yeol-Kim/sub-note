@@ -13,6 +13,11 @@ export type SubNoteInput = {
   tags?: string[];
   status?: "draft" | "in_review" | "completed";
   difficulty?: number;
+  structuredAnswer?: Record<string, unknown>;
+  lineCount?: number;
+  cellCount?: number;
+  isValidFormat?: boolean;
+  formatWarnings?: string[];
 };
 
 // Get all sub-notes for a user
@@ -85,6 +90,11 @@ export async function createSubNote(userId: string, data: SubNoteInput) {
         tags: data.tags,
         status: data.status || "draft",
         difficulty: data.difficulty,
+        structuredAnswer: data.structuredAnswer,
+        lineCount: data.lineCount,
+        cellCount: data.cellCount,
+        isValidFormat: data.isValidFormat,
+        formatWarnings: data.formatWarnings,
         updatedAt: new Date(),
       })
       .returning();

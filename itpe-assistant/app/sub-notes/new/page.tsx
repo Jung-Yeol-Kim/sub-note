@@ -5,77 +5,35 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, BookOpen, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SubNoteEditor } from "@/components/subnote/subnote-editor";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
-import { StandardSubNote, standardSubNoteToMarkdown } from "@/lib/types/subnote";
 import { BlockEditor } from "@/components/answer-sheet/block-editor";
-import { type AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
+import type { AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
 import { serializeAnswerSheet, prepareForStorage } from "@/lib/utils/answer-sheet-db";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createSubNoteWithAuth } from "../actions";
 
-type EditorMode = "structured" | "freeform";
-
 export default function NewSubNotePage() {
   const router = useRouter();
-  const [editorMode, setEditorMode] = useState<EditorMode>("structured");
   const [showSyllabus, setShowSyllabus] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [title, setTitle] = useState("");
+  const [document, setDocument] = useState<AnswerSheetDocument | null>(null);
 
-  // For freeform mode
-  const [freeformTitle, setFreeformTitle] = useState("");
-  const [freeformDocument, setFreeformDocument] = useState<AnswerSheetDocument | null>(null);
-
-  const handleSave = async (data: StandardSubNote) => {
-    setIsSaving(true);
-    try {
-      // Convert to markdown for storage
-      const markdown = standardSubNoteToMarkdown(data);
-
-      const result = await createSubNoteWithAuth({
-        title: data.title,
-        content: markdown,
-        category: data.syllabusMapping.categoryName,
-        tags: data.tags,
-        status: data.study?.status || "draft",
-        difficulty: data.difficulty,
-      });
-
-      if (result.success) {
-        router.push("/sub-notes");
-      } else {
-        alert(`저장 실패: ${result.error}`);
-      }
-    } catch (error) {
-      console.error("Error saving sub-note:", error);
-      alert("서브노트 저장 중 오류가 발생했습니다.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleFreeformSave = async () => {
-    if (!freeformDocument) return;
-    if (!freeformTitle.trim()) {
+  const handleSave = async () => {
+    if (!document) return;
+    if (!title.trim()) {
       alert("제목을 입력해주세요.");
       return;
     }
 
     setIsSaving(true);
     try {
-      const prepared = prepareForStorage(freeformDocument);
+      const prepared = prepareForStorage(document);
 
       const result = await createSubNoteWithAuth({
-        title: freeformTitle,
+        title,
         content: JSON.stringify(serializeAnswerSheet(prepared.document)),
         status: "draft",
         structuredAnswer: serializeAnswerSheet(prepared.document),
@@ -91,7 +49,7 @@ export default function NewSubNotePage() {
         alert(`저장 실패: ${result.error}`);
       }
     } catch (error) {
-      console.error("Error saving freeform sub-note:", error);
+      console.error("Error saving sub-note:", error);
       alert("서브노트 저장 중 오류가 발생했습니다.");
     } finally {
       setIsSaving(false);
@@ -115,77 +73,58 @@ export default function NewSubNotePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSyllabus(!showSyllabus)}
-          >
-            <BookOpen className="mr-2 h-4 w-4" />
-            {showSyllabus ? "출제기준 숨기기" : "출제기준 보기"}
-          </Button>
-
-          <Select
-            value={editorMode}
-            onValueChange={(value) => setEditorMode(value as EditorMode)}
-          >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="structured">구조화 에디터</SelectItem>
-              <SelectItem value="freeform">자유 형식 (22×19 규격)</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowSyllabus(!showSyllabus)}
+        >
+          <BookOpen className="mr-2 h-4 w-4" />
+          {showSyllabus ? "출제기준 숨기기" : "출제기준 보기"}
+        </Button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Editor */}
         <div className={showSyllabus ? "lg:col-span-2" : "lg:col-span-3"}>
-          {editorMode === "structured" ? (
-            <SubNoteEditor onSave={handleSave} />
-          ) : (
-            <div className="space-y-4">
-              {/* Title input and save button for freeform mode */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>서브노트 정보</CardTitle>
-                  <CardDescription>
-                    서브노트 제목을 입력하고 자유 형식으로 작성하세요
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="freeform-title">제목</Label>
-                    <Input
-                      id="freeform-title"
-                      placeholder="예: OAuth 2.0 인증 프로토콜"
-                      value={freeformTitle}
-                      onChange={(e) => setFreeformTitle(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex justify-end">
-                    <Button
-                      onClick={handleFreeformSave}
-                      disabled={!freeformDocument?.metadata.isValid || !freeformTitle.trim() || isSaving}
-                      size="lg"
-                    >
-                      <Save className="mr-2 h-4 w-4" />
-                      {isSaving ? "저장 중..." : "저장"}
-                      {freeformDocument && !freeformDocument.metadata.isValid && " (규격 오류 확인 필요)"}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="space-y-4">
+            {/* Title input and save button */}
+            <Card>
+              <CardHeader>
+                <CardTitle>서브노트 정보</CardTitle>
+                <CardDescription>
+                  답안지 형식 (22줄 × 20칸)으로 서브노트를 작성하세요
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">제목</Label>
+                  <Input
+                    id="title"
+                    placeholder="예: OAuth 2.0 인증 프로토콜"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    onClick={handleSave}
+                    disabled={!document?.metadata.isValid || !title.trim() || isSaving}
+                    size="lg"
+                  >
+                    <Save className="mr-2 h-4 w-4" />
+                    {isSaving ? "저장 중..." : "저장"}
+                    {document && !document.metadata.isValid && " (규격 오류 확인 필요)"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-              {/* Block Editor */}
-              <BlockEditor
-                initialDocument={freeformDocument || undefined}
-                onChange={(doc) => setFreeformDocument(doc)}
-              />
-            </div>
-          )}
+            {/* Block Editor */}
+            <BlockEditor
+              initialDocument={document || undefined}
+              onChange={(doc) => setDocument(doc)}
+            />
+          </div>
         </div>
 
         {/* Syllabus Sidebar */}
