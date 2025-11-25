@@ -182,7 +182,6 @@ def main():
         sys.exit(1)
 
     print("=" * 80)
-    print("Answer Sheet Format Analysis (22줄 × 19칸)")
     print("=" * 80)
     print()
 

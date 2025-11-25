@@ -6,13 +6,15 @@ import type { TableBlock } from "@/lib/types/answer-sheet-block";
 
 interface TableBlockRendererProps {
   block: TableBlock;
+  editable?: boolean;
+  onChange?: (headers: string[], rows: string[][]) => void;
 }
 
 /**
  * Renders a table block with natural, fluid layout
  * Column widths are proportional but not strictly enforced
  */
-export function TableBlockRenderer({ block }: TableBlockRendererProps) {
+export function TableBlockRenderer({ block, editable = false, onChange }: TableBlockRendererProps) {
   const { headers, rows, columnWidths, lineStart, lineEnd } = block;
   const containerRef = useRef<HTMLDivElement>(null);
   const [lineHeight, setLineHeight] = useState<number>(0);
@@ -46,6 +48,21 @@ export function TableBlockRenderer({ block }: TableBlockRendererProps) {
     .map((width) => `${width}fr`)
     .join(" ");
 
+  const handleHeaderChange = (index: number, value: string) => {
+    if (!onChange) return;
+    const newHeaders = [...headers];
+    newHeaders[index] = value;
+    onChange(newHeaders, rows);
+  };
+
+  const handleCellChange = (rowIndex: number, cellIndex: number, value: string) => {
+    if (!onChange) return;
+    const newRows = [...rows];
+    newRows[rowIndex] = [...newRows[rowIndex]];
+    newRows[rowIndex][cellIndex] = value;
+    onChange(headers, newRows);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -71,7 +88,20 @@ export function TableBlockRenderer({ block }: TableBlockRendererProps) {
                 lineHeight: `${lineHeight * 0.7}px`,
               }}
             >
-              {header}
+              {editable ? (
+                <input
+                  type="text"
+                  value={header}
+                  onChange={(e) => handleHeaderChange(headerIndex, e.target.value)}
+                  className="w-full bg-transparent border-none focus:outline-none text-center font-semibold"
+                  style={{
+                    fontSize: `${lineHeight * 0.45}px`,
+                    lineHeight: `${lineHeight * 0.7}px`,
+                  }}
+                />
+              ) : (
+                header
+              )}
             </div>
           ))}
         </div>
@@ -92,7 +122,20 @@ export function TableBlockRenderer({ block }: TableBlockRendererProps) {
                   lineHeight: `${lineHeight * 0.65}px`,
                 }}
               >
-                {cell}
+                {editable ? (
+                  <input
+                    type="text"
+                    value={cell}
+                    onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
+                    className="w-full bg-transparent border-none focus:outline-none"
+                    style={{
+                      fontSize: `${lineHeight * 0.42}px`,
+                      lineHeight: `${lineHeight * 0.65}px`,
+                    }}
+                  />
+                ) : (
+                  cell
+                )}
               </div>
             ))}
           </div>

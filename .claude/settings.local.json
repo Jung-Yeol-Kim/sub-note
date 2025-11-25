@@ -4,7 +4,10 @@
       "Bash(python scripts/parse_exam_txt.py:*)",
       "Bash(python3:*)",
       "Bash(cat:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(pnpm db:push:*)",
+      "Bash(find:*)",
+      "Bash(tsx:*)"
     ],
     "deny": [],
     "ask": []

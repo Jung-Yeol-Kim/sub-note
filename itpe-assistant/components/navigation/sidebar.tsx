@@ -12,6 +12,7 @@ import {
   Target,
   UsersRound,
   GraduationCap,
+  BarChart3,
 } from "lucide-react";
 import { AuthButton } from "@/components/auth/auth-button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -47,6 +48,12 @@ const navigationItems = [
     href: "/topics",
     icon: FileText,
     disabled: true,
+  },
+  {
+    title: "출제 분석",
+    href: "/reports",
+    icon: BarChart3,
+    disabled: false,
   },
   {
     title: "커뮤니티",

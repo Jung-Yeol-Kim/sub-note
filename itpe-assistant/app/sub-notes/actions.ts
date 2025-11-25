@@ -149,6 +149,22 @@ export async function updateSubNote(
   }
 }
 
+// Update an existing sub-note (auth-aware version)
+export async function updateSubNoteWithAuth(
+  id: string,
+  data: Partial<SubNoteInput>
+) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  return updateSubNote(id, session.user.id, data);
+}
+
 // Delete a sub-note
 export async function deleteSubNote(id: string, userId: string) {
   try {

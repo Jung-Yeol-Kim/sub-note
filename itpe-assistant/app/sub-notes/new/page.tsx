@@ -6,12 +6,11 @@ import { ArrowLeft, BookOpen, Save } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
-import { BlockEditor } from "@/components/answer-sheet/block-editor";
+import { AnswerSheetEditor } from "@/components/answer-sheet/answer-sheet-editor";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import type { AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
 import { serializeAnswerSheet, prepareForStorage } from "@/lib/utils/answer-sheet-db";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { createSubNoteWithAuth } from "../actions";
 
 export default function NewSubNotePage() {
@@ -22,9 +21,18 @@ export default function NewSubNotePage() {
   const [document, setDocument] = useState<AnswerSheetDocument | null>(null);
 
   const handleSave = async () => {
-    if (!document) return;
     if (!title.trim()) {
       alert("제목을 입력해주세요.");
+      return;
+    }
+
+    if (!document || document.blocks.length === 0) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+
+    if (!document.metadata.isValid) {
+      alert("답안지 규격을 확인해주세요.");
       return;
     }
 
@@ -83,44 +91,38 @@ export default function NewSubNotePage() {
         </Button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-4">
         {/* Main Editor */}
-        <div className={showSyllabus ? "lg:col-span-2" : "lg:col-span-3"}>
+        <div className={showSyllabus ? "lg:col-span-3" : "lg:col-span-4"}>
           <div className="space-y-4">
             {/* Title input and save button */}
             <Card>
-              <CardHeader>
-                <CardTitle>서브노트 정보</CardTitle>
-                <CardDescription>
-                  답안지 형식 (22줄 × 20칸)으로 서브노트를 작성하세요
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">제목</Label>
-                  <Input
-                    id="title"
-                    placeholder="예: OAuth 2.0 인증 프로토콜"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    onClick={handleSave}
-                    disabled={!document?.metadata.isValid || !title.trim() || isSaving}
-                    size="lg"
-                  >
-                    <Save className="mr-2 h-4 w-4" />
-                    {isSaving ? "저장 중..." : "저장"}
-                    {document && !document.metadata.isValid && " (규격 오류 확인 필요)"}
-                  </Button>
+              <CardContent className="pt-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Input
+                      id="title"
+                      placeholder="서브노트 제목을 입력하세요 (예: OAuth 2.0 인증 프로토콜)"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 px-0"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <Button
+                      onClick={handleSave}
+                      disabled={!title.trim() || !document || isSaving}
+                    >
+                      <Save className="mr-2 h-4 w-4" />
+                      {isSaving ? "저장 중..." : "저장"}
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Block Editor */}
-            <BlockEditor
+            {/* Answer Sheet Editor */}
+            <AnswerSheetEditor
               initialDocument={document || undefined}
               onChange={(doc) => setDocument(doc)}
             />
@@ -130,7 +132,9 @@ export default function NewSubNotePage() {
         {/* Syllabus Sidebar */}
         {showSyllabus && (
           <div className="lg:col-span-1">
-            <SyllabusBrowser />
+            <div className="sticky top-6">
+              <SyllabusBrowser />
+            </div>
           </div>
         )}
       </div>

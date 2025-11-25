@@ -22,7 +22,7 @@ export function AuthPage() {
 				<div className="z-10 mt-auto">
 					<blockquote className="space-y-2">
 						<p className="text-xl">
-							&ldquo;Claude AI가 함께하는 체계적인 학습 여정&rdquo;
+							&ldquo;AI가 함께하는 체계적인 학습 여정&rdquo;
 						</p>
 						<footer className="font-mono font-semibold text-sm">
 							~ ITPE Assistant

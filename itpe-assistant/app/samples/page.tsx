@@ -187,7 +187,6 @@ export default function SamplesPage() {
               <CardTitle className="text-sm">학습 가이드</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-xs text-muted-foreground">
-              <p>✓ 22줄 × 19칸 규격 준수</p>
               <p>✓ 정의 → 구조/표 → 고려사항 형식</p>
               <p>✓ 간결한 문장, 조사 생략</p>
               <p>✓ 다이어그램과 3단 표 활용</p>

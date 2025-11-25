@@ -6,6 +6,8 @@ import type { TextBlock } from "@/lib/types/answer-sheet-block";
 
 interface TextBlockRendererProps {
   block: TextBlock;
+  editable?: boolean;
+  onChange?: (lines: string[]) => void;
 }
 
 /**
@@ -13,7 +15,7 @@ interface TextBlockRendererProps {
  * Uses 20-column grid as a guide but doesn't strictly enforce it
  * Provides a more handwritten, natural feel
  */
-export function TextBlockRenderer({ block }: TextBlockRendererProps) {
+export function TextBlockRenderer({ block, editable = false, onChange }: TextBlockRendererProps) {
   const { lines, lineStart } = block;
   const containerRef = useRef<HTMLDivElement>(null);
   const [lineHeight, setLineHeight] = useState<number>(0);
@@ -41,6 +43,13 @@ export function TextBlockRenderer({ block }: TextBlockRendererProps) {
   // Calculate positioning within the grid
   const topPosition = lineHeight * (lineStart - 1);
 
+  const handleLineChange = (lineIndex: number, newContent: string) => {
+    if (!onChange) return;
+    const newLines = [...lines];
+    newLines[lineIndex] = newContent;
+    onChange(newLines);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -61,7 +70,22 @@ export function TextBlockRenderer({ block }: TextBlockRendererProps) {
             lineHeight: `${lineHeight * 0.85}px`,
           }}
         >
-          {lineContent}
+          {editable ? (
+            <input
+              type="text"
+              value={lineContent}
+              onChange={(e) => handleLineChange(lineIndex, e.target.value)}
+              className="w-full bg-transparent border-none focus:outline-none focus:bg-accent/5"
+              style={{
+                fontFamily: 'D2Coding, "Nanum Gothic Coding", "Courier New", monospace',
+                fontSize: `${lineHeight * 0.55}px`,
+                letterSpacing: '0.02em',
+                lineHeight: `${lineHeight * 0.85}px`,
+              }}
+            />
+          ) : (
+            lineContent
+          )}
         </div>
       ))}
     </div>

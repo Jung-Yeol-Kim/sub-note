@@ -9,6 +9,8 @@ interface AnswerSheetGridProps {
   showLineNumbers?: boolean;
   showLeftMargin?: boolean; // 왼쪽 목차 칸 표시 여부
   leftMargin?: LeftMarginItem[]; // 왼쪽 목차 데이터
+  leftMarginEditable?: boolean; // 왼쪽 목차 편집 가능 여부
+  onLeftMarginChange?: (items: LeftMarginItem[]) => void; // 왼쪽 목차 변경 콜백
   children?: React.ReactNode;
 }
 
@@ -21,6 +23,8 @@ export function AnswerSheetGrid({
   showLineNumbers = false,
   showLeftMargin = true,
   leftMargin = [],
+  leftMarginEditable = false,
+  onLeftMarginChange,
   children,
 }: AnswerSheetGridProps) {
   // Create array of 22 lines
@@ -71,11 +75,13 @@ export function AnswerSheetGrid({
                 ))}
               </div>
               {/* Left margin content overlay */}
-              {leftMargin.length > 0 && (
-                <div className="absolute inset-0 z-10">
-                  <LeftMarginRenderer items={leftMargin} />
-                </div>
-              )}
+              <div className="absolute inset-0 z-10">
+                <LeftMarginRenderer
+                  items={leftMargin}
+                  editable={leftMarginEditable}
+                  onChange={onLeftMarginChange}
+                />
+              </div>
             </div>
           )}
 

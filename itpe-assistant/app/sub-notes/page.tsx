@@ -11,18 +11,9 @@ import {
 } from "@/components/ui/select";
 import { Plus, Search, FileText, Clock } from "lucide-react";
 import Link from "next/link";
-
-// Mock data - will be replaced with actual database queries
-const subNotes = [
-  {
-    id: "1",
-    title: "DevOps",
-    category: "소프트웨어공학",
-    status: "completed",
-    difficulty: 3,
-    updatedAt: "2025-11-24",
-  },
-];
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { getSubNotes } from "./actions";
 
 const categories = ["전체", "보안", "클라우드", "데이터베이스", "네트워크", "아키텍처"];
 const statuses = [
@@ -32,7 +23,19 @@ const statuses = [
   { value: "completed", label: "완료" },
 ];
 
-export default function SubNotesPage() {
+export default async function SubNotesPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  let subNotes: any[] = [];
+
+  if (session?.user) {
+    const result = await getSubNotes(session.user.id);
+    if (result.success && result.data) {
+      subNotes = result.data;
+    }
+  }
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header */}
@@ -130,20 +133,22 @@ export default function SubNotesPage() {
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    <span>{note.updatedAt}</span>
+                    <span>{new Date(note.updatedAt).toLocaleDateString('ko-KR')}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className={`h-1.5 w-1.5 rounded-full ${
-                          i < note.difficulty
-                            ? "bg-accent"
-                            : "bg-muted"
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  {note.difficulty && (
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            i < note.difficulty
+                              ? "bg-accent"
+                              : "bg-muted"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -151,26 +156,26 @@ export default function SubNotesPage() {
         ))}
       </div>
 
-      {/* Empty State - uncomment when needed */}
-      {/* {subNotes.length === 0 && (
+      {/* Empty State */}
+      {subNotes.length === 0 && (
         <Card className="border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <div className="rounded-full bg-muted p-4 mb-4">
               <FileText className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">No sub-notes yet</h3>
+            <h3 className="text-lg font-semibold mb-2">아직 서브노트가 없습니다</h3>
             <p className="text-sm text-muted-foreground text-center max-w-sm mb-4">
-              Start creating your first sub-note to organize your study materials.
+              첫 번째 서브노트를 작성하여 학습 자료를 정리하세요.
             </p>
             <Link href="/sub-notes/new">
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Create Sub-note
+                서브노트 작성
               </Button>
             </Link>
           </CardContent>
         </Card>
-      )} */}
+      )}
     </div>
   );
 }
