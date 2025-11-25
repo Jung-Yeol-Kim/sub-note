@@ -13,7 +13,7 @@ export type SubNoteInput = {
   tags?: string[];
   status?: "draft" | "in_review" | "completed";
   difficulty?: number;
-  structuredAnswer?: Record<string, unknown>;
+  structuredAnswer?: unknown;
   lineCount?: number;
   cellCount?: number;
   isValidFormat?: boolean;

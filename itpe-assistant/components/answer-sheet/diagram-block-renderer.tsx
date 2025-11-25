@@ -1,19 +1,44 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { type DiagramBlock } from "@/lib/types/answer-sheet-block";
-import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Background,
+  ReactFlow,
+  type Edge,
+  type Node,
+  type NodeTypes,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { BLOCK_CONSTANTS, type DiagramBlock } from "@/lib/types/answer-sheet-block";
 
 interface DiagramBlockRendererProps {
   block: DiagramBlock;
 }
 
 /**
+ * Custom node component for diagram boxes
+ */
+function DiagramNode({ data }: { data: { label: string } }) {
+  return (
+    <div className="border-2 border-foreground rounded flex items-center justify-center bg-card px-2 py-1 h-full">
+      <span className="font-semibold text-xs">{data.label}</span>
+    </div>
+  );
+}
+
+/**
+ * Custom node types for React Flow
+ */
+const nodeTypes: NodeTypes = {
+  diagramNode: DiagramNode,
+};
+
+/**
  * Renders a diagram block (flowchart) within the 19-column grid system
- * Shows boxes (nodes) connected with arrows
+ * Uses @xyflow/react for rendering nodes and connections
  */
 export function DiagramBlockRenderer({ block }: DiagramBlockRendererProps) {
-  const { nodes, connections, labels, lineStart, lineEnd } = block;
+  const { nodes: diagramNodes, connections, labels, lineStart, lineEnd } = block;
   const containerRef = useRef<HTMLDivElement>(null);
   const [cellWidth, setCellWidth] = useState<number>(0);
   const [lineHeight, setLineHeight] = useState<number>(0);
@@ -26,8 +51,11 @@ export function DiagramBlockRenderer({ block }: DiagramBlockRendererProps) {
         if (parent) {
           const containerWidth = parent.offsetWidth;
           const containerHeight = parent.offsetHeight;
+
+          // Calculate based on full 22-line grid (same as TextBlockRenderer)
           const calculatedCellWidth = containerWidth / BLOCK_CONSTANTS.MAX_CELLS_PER_LINE;
           const calculatedLineHeight = containerHeight / BLOCK_CONSTANTS.MAX_LINES;
+
           setCellWidth(calculatedCellWidth);
           setLineHeight(calculatedLineHeight);
         }
@@ -45,18 +73,49 @@ export function DiagramBlockRenderer({ block }: DiagramBlockRendererProps) {
   const topPosition = lineHeight * (lineStart - 1);
   const height = lineHeight * (lineEnd - lineStart + 1);
 
-  // Helper to get node position
-  const getNodePosition = (nodeId: string) => {
-    return nodes.find(n => n.id === nodeId);
-  };
+  // Convert DiagramBlock nodes to React Flow nodes
+  const flowNodes: Node[] = useMemo(() => {
+    if (cellWidth === 0 || lineHeight === 0) return [];
 
-  // Helper to calculate center of a node
-  const getNodeCenter = (node: { x: number; y: number; width: number; height: number }) => {
-    return {
-      x: (node.x + node.width / 2) * cellWidth,
-      y: (node.y + node.height / 2) * lineHeight,
-    };
-  };
+    return diagramNodes.map((node) => ({
+      id: node.id,
+      type: "diagramNode",
+      position: {
+        x: node.x * cellWidth,
+        y: node.y * lineHeight,
+      },
+      data: {
+        label: node.label,
+      },
+      style: {
+        width: node.width * cellWidth,
+        height: node.height * lineHeight,
+      },
+      draggable: false,
+      selectable: false,
+      focusable: false,
+    }));
+  }, [diagramNodes, cellWidth, lineHeight]);
+
+  // Convert DiagramBlock connections to React Flow edges
+  const flowEdges: Edge[] = useMemo(() => {
+    return connections.map((conn, index) => ({
+      id: `edge-${index}`,
+      source: conn.from,
+      target: conn.to,
+      label: conn.label,
+      type: "smoothstep",
+      animated: false,
+      style: {
+        stroke: "currentColor",
+        strokeWidth: 2,
+      },
+      labelStyle: {
+        fontSize: "10px",
+        fontFamily: 'D2Coding, "Nanum Gothic Coding", "Courier New", monospace',
+      },
+    }));
+  }, [connections]);
 
   return (
     <div
@@ -67,93 +126,32 @@ export function DiagramBlockRenderer({ block }: DiagramBlockRendererProps) {
         height: `${height}px`,
       }}
     >
-      <svg
-        className="absolute inset-0 pointer-events-none"
-        style={{ width: '100%', height: '100%' }}
-      >
-        {/* Draw connections (arrows) */}
-        {cellWidth > 0 && lineHeight > 0 && connections.map((conn, index) => {
-          const fromNode = getNodePosition(conn.from);
-          const toNode = getNodePosition(conn.to);
-
-          if (!fromNode || !toNode) return null;
-
-          const from = getNodeCenter(fromNode);
-          const to = getNodeCenter(toNode);
-
-          // Calculate arrow path
-          const isHorizontal = Math.abs(to.x - from.x) > Math.abs(to.y - from.y);
-
-          return (
-            <g key={index}>
-              {/* Arrow line */}
-              <line
-                x1={from.x}
-                y1={from.y}
-                x2={to.x}
-                y2={to.y}
-                stroke="currentColor"
-                strokeWidth="2"
-                markerEnd="url(#arrowhead)"
-              />
-
-              {/* Connection label */}
-              {conn.label && (
-                <text
-                  x={(from.x + to.x) / 2}
-                  y={(from.y + to.y) / 2 - 5}
-                  textAnchor="middle"
-                  fontSize={cellWidth * 0.6}
-                  fill="currentColor"
-                  style={{
-                    fontFamily: 'D2Coding, "Nanum Gothic Coding", "Courier New", monospace',
-                  }}
-                >
-                  {conn.label}
-                </text>
-              )}
-            </g>
-          );
-        })}
-
-        {/* Arrow marker definition */}
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="10"
-            refX="9"
-            refY="3"
-            orient="auto"
-          >
-            <polygon points="0 0, 10 3, 0 6" fill="currentColor" />
-          </marker>
-        </defs>
-      </svg>
-
-      {/* Draw nodes (boxes) */}
-      {cellWidth > 0 && lineHeight > 0 && nodes.map((node) => (
-        <div
-          key={node.id}
-          className="absolute border-2 border-foreground rounded flex items-center justify-center bg-card"
-          style={{
-            left: `${node.x * cellWidth}px`,
-            top: `${node.y * lineHeight}px`,
-            width: `${node.width * cellWidth}px`,
-            height: `${node.height * lineHeight}px`,
-            fontSize: `${Math.min(cellWidth * 0.75, lineHeight * 0.7)}px`,
-            fontFamily: 'D2Coding, "Nanum Gothic Coding", "Courier New", monospace',
-          }}
+      {cellWidth > 0 && lineHeight > 0 && (
+        <ReactFlow
+          nodes={flowNodes}
+          edges={flowEdges}
+          nodeTypes={nodeTypes}
+          nodesDraggable={false}
+          nodesConnectable={false}
+          nodesFocusable={false}
+          edgesFocusable={false}
+          elementsSelectable={false}
+          panOnDrag={false}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
+          zoomOnDoubleClick={false}
+          preventScrolling={true}
+          defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         >
-          <span className="font-semibold">{node.label}</span>
-        </div>
-      ))}
+          <Background gap={cellWidth} size={1} />
+        </ReactFlow>
+      )}
 
       {/* Draw additional labels */}
-      {cellWidth > 0 && lineHeight > 0 && labels?.map((label, index) => (
+      {cellWidth > 0 && lineHeight > 0 && labels?.map((label) => (
         <div
-          key={index}
-          className="absolute whitespace-nowrap"
+          key={`label-${label.x}-${label.y}-${label.text}`}
+          className="absolute whitespace-nowrap pointer-events-none"
           style={{
             left: `${label.x * cellWidth}px`,
             top: `${label.y * lineHeight}px`,
