@@ -7,7 +7,8 @@
       "Bash(pnpm build:*)",
       "Bash(pnpm db:push:*)",
       "Bash(find:*)",
-      "Bash(tsx:*)"
+      "Bash(tsx:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": [],
     "ask": []

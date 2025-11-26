@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
 import type { TableBlock } from "@/lib/types/answer-sheet-block";
+import { useAnswerSheetLayout } from "./answer-sheet-layout-context";
 
 interface TableBlockRendererProps {
   block: TableBlock;
@@ -16,28 +16,7 @@ interface TableBlockRendererProps {
  */
 export function TableBlockRenderer({ block, editable = false, onChange }: TableBlockRendererProps) {
   const { headers, rows, columnWidths, lineStart, lineEnd } = block;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [lineHeight, setLineHeight] = useState<number>(0);
-
-  // Measure container dimensions
-  useEffect(() => {
-    const updateMeasurements = () => {
-      if (containerRef.current) {
-        const parent = containerRef.current.parentElement;
-        if (parent) {
-          const containerHeight = parent.offsetHeight;
-          const calculatedLineHeight = containerHeight / BLOCK_CONSTANTS.MAX_LINES;
-          setLineHeight(calculatedLineHeight);
-        }
-      }
-    };
-
-    updateMeasurements();
-
-    // Update on window resize
-    window.addEventListener('resize', updateMeasurements);
-    return () => window.removeEventListener('resize', updateMeasurements);
-  }, []);
+  const { lineHeight } = useAnswerSheetLayout();
 
   // Calculate positioning within the grid
   const topPosition = lineHeight * (lineStart - 1);
@@ -65,7 +44,6 @@ export function TableBlockRenderer({ block, editable = false, onChange }: TableB
 
   return (
     <div
-      ref={containerRef}
       className="absolute left-0 right-0 px-1"
       style={{
         top: `${topPosition}px`,

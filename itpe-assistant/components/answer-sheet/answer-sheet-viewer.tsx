@@ -16,7 +16,7 @@ import {
 import { AnswerSheetGrid } from "./answer-sheet-grid";
 import { TextBlockRenderer } from "./text-block-renderer";
 import { TableBlockRenderer } from "./table-block-renderer";
-import { DiagramBlockRenderer } from "./diagram-block-renderer";
+import { DrawingBlockRenderer } from "./drawing-block-renderer";
 
 interface AnswerSheetViewerProps {
   document: AnswerSheetDocument;
@@ -80,8 +80,8 @@ export function AnswerSheetViewer({
                 return <TextBlockRenderer key={block.id} block={block} />;
               } else if (block.type === "table") {
                 return <TableBlockRenderer key={block.id} block={block} />;
-              } else if (block.type === "diagram") {
-                return <DiagramBlockRenderer key={block.id} block={block} />;
+              } else if (block.type === "drawing") {
+                return <DrawingBlockRenderer key={block.id} block={block} />;
               }
               return null;
             })}

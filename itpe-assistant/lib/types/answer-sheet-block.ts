@@ -3,7 +3,7 @@
  * 정보관리기술사 답안지 블록 기반 구조
  */
 
-export type BlockType = 'text' | 'table' | 'diagram';
+export type BlockType = 'text' | 'table' | 'drawing';
 
 /**
  * Base block interface
@@ -34,51 +34,76 @@ export interface TableBlock extends BaseBlock {
 }
 
 /**
- * Diagram block - 다이어그램/흐름도
- * 박스와 화살표로 구성된 구조도
+ * Drawing block - Excalidraw 기반 자유 그림 블록
+ * 다이어그램, 흐름도, 구조도 등을 자유롭게 그릴 수 있음
  */
-export interface DiagramBlock extends BaseBlock {
-  type: 'diagram';
-  nodes: DiagramNode[]; // 노드(박스) 배열
-  connections: DiagramConnection[]; // 연결선 배열
-  labels?: DiagramLabel[]; // 추가 레이블 (선택사항)
+export interface DrawingBlock extends BaseBlock {
+  type: 'drawing';
+  excalidrawData: ExcalidrawData;
+  thumbnail?: string; // Base64 encoded SVG/PNG for preview
 }
 
 /**
- * Diagram node - 다이어그램의 박스/노드
+ * Excalidraw data structure
+ * @see https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/initialdata
  */
-export interface DiagramNode {
+export interface ExcalidrawData {
+  elements: ExcalidrawElement[];
+  appState?: Partial<ExcalidrawAppState>;
+  files?: ExcalidrawFiles;
+}
+
+/**
+ * Excalidraw element (simplified type)
+ * For full type definition, use @excalidraw/excalidraw types
+ */
+export interface ExcalidrawElement {
   id: string;
-  label: string; // 노드 안의 텍스트
-  x: number; // 가로 위치 (0-19 칸)
-  y: number; // 세로 위치 (블록 내에서 0부터 시작)
-  width: number; // 너비 (칸 수)
-  height: number; // 높이 (줄 수)
+  type: string; // 'rectangle', 'diamond', 'ellipse', 'arrow', 'line', 'text', etc.
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  angle?: number;
+  strokeColor?: string;
+  backgroundColor?: string;
+  fillStyle?: string;
+  strokeWidth?: number;
+  roughness?: number;
+  opacity?: number;
+  text?: string;
+  fontSize?: number;
+  fontFamily?: number;
+  [key: string]: any; // Allow other Excalidraw properties
 }
 
 /**
- * Diagram connection - 노드 간 연결선
+ * Excalidraw app state (simplified)
  */
-export interface DiagramConnection {
-  from: string; // 시작 노드 ID
-  to: string; // 종료 노드 ID
-  label?: string; // 연결선 위의 레이블 (선택사항)
-  direction?: 'horizontal' | 'vertical' | 'both'; // 연결 방향
+export interface ExcalidrawAppState {
+  gridSize?: number;
+  viewBackgroundColor?: string;
+  zoom?: { value: number };
+  [key: string]: any;
 }
 
 /**
- * Diagram label - 추가 레이블 (화살표 위 텍스트 등)
+ * Excalidraw files (images)
  */
-export interface DiagramLabel {
-  text: string;
-  x: number; // 가로 위치 (0-19 칸)
-  y: number; // 세로 위치 (블록 내에서 0부터 시작)
+export interface ExcalidrawFiles {
+  [fileId: string]: {
+    mimeType: string;
+    id: string;
+    dataURL: string;
+    created: number;
+    lastRetrieved?: number;
+  };
 }
 
 /**
  * Union type for all blocks
  */
-export type AnswerSheetBlock = TextBlock | TableBlock | DiagramBlock;
+export type AnswerSheetBlock = TextBlock | TableBlock | DrawingBlock;
 
 /**
  * Left margin item - 왼쪽 목차 항목
@@ -161,22 +186,24 @@ export function createTableBlock(
 }
 
 /**
- * Helper: Create new diagram block
+ * Helper: Create new drawing block
  */
-export function createDiagramBlock(
-  nodes: DiagramNode[],
-  connections: DiagramConnection[],
+export function createDrawingBlock(
   lineCount: number,
   lineStart: number,
-  labels?: DiagramLabel[],
+  initialData?: ExcalidrawData,
   id?: string
-): DiagramBlock {
+): DrawingBlock {
   return {
-    id: id || `diagram-${Date.now()}-${Math.random()}`,
-    type: 'diagram',
-    nodes,
-    connections,
-    labels,
+    id: id || `drawing-${Date.now()}-${Math.random()}`,
+    type: 'drawing',
+    excalidrawData: initialData || {
+      elements: [],
+      appState: {
+        viewBackgroundColor: '#ffffff',
+      },
+      files: {},
+    },
     lineStart,
     lineEnd: lineStart + lineCount - 1,
   };
@@ -204,14 +231,14 @@ export function validateBlock(block: AnswerSheetBlock): BlockValidationResult {
 
   // Type-specific validation
   if (block.type === 'table') {
-    const totalWidth = block.columnWidths.reduce((sum, w) => sum + w, 0);
+    const totalWidth = block.columnWidths.reduce((sum: number, w: number) => sum + w, 0);
     if (totalWidth > BLOCK_CONSTANTS.MAX_CELLS_PER_LINE) {
       errors.push(
         `Table width (${totalWidth}) exceeds ${BLOCK_CONSTANTS.MAX_CELLS_PER_LINE} cells`
       );
     }
 
-    if (block.columnWidths.some((w) => w < BLOCK_CONSTANTS.MIN_COLUMN_WIDTH)) {
+    if (block.columnWidths.some((w: number) => w < BLOCK_CONSTANTS.MIN_COLUMN_WIDTH)) {
       errors.push('Column width must be at least 1');
     }
 
@@ -220,7 +247,7 @@ export function validateBlock(block: AnswerSheetBlock): BlockValidationResult {
     }
 
     if (
-      block.rows.some((row) => row.length !== block.headers.length)
+      block.rows.some((row: string[]) => row.length !== block.headers.length)
     ) {
       errors.push('All rows must have same number of columns as headers');
     }
