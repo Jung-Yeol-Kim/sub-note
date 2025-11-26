@@ -1,9 +1,8 @@
 "use client";
 
 import { Excalidraw } from "@excalidraw/excalidraw";
-import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
+import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import type { ExcalidrawData } from "@/lib/types/answer-sheet-block";
-import { useRef } from "react";
 import { useTheme } from "next-themes";
 
 import "@excalidraw/excalidraw/index.css";
@@ -22,7 +21,6 @@ export function ExcalidrawEditor({
   onChange,
   viewModeEnabled = false,
 }: ExcalidrawEditorProps) {
-  const excalidrawRef = useRef<ExcalidrawImperativeAPI | null>(null);
   const { resolvedTheme } = useTheme();
 
   // Handle changes
@@ -30,7 +28,7 @@ export function ExcalidrawEditor({
     if (!onChange) return;
 
     const data: ExcalidrawData = {
-      elements: elements as any[],
+      elements,
       appState: {
         viewBackgroundColor: appState.viewBackgroundColor,
         gridSize: appState.gridSize,
@@ -47,7 +45,9 @@ export function ExcalidrawEditor({
   return (
     <div style={{ height: "100%", width: "100%" }} className="excalidraw-editor-wrapper">
       <Excalidraw
-        ref={excalidrawRef}
+        excalidrawAPI={(api: ExcalidrawImperativeAPI) => {
+          // API is available here if needed
+        }}
         initialData={initialData}
         onChange={handleChange}
         viewModeEnabled={viewModeEnabled}

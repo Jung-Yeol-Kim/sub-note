@@ -5,12 +5,9 @@
 
 import {
   createTextBlock,
-  createDiagramBlock,
+  createDrawingBlock,
   createTableBlock,
   type AnswerSheetDocument,
-  type DiagramNode,
-  type DiagramConnection,
-  type DiagramLabel,
 } from "@/lib/types/answer-sheet-block";
 
 export const devopsAnswerSheet: AnswerSheetDocument = {
@@ -49,51 +46,11 @@ export const devopsAnswerSheet: AnswerSheetDocument = {
     ),
 
     // 4. CI/CD 다이어그램 (줄 8-12)
-    createDiagramBlock(
-      // Nodes
-      [
-        // CI 라인 (위)
-        { id: "plan", label: "계획", x: 1.5, y: 1.1, width: 2.5, height: 0.7 } as DiagramNode,
-        { id: "dev", label: "개발", x: 7, y: 1.1, width: 2.5, height: 0.7 } as DiagramNode,
-        { id: "test", label: "테스트", x: 12.5, y: 1.1, width: 2.8, height: 0.7 } as DiagramNode,
-
-        // CD 라인 (아래)
-        { id: "monitor", label: "모니터링", x: 1.5, y: 2.9, width: 2.8, height: 0.7 } as DiagramNode,
-        { id: "operate", label: "운영", x: 7, y: 2.9, width: 2.5, height: 0.7 } as DiagramNode,
-        { id: "deploy", label: "배포", x: 12.5, y: 2.9, width: 2.5, height: 0.7 } as DiagramNode,
-      ],
-      // Connections
-      [
-        // CI 흐름 (위 →)
-        { from: "plan", to: "dev" } as DiagramConnection,
-        { from: "dev", to: "test" } as DiagramConnection,
-
-        // CD 흐름 (아래 ←)
-        { from: "deploy", to: "operate" } as DiagramConnection,
-        { from: "operate", to: "monitor" } as DiagramConnection,
-
-        // CI와 CD 연결
-        { from: "test", to: "deploy" } as DiagramConnection,
-        { from: "monitor", to: "plan" } as DiagramConnection,
-      ],
+    // Note: This would be better as a drawing block with Excalidraw data
+    // For now, using empty drawing block as placeholder
+    createDrawingBlock(
       5, // lineCount
-      8, // lineStart
-      // Labels
-      [
-        // CI 도구 레이블 (위)
-        { text: "-Jira", x: 1.8, y: 0.3 } as DiagramLabel,
-        { text: "-git", x: 7.3, y: 0.3 } as DiagramLabel,
-        { text: "-JUnit", x: 12.8, y: 0.3 } as DiagramLabel,
-
-        // CD 도구 레이블 (아래)
-        { text: "-Grafana", x: 1.5, y: 4.1 } as DiagramLabel,
-        { text: "-azure", x: 7.2, y: 4.1 } as DiagramLabel,
-        { text: "-Jenkins", x: 12.5, y: 4.1 } as DiagramLabel,
-
-        // CI/CD 레이블
-        { text: "CI", x: 0, y: 1.3 } as DiagramLabel,
-        { text: "CD", x: 0, y: 3.1 } as DiagramLabel,
-      ]
+      8  // lineStart
     ),
 
     // 5. 다이어그램 설명 (줄 13)

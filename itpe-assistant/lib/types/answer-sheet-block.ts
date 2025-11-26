@@ -3,6 +3,9 @@
  * 정보관리기술사 답안지 블록 기반 구조
  */
 
+import type { ExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { AppState, BinaryFiles } from "@excalidraw/excalidraw/types";
+
 export type BlockType = 'text' | 'table' | 'drawing';
 
 /**
@@ -45,62 +48,20 @@ export interface DrawingBlock extends BaseBlock {
 
 /**
  * Excalidraw data structure
- * @see https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/initialdata
+ * Uses actual Excalidraw library types for compatibility
  */
 export interface ExcalidrawData {
-  elements: ExcalidrawElement[];
-  appState?: Partial<ExcalidrawAppState>;
-  files?: ExcalidrawFiles;
+  elements: readonly ExcalidrawElement[];
+  appState?: Partial<AppState>;
+  files?: BinaryFiles;
 }
 
 /**
- * Excalidraw element (simplified type)
- * For full type definition, use @excalidraw/excalidraw types
+ * Re-export Excalidraw types for convenience
  */
-export interface ExcalidrawElement {
-  id: string;
-  type: string; // 'rectangle', 'diamond', 'ellipse', 'arrow', 'line', 'text', etc.
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-  angle?: number;
-  strokeColor?: string;
-  backgroundColor?: string;
-  fillStyle?: string;
-  strokeWidth?: number;
-  roughness?: number;
-  opacity?: number;
-  text?: string;
-  fontSize?: number;
-  fontFamily?: number;
-  [key: string]: any; // Allow other Excalidraw properties
-}
-
-/**
- * Excalidraw app state (simplified)
- */
-export interface ExcalidrawAppState {
-  gridSize?: number;
-  viewBackgroundColor?: string;
-  zoom?: { value: number };
-  scrollX?: number;
-  scrollY?: number;
-  [key: string]: any;
-}
-
-/**
- * Excalidraw files (images)
- */
-export interface ExcalidrawFiles {
-  [fileId: string]: {
-    mimeType: string;
-    id: string;
-    dataURL: string;
-    created: number;
-    lastRetrieved?: number;
-  };
-}
+export type { ExcalidrawElement };
+export type ExcalidrawAppState = AppState;
+export type ExcalidrawFiles = BinaryFiles;
 
 /**
  * Union type for all blocks

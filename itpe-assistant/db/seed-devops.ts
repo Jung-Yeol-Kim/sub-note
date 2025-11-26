@@ -94,8 +94,8 @@ function calculateTotalCells(sheet: typeof devopsAnswerSheet): number {
       for (const line of block.lines) {
         totalCells += line.length;
       }
-    } else if (block.type === 'diagram') {
-      // Rough estimate for diagram cells - use lineEnd - lineStart + 1
+    } else if (block.type === 'drawing') {
+      // Rough estimate for drawing cells - use lineEnd - lineStart + 1
       const lineCount = block.lineEnd - block.lineStart + 1;
       totalCells += lineCount * 19; // Full width
     } else if (block.type === 'table') {
