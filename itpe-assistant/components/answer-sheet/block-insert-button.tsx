@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BlockTypePopover } from "./block-type-popover";
+import { useAnswerSheetLayout } from "./answer-sheet-layout-context";
 import type { AnswerSheetBlock } from "@/lib/types/answer-sheet-block";
 
 interface BlockInsertButtonProps {
@@ -28,20 +29,28 @@ export function BlockInsertButton({
 }: BlockInsertButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
+  const { lineHeight } = useAnswerSheetLayout();
 
   const handleInsert = (block: AnswerSheetBlock) => {
     onInsertBlock(block);
     setPopoverOpen(false);
   };
 
+  // Calculate top position based on currentLine
+  const topPosition = currentLine * lineHeight;
+
   return (
     <div
       className={cn(
-        "group relative flex items-center justify-center transition-opacity",
-        "h-6 -my-3", // Negative margin to overlap with block spacing
+        "absolute left-0 right-0 flex items-center justify-center transition-opacity pointer-events-none",
+        "h-6",
         isHovered || popoverOpen ? "opacity-100" : "opacity-0 hover:opacity-100",
         className
       )}
+      style={{
+        top: `${topPosition}px`,
+        transform: "translateY(-50%)", // Center on the line
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -65,7 +74,7 @@ export function BlockInsertButton({
           variant="ghost"
           size="icon"
           className={cn(
-            "relative h-6 w-6 rounded-full bg-background border border-border shadow-sm",
+            "relative h-6 w-6 rounded-full bg-background border border-border shadow-sm pointer-events-auto",
             "hover:bg-primary hover:text-primary-foreground hover:border-primary",
             "transition-all duration-200",
             isHovered || popoverOpen ? "scale-100" : "scale-0"

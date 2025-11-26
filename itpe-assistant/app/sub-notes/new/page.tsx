@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
 import { AnswerSheetEditor } from "@/components/answer-sheet/answer-sheet-editor";
+import { AnswerSheetMetadataPanel } from "@/components/answer-sheet/answer-sheet-metadata-panel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
@@ -31,8 +32,37 @@ export default function NewSubNotePage() {
       return;
     }
 
+    // Enhanced validation error messaging
     if (!document.metadata.isValid) {
-      alert("답안지 규격을 확인해주세요.");
+      const errors = document.metadata.validationErrors;
+      const warnings = document.metadata.validationWarnings;
+
+      console.error("Validation errors:", errors);
+      console.warn("Validation warnings:", warnings);
+
+      let errorMessage = "답안지 규격을 확인해주세요.\n\n";
+
+      if (errors.length > 0) {
+        errorMessage += "❌ 오류:\n";
+        errors.forEach((error, idx) => {
+          errorMessage += `  ${idx + 1}. ${error}\n`;
+        });
+      }
+
+      if (warnings.length > 0) {
+        errorMessage += "\n⚠️  경고:\n";
+        warnings.forEach((warning, idx) => {
+          errorMessage += `  ${idx + 1}. ${warning}\n`;
+        });
+      }
+
+      errorMessage += "\n💡 힌트:\n";
+      errorMessage += "  • 최대 3페이지(66줄)까지 작성할 수 있습니다\n";
+      errorMessage += "  • 1페이지 = 22줄입니다\n";
+      errorMessage += "  • 그림 블록은 기본 8줄을 차지합니다\n";
+      errorMessage += "  • 불필요한 블록을 삭제하거나 크기를 조정해보세요";
+
+      alert(errorMessage);
       return;
     }
 
@@ -91,12 +121,12 @@ export default function NewSubNotePage() {
         </Button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-4">
+      <div className="grid gap-6 lg:grid-cols-12">
         {/* Main Editor */}
-        <div className={showSyllabus ? "lg:col-span-3" : "lg:col-span-4"}>
+        <div className={showSyllabus ? "lg:col-span-6" : "lg:col-span-9"}>
           <div className="space-y-4">
             {/* Title input and save button */}
-            <Card>
+            <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7]">
               <CardContent className="pt-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
@@ -105,17 +135,24 @@ export default function NewSubNotePage() {
                       placeholder="서브노트 제목을 입력하세요 (예: OAuth 2.0 인증 프로토콜)"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 px-0"
+                      className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 px-0 font-serif"
+                      style={{ fontFamily: "var(--font-crimson-pro, 'Crimson Pro', serif)" }}
                     />
                   </div>
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <Button
                       onClick={handleSave}
-                      disabled={!title.trim() || !document || isSaving}
+                      disabled={!title.trim() || !document || isSaving || !document?.metadata.isValid}
+                      className="bg-[#3d5a4c] hover:bg-[#2d4a3c] text-white disabled:opacity-50"
                     >
                       <Save className="mr-2 h-4 w-4" />
                       {isSaving ? "저장 중..." : "저장"}
                     </Button>
+                    {document && !document.metadata.isValid && (
+                      <span className="text-xs text-red-600 font-medium">
+                        ⚠ 검증 오류가 있습니다
+                      </span>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -129,9 +166,14 @@ export default function NewSubNotePage() {
           </div>
         </div>
 
-        {/* Syllabus Sidebar */}
+        {/* Metadata Sidebar - Always Visible */}
+        <div className="lg:col-span-3">
+          <AnswerSheetMetadataPanel document={document} title={title} />
+        </div>
+
+        {/* Syllabus Sidebar - Optional */}
         {showSyllabus && (
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
             <div className="sticky top-6">
               <SyllabusBrowser />
             </div>

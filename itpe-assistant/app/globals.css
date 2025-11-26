@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Hide Excalidraw menu in viewer mode */
+.excalidraw-viewer-wrapper .App-menu__left,
+.excalidraw-viewer-wrapper .App-top-bar,
+.excalidraw-viewer-wrapper .layer-ui__wrapper .App-menu__left,
+.excalidraw-viewer-wrapper button[aria-label="Menu"],
+.excalidraw-viewer-wrapper .main-menu-trigger,
+.excalidraw-viewer-wrapper .App-toolbar-content {
+  display: none !important;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -61,8 +71,10 @@
   --radius: 0.5rem;
 
   /* Scholar's Spectrum - Vibrant & Dynamic */
-  --background: hsl(30 33% 98%); /* Soft white with warmth */
-  --foreground: hsl(20 14% 9%); /* Rich black */
+  --background: hsl(30 33% 98%);
+  /* Soft white with warmth */
+  --foreground: hsl(20 14% 9%);
+  /* Rich black */
 
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(20 14% 9%);
@@ -71,51 +83,70 @@
   --popover-foreground: hsl(20 14% 9%);
 
   /* Deep Teal Primary - Knowledge & Clarity */
-  --primary: hsl(180 80% 27%); /* Rich teal */
+  --primary: hsl(180 80% 27%);
+  /* Rich teal */
   --primary-foreground: hsl(180 71% 96%);
 
   /* Royal Purple Secondary - Wisdom & Mastery */
-  --secondary: hsl(239 84% 67%); /* Vibrant indigo */
+  --secondary: hsl(239 84% 67%);
+  /* Vibrant indigo */
   --secondary-foreground: hsl(0 0% 98%);
 
   --muted: hsl(30 25% 95%);
   --muted-foreground: hsl(20 9% 40%);
 
   /* Amber Accent - Energy & Focus */
-  --accent: hsl(38 92% 50%); /* Vibrant amber */
+  --accent: hsl(38 92% 50%);
+  /* Vibrant amber */
   --accent-foreground: hsl(20 14% 9%);
 
-  --destructive: hsl(0 72% 51%); /* Bright red */
+  --destructive: hsl(0 72% 51%);
+  /* Bright red */
 
   /* Additional Semantic Colors */
-  --success: hsl(158 64% 52%); /* Emerald green */
+  --success: hsl(158 64% 52%);
+  /* Emerald green */
   --success-foreground: hsl(152 81% 96%);
 
-  --warning: hsl(38 92% 50%); /* Amber */
+  --warning: hsl(38 92% 50%);
+  /* Amber */
   --warning-foreground: hsl(20 14% 9%);
 
-  --info: hsl(221 83% 53%); /* Blue */
+  --info: hsl(221 83% 53%);
+  /* Blue */
   --info-foreground: hsl(214 100% 97%);
 
   /* Highlight Colors for Study Context */
-  --highlight-pink: hsl(330 81% 60%); /* Hot pink for important items */
-  --highlight-cyan: hsl(188 94% 43%); /* Cyan for links/references */
-  --highlight-violet: hsl(258 90% 66%); /* Purple for advanced topics */
-  --highlight-lime: hsl(78 73% 44%); /* Lime for new concepts */
+  --highlight-pink: hsl(330 81% 60%);
+  /* Hot pink for important items */
+  --highlight-cyan: hsl(188 94% 43%);
+  /* Cyan for links/references */
+  --highlight-violet: hsl(258 90% 66%);
+  /* Purple for advanced topics */
+  --highlight-lime: hsl(78 73% 44%);
+  /* Lime for new concepts */
 
   --border: hsl(20 6% 90%);
   --input: hsl(20 6% 90%);
   --ring: hsl(180 80% 27%);
 
   /* Vibrant Chart Colors - Full Spectrum */
-  --chart-1: hsl(180 80% 27%); /* Teal */
-  --chart-2: hsl(38 92% 50%); /* Amber */
-  --chart-3: hsl(330 81% 60%); /* Pink */
-  --chart-4: hsl(258 90% 66%); /* Violet */
-  --chart-5: hsl(158 64% 52%); /* Emerald */
-  --chart-6: hsl(221 83% 53%); /* Blue */
-  --chart-7: hsl(347 77% 50%); /* Rose */
-  --chart-8: hsl(188 94% 43%); /* Cyan */
+  --chart-1: hsl(180 80% 27%);
+  /* Teal */
+  --chart-2: hsl(38 92% 50%);
+  /* Amber */
+  --chart-3: hsl(330 81% 60%);
+  /* Pink */
+  --chart-4: hsl(258 90% 66%);
+  /* Violet */
+  --chart-5: hsl(158 64% 52%);
+  /* Emerald */
+  --chart-6: hsl(221 83% 53%);
+  /* Blue */
+  --chart-7: hsl(347 77% 50%);
+  /* Rose */
+  --chart-8: hsl(188 94% 43%);
+  /* Cyan */
 
   --sidebar: hsl(60 9% 98%);
   --sidebar-foreground: hsl(20 14% 9%);
@@ -129,61 +160,83 @@
 
 .dark {
   /* Deep Navy Background - Night Study Mode */
-  --background: oklch(0.15 0.025 250); /* Deep blue-black */
-  --foreground: oklch(0.98 0.005 90); /* Warm white */
+  --background: oklch(0.15 0.025 250);
+  /* Deep blue-black */
+  --foreground: oklch(0.98 0.005 90);
+  /* Warm white */
 
-  --card: oklch(0.22 0.03 245); /* Deeper blue-gray */
+  --card: oklch(0.22 0.03 245);
+  /* Deeper blue-gray */
   --card-foreground: oklch(0.98 0.005 90);
 
   --popover: oklch(0.20 0.03 250);
   --popover-foreground: oklch(0.98 0.005 90);
 
   /* Bright Cyan Primary - Electric Knowledge */
-  --primary: oklch(0.75 0.15 200); /* Bright cyan */
+  --primary: oklch(0.75 0.15 200);
+  /* Bright cyan */
   --primary-foreground: oklch(0.15 0.025 250);
 
   /* Vivid Purple Secondary - Deep Mastery */
-  --secondary: oklch(0.65 0.22 280); /* Rich purple */
+  --secondary: oklch(0.65 0.22 280);
+  /* Rich purple */
   --secondary-foreground: oklch(0.98 0.005 90);
 
   --muted: oklch(0.28 0.02 245);
   --muted-foreground: oklch(0.68 0.015 250);
 
   /* Bright Amber Accent - Energetic Highlights */
-  --accent: oklch(0.78 0.18 75); /* Vibrant amber/gold */
+  --accent: oklch(0.78 0.18 75);
+  /* Vibrant amber/gold */
   --accent-foreground: oklch(0.15 0.025 250);
 
-  --destructive: oklch(0.65 0.25 25); /* Bright red-orange */
+  --destructive: oklch(0.65 0.25 25);
+  /* Bright red-orange */
 
   /* Semantic Colors - Dark Mode Optimized */
-  --success: oklch(0.70 0.20 155); /* Bright emerald */
+  --success: oklch(0.70 0.20 155);
+  /* Bright emerald */
   --success-foreground: oklch(0.15 0.025 250);
 
-  --warning: oklch(0.75 0.18 75); /* Bright amber */
+  --warning: oklch(0.75 0.18 75);
+  /* Bright amber */
   --warning-foreground: oklch(0.15 0.025 250);
 
-  --info: oklch(0.68 0.20 240); /* Bright blue */
+  --info: oklch(0.68 0.20 240);
+  /* Bright blue */
   --info-foreground: oklch(0.98 0.005 90);
 
   /* Highlight Colors - Neon Study Mode */
-  --highlight-pink: oklch(0.70 0.24 340); /* Hot pink neon */
-  --highlight-cyan: oklch(0.72 0.16 200); /* Cyan electric */
-  --highlight-violet: oklch(0.68 0.22 290); /* Purple glow */
-  --highlight-lime: oklch(0.75 0.20 125); /* Lime bright */
+  --highlight-pink: oklch(0.70 0.24 340);
+  /* Hot pink neon */
+  --highlight-cyan: oklch(0.72 0.16 200);
+  /* Cyan electric */
+  --highlight-violet: oklch(0.68 0.22 290);
+  /* Purple glow */
+  --highlight-lime: oklch(0.75 0.20 125);
+  /* Lime bright */
 
   --border: oklch(0.35 0.02 245);
   --input: oklch(0.30 0.025 245);
   --ring: oklch(0.75 0.15 200);
 
   /* Vibrant Chart Colors - Night Spectrum */
-  --chart-1: oklch(0.70 0.18 195); /* Cyan */
-  --chart-2: oklch(0.75 0.18 75); /* Amber */
-  --chart-3: oklch(0.68 0.24 340); /* Pink */
-  --chart-4: oklch(0.65 0.22 280); /* Violet */
-  --chart-5: oklch(0.68 0.20 155); /* Emerald */
-  --chart-6: oklch(0.65 0.20 245); /* Blue */
-  --chart-7: oklch(0.66 0.25 15); /* Rose */
-  --chart-8: oklch(0.70 0.16 210); /* Sky */
+  --chart-1: oklch(0.70 0.18 195);
+  /* Cyan */
+  --chart-2: oklch(0.75 0.18 75);
+  /* Amber */
+  --chart-3: oklch(0.68 0.24 340);
+  /* Pink */
+  --chart-4: oklch(0.65 0.22 280);
+  /* Violet */
+  --chart-5: oklch(0.68 0.20 155);
+  /* Emerald */
+  --chart-6: oklch(0.65 0.20 245);
+  /* Blue */
+  --chart-7: oklch(0.66 0.25 15);
+  /* Rose */
+  --chart-8: oklch(0.70 0.16 210);
+  /* Sky */
 
   --sidebar: oklch(0.18 0.03 248);
   --sidebar-foreground: oklch(0.98 0.005 90);
@@ -326,13 +379,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "liga" 1, "calt" 1;
   }
 
   /* Serif headings for academic feel */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Crimson Pro', serif;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -340,6 +399,7 @@
 }
 
 @layer utilities {
+
   /* Corner brackets for technical drawing aesthetic */
   .corner-brackets {
     position: relative;
@@ -371,13 +431,11 @@
   /* Subtle paper texture */
   .paper-texture {
     background-image:
-      repeating-linear-gradient(
-        0deg,
+      repeating-linear-gradient(0deg,
         transparent,
         transparent 2px,
         rgba(0, 0, 0, 0.015) 2px,
-        rgba(0, 0, 0, 0.015) 4px
-      );
+        rgba(0, 0, 0, 0.015) 4px);
   }
 
   /* Smooth transitions */
@@ -403,6 +461,7 @@
 
 /* Print Styles for Answer Sheet */
 @media print {
+
   /* Hide UI elements */
   @page {
     size: A4;

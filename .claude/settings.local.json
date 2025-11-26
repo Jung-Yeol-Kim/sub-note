@@ -8,7 +8,8 @@
       "Bash(pnpm db:push:*)",
       "Bash(find:*)",
       "Bash(tsx:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Skill(frontend-design)"
     ],
     "deny": [],
     "ask": []

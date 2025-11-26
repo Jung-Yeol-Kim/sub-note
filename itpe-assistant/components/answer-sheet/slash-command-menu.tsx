@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { FileText, Table2, PenTool } from "lucide-react";
-import { cn } from "@/lib/utils";
 import type { BlockType } from "@/lib/types/answer-sheet-block";
+import { cn } from "@/lib/utils";
 
 interface SlashCommand {
   type: BlockType;
@@ -116,41 +116,41 @@ export function SlashCommandMenu({
 
   return (
     <div
-      className="absolute z-50 w-72 rounded-md border bg-popover shadow-lg"
-      style={position ? { top: position.top, left: position.left } : undefined}
+      className="fixed z-50 w-80 bg-popover text-popover-foreground rounded-lg border shadow-md overflow-hidden"
+      style={position ? { top: `${position.top}px`, left: `${position.left}px` } : undefined}
+      onMouseDown={(e) => {
+        // Prevent input blur when clicking on menu
+        e.preventDefault();
+      }}
     >
-      <div className="p-2">
-        <div className="mb-2 px-2 py-1.5">
-          <p className="text-xs font-medium text-muted-foreground">블록 추가</p>
+      <div className="max-h-[300px] overflow-y-auto p-1">
+        <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+          블록 추가
         </div>
-        <div className="space-y-1">
-          {filteredCommands.map((cmd, index) => (
-            <button
-              key={cmd.type}
-              className={cn(
-                "w-full flex items-center gap-3 px-2 py-2 rounded-md transition-colors text-left",
-                index === selectedIndex
-                  ? "bg-accent text-accent-foreground"
-                  : "hover:bg-accent/50"
-              )}
-              onClick={() => onSelect(cmd.type)}
-              onMouseEnter={() => setSelectedIndex(index)}
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded border bg-background">
-                {cmd.icon}
+        {filteredCommands.map((cmd, index) => (
+          <div
+            key={cmd.type}
+            onClick={() => onSelect(cmd.type)}
+            className={cn(
+              "flex items-center gap-3 px-2 py-2 rounded-sm cursor-pointer select-none",
+              index === selectedIndex ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground"
+            )}
+            onMouseEnter={() => setSelectedIndex(index)}
+          >
+            <div className="flex items-center justify-center w-8 h-8 rounded border bg-background">
+              {cmd.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-sm">{cmd.label}</div>
+              <div className="text-xs text-muted-foreground">
+                {cmd.description}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-medium text-sm">{cmd.label}</div>
-                <div className="text-xs text-muted-foreground">
-                  {cmd.description}
-                </div>
-              </div>
-              <div className="text-xs text-muted-foreground font-mono">
-                {cmd.trigger}
-              </div>
-            </button>
-          ))}
-        </div>
+            </div>
+            <div className="text-xs text-muted-foreground font-mono">
+              {cmd.trigger}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

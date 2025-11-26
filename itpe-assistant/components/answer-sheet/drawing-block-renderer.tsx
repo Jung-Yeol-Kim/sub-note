@@ -26,7 +26,7 @@ export function DrawingBlockRenderer({ block }: DrawingBlockRendererProps) {
 
   return (
     <div
-      className="drawing-block-renderer border border-border rounded bg-white"
+      className="drawing-block-renderer border border-border rounded bg-white pointer-events-none"
       style={{ height: `${height}px`, minHeight: "200px" }}
     >
       <ExcalidrawWrapper initialData={block.excalidrawData} />

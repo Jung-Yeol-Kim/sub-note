@@ -120,10 +120,10 @@ export function ReportViewer({ content }: ReportViewerProps) {
     <div className="space-y-6">
       {/* Frequency Table */}
       {sections.frequencyTable && sections.frequencyTable.length > 0 && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="flex items-center gap-2 mb-4">
-            <TableIcon className="w-5 h-5 text-[#3d5a4c]" />
-            <h2 className="text-lg font-bold text-[#3d5a4c] font-crimson">
+            <TableIcon className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-bold text-foreground font-crimson">
               주요항목별 출제 빈도
             </h2>
           </div>
@@ -131,17 +131,17 @@ export function ReportViewer({ content }: ReportViewerProps) {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b-2 border-[#3d5a4c]">
-                  <th className="text-left py-3 px-4 text-sm font-bold text-[#3d5a4c]">
+                <tr className="border-b-2 border-primary">
+                  <th className="text-left py-3 px-4 text-sm font-bold text-foreground">
                     주요항목
                   </th>
-                  <th className="text-center py-3 px-4 text-sm font-bold text-[#3d5a4c]">
+                  <th className="text-center py-3 px-4 text-sm font-bold text-foreground">
                     문제수
                   </th>
-                  <th className="text-center py-3 px-4 text-sm font-bold text-[#3d5a4c]">
+                  <th className="text-center py-3 px-4 text-sm font-bold text-foreground">
                     비율
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-bold text-[#3d5a4c]">
+                  <th className="text-left py-3 px-4 text-sm font-bold text-foreground">
                     출제율
                   </th>
                 </tr>
@@ -150,18 +150,18 @@ export function ReportViewer({ content }: ReportViewerProps) {
                 {sections.frequencyTable.map((row, index) => (
                   <tr
                     key={index}
-                    className="border-b border-[#3d5a4c]/10 hover:bg-[#3d5a4c]/5 transition-colors"
+                    className="border-b border-border hover:bg-muted/50 transition-colors"
                   >
-                    <td className="py-3 px-4 text-sm text-[#3d5a4c]">
+                    <td className="py-3 px-4 text-sm text-foreground">
                       {row[0]}
                     </td>
-                    <td className="py-3 px-4 text-sm text-center font-medium text-[#3d5a4c]">
+                    <td className="py-3 px-4 text-sm text-center font-medium text-foreground">
                       {row[1]}
                     </td>
-                    <td className="py-3 px-4 text-sm text-center text-[#3d5a4c]/70">
+                    <td className="py-3 px-4 text-sm text-center text-muted-foreground">
                       {row[2]}
                     </td>
-                    <td className="py-3 px-4 text-sm text-[#c49a6c] font-medium">
+                    <td className="py-3 px-4 text-sm text-secondary font-medium">
                       {row[3]}
                     </td>
                   </tr>
@@ -173,10 +173,10 @@ export function ReportViewer({ content }: ReportViewerProps) {
       )}
 
       {/* Category Details */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+      <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
         <div className="flex items-center gap-2 mb-6">
-          <Hash className="w-5 h-5 text-[#3d5a4c]" />
-          <h2 className="text-lg font-bold text-[#3d5a4c] font-crimson">
+          <Hash className="w-5 h-5 text-primary" />
+          <h2 className="text-lg font-bold text-foreground font-crimson">
             카테고리별 출제 문제 상세
           </h2>
         </div>
@@ -185,14 +185,14 @@ export function ReportViewer({ content }: ReportViewerProps) {
           {sections.categories.map((section, index) => (
             <div key={index} className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-[#3d5a4c] to-[#2d4a3c] text-white text-sm font-bold">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 text-primary-foreground text-sm font-bold">
                   {index + 1}
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-[#3d5a4c]">
+                  <h3 className="text-base font-bold text-foreground">
                     {section.category}
                   </h3>
-                  <p className="text-xs text-[#3d5a4c]/60">
+                  <p className="text-xs text-muted-foreground">
                     {section.count}문제 출제
                   </p>
                 </div>
@@ -202,12 +202,12 @@ export function ReportViewer({ content }: ReportViewerProps) {
                 {section.questions.map((question, qIndex) => (
                   <div
                     key={qIndex}
-                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#3d5a4c]/5 transition-colors group"
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors group"
                   >
-                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#c49a6c]/20 text-[#c49a6c] text-xs font-medium flex-shrink-0 mt-0.5">
+                    <div className="flex items-center justify-center w-6 h-6 rounded-full bg-secondary/20 text-secondary text-xs font-medium flex-shrink-0 mt-0.5">
                       {qIndex + 1}
                     </div>
-                    <p className="text-sm text-[#3d5a4c]/80 leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {question}
                     </p>
                   </div>
@@ -215,7 +215,7 @@ export function ReportViewer({ content }: ReportViewerProps) {
               </div>
 
               {index < sections.categories.length - 1 && (
-                <div className="mt-6 border-b border-[#3d5a4c]/10" />
+                <div className="mt-6 border-b border-border" />
               )}
             </div>
           ))}

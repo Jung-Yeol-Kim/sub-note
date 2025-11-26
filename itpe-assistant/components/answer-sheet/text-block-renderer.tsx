@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
 import type { TextBlock, BlockType } from "@/lib/types/answer-sheet-block";
 import { SlashCommandMenu, useSlashCommand } from "./slash-command-menu";
@@ -10,7 +10,7 @@ interface TextBlockRendererProps {
   block: TextBlock;
   editable?: boolean;
   onChange?: (lines: string[]) => void;
-  onConvertToBlock?: (blockType: BlockType) => void;
+  onConvertToBlock?: (blockType: BlockType, lineIndex: number) => void;
 }
 
 /**
@@ -32,12 +32,9 @@ export function TextBlockRenderer({ block, editable = false, onChange, onConvert
     focusedLineText,
     (blockType) => {
       // Convert this text block to the selected block type
-      if (onConvertToBlock) {
-        onConvertToBlock(blockType);
-      }
-      // Clear the slash command text
-      if (focusedLineIndex !== null) {
-        handleLineChange(focusedLineIndex, "");
+      if (onConvertToBlock && focusedLineIndex !== null) {
+        onConvertToBlock(blockType, focusedLineIndex);
+        // Note: No need to clear text - block will be replaced
       }
     }
   );
@@ -52,7 +49,15 @@ export function TextBlockRenderer({ block, editable = false, onChange, onConvert
     onChange(newLines);
   };
 
+  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const handleInputFocus = (lineIndex: number, event: React.FocusEvent<HTMLInputElement>) => {
+    // Clear any pending blur timeout to prevent state reset when switching lines
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+      blurTimeoutRef.current = null;
+    }
+
     setFocusedLineIndex(lineIndex);
 
     // Calculate menu position relative to the input
@@ -65,7 +70,7 @@ export function TextBlockRenderer({ block, editable = false, onChange, onConvert
 
   const handleInputBlur = () => {
     // Delay to allow menu click to register
-    setTimeout(() => {
+    blurTimeoutRef.current = setTimeout(() => {
       setFocusedLineIndex(null);
       setCommandMenuPosition(undefined);
     }, 200);
@@ -73,7 +78,7 @@ export function TextBlockRenderer({ block, editable = false, onChange, onConvert
 
   return (
     <div
-      className="absolute left-0 right-0 px-1"
+      className="absolute left-0 right-0 px-1 pointer-events-auto"
       style={{
         top: `${topPosition}px`,
       }}
@@ -104,7 +109,7 @@ export function TextBlockRenderer({ block, editable = false, onChange, onConvert
                 letterSpacing: '0.02em',
                 lineHeight: `${lineHeight * 0.85}px`,
               }}
-              placeholder="텍스트 입력 또는 '/' 로 명령어"
+              placeholder={lineIndex === 0 && !lineContent ? "텍스트 입력 또는 '/' 로 명령어" : ""}
             />
           ) : (
             lineContent

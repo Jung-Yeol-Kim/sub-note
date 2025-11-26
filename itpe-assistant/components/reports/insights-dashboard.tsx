@@ -19,42 +19,42 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
     <div className="space-y-8">
       {/* Key Metrics */}
       <div>
-        <h2 className="text-2xl font-bold text-[#3d5a4c] font-crimson mb-6">
+        <h2 className="text-2xl font-bold text-foreground font-crimson mb-6">
           주요 지표
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-[#3d5a4c]/10 rounded-lg">
-                <BarChart3 className="w-5 h-5 text-[#3d5a4c]" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <BarChart3 className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-sm text-[#3d5a4c]/60">분석 회차</span>
+              <span className="text-sm text-muted-foreground">분석 회차</span>
             </div>
-            <p className="text-3xl font-bold text-[#3d5a4c]">
+            <p className="text-3xl font-bold text-foreground">
               {insights.totalRounds}회
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-[#c49a6c]/10 rounded-lg">
-                <Target className="w-5 h-5 text-[#c49a6c]" />
+              <div className="p-2 bg-secondary/10 rounded-lg">
+                <Target className="w-5 h-5 text-secondary" />
               </div>
-              <span className="text-sm text-[#3d5a4c]/60">총 문제 수</span>
+              <span className="text-sm text-muted-foreground">총 문제 수</span>
             </div>
-            <p className="text-3xl font-bold text-[#3d5a4c]">
+            <p className="text-3xl font-bold text-foreground">
               {insights.totalQuestions}문제
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-[#c49a6c]/10 rounded-lg">
-                <Activity className="w-5 h-5 text-[#c49a6c]" />
+              <div className="p-2 bg-accent/10 rounded-lg">
+                <Activity className="w-5 h-5 text-accent" />
               </div>
-              <span className="text-sm text-[#3d5a4c]/60">평균 출제</span>
+              <span className="text-sm text-muted-foreground">평균 출제</span>
             </div>
-            <p className="text-3xl font-bold text-[#3d5a4c]">
+            <p className="text-3xl font-bold text-foreground">
               {insights.avgQuestionsPerRound.toFixed(1)}문제
             </p>
           </div>
@@ -63,27 +63,27 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
 
       {/* Top Categories */}
       <div>
-        <h2 className="text-2xl font-bold text-[#3d5a4c] font-crimson mb-6">
+        <h2 className="text-2xl font-bold text-foreground font-crimson mb-6">
           최다 출제 카테고리
         </h2>
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="space-y-4">
             {insights.topCategories.map((category, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-[#3d5a4c]/5 to-transparent hover:from-[#3d5a4c]/10 transition-colors"
+                className="flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-primary/5 to-transparent hover:from-primary/10 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-[#c49a6c] to-[#a87d52] text-white text-sm font-bold">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-secondary/80 text-secondary-foreground text-sm font-bold">
                     {index + 1}
                   </div>
-                  <span className="font-medium text-[#3d5a4c]">
+                  <span className="font-medium text-foreground">
                     {category.name}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-[#c49a6c]" />
-                  <span className="text-lg font-bold text-[#3d5a4c]">
+                  <Award className="w-4 h-4 text-accent" />
+                  <span className="text-lg font-bold text-foreground">
                     평균 {category.avgCount.toFixed(1)}문제
                   </span>
                 </div>
@@ -97,31 +97,31 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Rising */}
         <div>
-          <h2 className="text-2xl font-bold text-[#3d5a4c] font-crimson mb-6">
+          <h2 className="text-2xl font-bold text-foreground font-crimson mb-6">
             증가 추세
           </h2>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
             {insights.risingCategories.length > 0 ? (
               <div className="space-y-4">
                 {insights.risingCategories.map((category, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 rounded-lg bg-green-50 border border-green-100"
+                    className="flex items-center justify-between p-4 rounded-lg bg-success/10 border border-success/20"
                   >
                     <div className="flex items-center gap-3">
-                      <TrendingUp className="w-5 h-5 text-green-600" />
-                      <span className="font-medium text-[#3d5a4c]">
+                      <TrendingUp className="w-5 h-5 text-success" />
+                      <span className="font-medium text-foreground">
                         {category.name}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-green-600">
+                    <span className="text-sm font-bold text-success">
                       +{category.change.toFixed(1)}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center text-[#3d5a4c]/40 py-8">
+              <p className="text-center text-muted-foreground py-8">
                 데이터 없음
               </p>
             )}
@@ -130,31 +130,31 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
 
         {/* Declining */}
         <div>
-          <h2 className="text-2xl font-bold text-[#3d5a4c] font-crimson mb-6">
+          <h2 className="text-2xl font-bold text-foreground font-crimson mb-6">
             감소 추세
           </h2>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+          <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
             {insights.decliningCategories.length > 0 ? (
               <div className="space-y-4">
                 {insights.decliningCategories.map((category, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-4 rounded-lg bg-orange-50 border border-orange-100"
+                    className="flex items-center justify-between p-4 rounded-lg bg-warning/10 border border-warning/20"
                   >
                     <div className="flex items-center gap-3">
-                      <TrendingDown className="w-5 h-5 text-orange-600" />
-                      <span className="font-medium text-[#3d5a4c]">
+                      <TrendingDown className="w-5 h-5 text-warning" />
+                      <span className="font-medium text-foreground">
                         {category.name}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-orange-600">
+                    <span className="text-sm font-bold text-warning">
                       {category.change.toFixed(1)}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center text-[#3d5a4c]/40 py-8">
+              <p className="text-center text-muted-foreground py-8">
                 데이터 없음
               </p>
             )}
@@ -164,10 +164,10 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
 
       {/* Category Trends Mini Chart */}
       <div>
-        <h2 className="text-2xl font-bold text-[#3d5a4c] font-crimson mb-6">
+        <h2 className="text-2xl font-bold text-foreground font-crimson mb-6">
           카테고리별 출제 추이
         </h2>
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10">
+        <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
           <div className="space-y-6">
             {insights.categoryTrends.map((categoryTrend, index) => {
               const maxValue = Math.max(
@@ -179,10 +179,10 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
               return (
                 <div key={index} className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-[#3d5a4c]">
+                    <span className="text-sm font-medium text-foreground">
                       {categoryTrend.categoryName}
                     </span>
-                    <div className="flex items-center gap-4 text-xs text-[#3d5a4c]/60">
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span>평균: {categoryTrend.average.toFixed(1)}</span>
                       <span>최근: {categoryTrend.recent.toFixed(1)}</span>
                       <span>
@@ -203,14 +203,14 @@ export function InsightsDashboard({ insights }: InsightsDashboardProps) {
                             <div
                               className={`w-full rounded-t transition-all ${
                                 isRecent
-                                  ? "bg-gradient-to-t from-[#c49a6c] to-[#d4aa7c]"
-                                  : "bg-gradient-to-t from-[#3d5a4c]/40 to-[#3d5a4c]/60"
+                                  ? "bg-gradient-to-t from-accent to-accent/80"
+                                  : "bg-gradient-to-t from-primary/40 to-primary/60"
                               }`}
                               style={{ height: `${height}%` }}
                               title={`${point.round}회: ${point.value}문제`}
                             />
                           </div>
-                          <span className="text-[10px] text-[#3d5a4c]/40">
+                          <span className="text-[10px] text-muted-foreground">
                             {point.round}
                           </span>
                         </div>

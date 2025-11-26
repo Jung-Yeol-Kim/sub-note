@@ -3,7 +3,8 @@
 import { Excalidraw } from "@excalidraw/excalidraw";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types/types";
 import type { ExcalidrawData } from "@/lib/types/answer-sheet-block";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
+import { useTheme } from "next-themes";
 
 import "@excalidraw/excalidraw/index.css";
 
@@ -22,6 +23,7 @@ export function ExcalidrawEditor({
   viewModeEnabled = false,
 }: ExcalidrawEditorProps) {
   const excalidrawRef = useRef<ExcalidrawImperativeAPI | null>(null);
+  const { resolvedTheme } = useTheme();
 
   // Handle changes
   const handleChange = (elements: readonly any[], appState: any, files: any) => {
@@ -33,6 +35,8 @@ export function ExcalidrawEditor({
         viewBackgroundColor: appState.viewBackgroundColor,
         gridSize: appState.gridSize,
         zoom: appState.zoom,
+        scrollX: appState.scrollX,
+        scrollY: appState.scrollY,
       },
       files: files || {},
     };
@@ -41,23 +45,16 @@ export function ExcalidrawEditor({
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ height: "100%", width: "100%" }} className="excalidraw-editor-wrapper">
       <Excalidraw
         ref={excalidrawRef}
         initialData={initialData}
         onChange={handleChange}
         viewModeEnabled={viewModeEnabled}
         zenModeEnabled={false}
-        gridModeEnabled={true}
-        theme="light"
+        gridModeEnabled={false}
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
         name="answer-sheet-drawing"
-        UIOptions={{
-          canvasActions: {
-            toggleTheme: false,
-            saveAsImage: true,
-            export: true,
-          },
-        }}
       />
     </div>
   );
@@ -67,13 +64,27 @@ export function ExcalidrawEditor({
  * Excalidraw Viewer (Read-only)
  */
 export function ExcalidrawViewer({ initialData }: { initialData: ExcalidrawData }) {
+  const { resolvedTheme } = useTheme();
+
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ height: "100%", width: "100%" }} className="excalidraw-viewer-wrapper">
       <Excalidraw
         initialData={initialData}
         viewModeEnabled={true}
         zenModeEnabled={true}
         gridModeEnabled={false}
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
+        UIOptions={{
+          canvasActions: {
+            loadScene: false,
+            saveToActiveFile: false,
+            export: false,
+            saveAsImage: false,
+            changeViewBackgroundColor: false,
+            clearCanvas: false,
+            toggleTheme: false,
+          }
+        }}
       />
     </div>
   );

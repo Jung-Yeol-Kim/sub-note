@@ -84,6 +84,8 @@ export interface ExcalidrawAppState {
   gridSize?: number;
   viewBackgroundColor?: string;
   zoom?: { value: number };
+  scrollX?: number;
+  scrollY?: number;
   [key: string]: any;
 }
 
@@ -141,7 +143,9 @@ export interface BlockValidationResult {
  * Constants
  */
 export const BLOCK_CONSTANTS = {
-  MAX_LINES: 22,
+  MAX_LINES: 66, // 3 pages × 22 lines per page
+  LINES_PER_PAGE: 22,
+  MAX_PAGES: 3,
   MAX_CELLS_PER_LINE: 20,
   LEFT_MARGIN_CELLS: 3, // 왼쪽 목차용 칸 (문1), 답1), 1. 등)
   MIN_COLUMN_WIDTH: 1,
@@ -210,6 +214,22 @@ export function createDrawingBlock(
 }
 
 /**
+ * Helper: Get page number for a given line
+ */
+export function getPageForLine(line: number): number {
+  return Math.ceil(line / BLOCK_CONSTANTS.LINES_PER_PAGE);
+}
+
+/**
+ * Helper: Check if a block crosses page boundaries
+ */
+export function blockCrossesPages(block: AnswerSheetBlock): boolean {
+  const startPage = getPageForLine(block.lineStart);
+  const endPage = getPageForLine(block.lineEnd);
+  return startPage !== endPage;
+}
+
+/**
  * Helper: Validate block
  */
 export function validateBlock(block: AnswerSheetBlock): BlockValidationResult {
@@ -227,6 +247,15 @@ export function validateBlock(block: AnswerSheetBlock): BlockValidationResult {
   }
   if (block.lineStart > block.lineEnd) {
     errors.push('Block start line is after end line');
+  }
+
+  // Warn if block crosses page boundaries
+  if (blockCrossesPages(block)) {
+    const startPage = getPageForLine(block.lineStart);
+    const endPage = getPageForLine(block.lineEnd);
+    warnings.push(
+      `Block crosses page boundary (${startPage}페이지 → ${endPage}페이지)`
+    );
   }
 
   // Type-specific validation

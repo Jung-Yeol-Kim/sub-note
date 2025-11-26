@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
+  type TextBlock,
+  type TableBlock,
   type AnswerSheetDocument,
   type AnswerSheetBlock,
   type LeftMarginItem,
@@ -36,9 +38,9 @@ export function AnswerSheetEditor({
     if (initialDocument) return initialDocument;
 
     return {
-      blocks: [createTextBlock(Array(22).fill(""), 1)],
+      blocks: [createTextBlock(Array(5).fill(""), 1)], // Start with a small text block
       leftMargin: [],
-      totalLines: 22,
+      totalLines: 5,
       metadata: {
         isValid: true,
         validationErrors: [],
@@ -175,34 +177,227 @@ export function AnswerSheetEditor({
   /**
    * Convert a text block to a different block type (triggered by slash commands)
    */
-  const handleConvertBlock = (blockId: string, newBlockType: BlockType) => {
+  /**
+   * Delete a block and recalculate line numbers
+   * Merges adjacent text blocks if possible
+   */
+  const handleDeleteBlock = (blockId: string) => {
     const blockIndex = document.blocks.findIndex((b) => b.id === blockId);
     if (blockIndex === -1) return;
 
-    const oldBlock = document.blocks[blockIndex];
-    let newBlock: AnswerSheetBlock;
+    const blockToDelete = document.blocks[blockIndex];
+    // const linesFreed = blockToDelete.lineEnd - blockToDelete.lineStart + 1; // Not strictly needed if we recalc everything
 
-    // Create new block based on type
-    if (newBlockType === "text") {
-      // Already a text block, do nothing
+    // Remove the block
+    const newBlocks = [...document.blocks];
+    newBlocks.splice(blockIndex, 1);
+
+    // If no blocks left, add an empty text block
+    if (newBlocks.length === 0) {
+      updateDocument({ blocks: [createTextBlock(Array(22).fill(""), 1)] });
       return;
-    } else if (newBlockType === "table") {
-      // Create a 3x3 table as default
+    }
+
+    // Check for adjacent text blocks to merge
+    // We check the gap between blockIndex-1 and blockIndex (which was blockIndex+1 before splice)
+    // Actually, after splice, newBlocks[blockIndex-1] and newBlocks[blockIndex] are now neighbors.
+
+    if (blockIndex > 0 && blockIndex < newBlocks.length) {
+      const prevBlock = newBlocks[blockIndex - 1];
+      const nextBlock = newBlocks[blockIndex];
+
+      if (prevBlock.type === "text" && nextBlock.type === "text") {
+        // Merge them
+        const mergedLines = [...(prevBlock as TextBlock).lines, ...(nextBlock as TextBlock).lines];
+        const mergedBlock: TextBlock = {
+          ...prevBlock as TextBlock,
+          lines: mergedLines,
+          lineEnd: prevBlock.lineStart + mergedLines.length - 1,
+        };
+
+        // Replace the two blocks with the merged one
+        newBlocks.splice(blockIndex - 1, 2, mergedBlock);
+      }
+    }
+
+    // Recalculate positions for ALL blocks to ensure consistency
+    // We start from the first block (or the one after the merge point)
+    // But to be safe and fix any "line mismatch", let's recalc from the beginning or the affected area.
+
+    // If we merged, the affected index starts at blockIndex - 1.
+    // If we didn't merge, it starts at blockIndex.
+    // Let's just recalc everything from index 0 to be super safe, or at least from the first affected block.
+
+    let currentLine = 1;
+    for (let i = 0; i < newBlocks.length; i++) {
+      const block = newBlocks[i];
+      const height = block.lineEnd - block.lineStart + 1; // Keep existing height logic
+      // Note: For text blocks, height is lines.length. For others, it's fixed or calculated.
+      // We should trust the block's internal height logic, but we need to update lineStart.
+
+      let newHeight = height;
+      if (block.type === "text") {
+        newHeight = (block as TextBlock).lines.length;
+      } else if (block.type === "table") {
+        // Table height depends on rows.
+        // If we just deleted a block, table height shouldn't change, but its position should.
+        newHeight = (block as TableBlock).rows.length + 1; // rows + header
+      }
+
+      newBlocks[i] = {
+        ...block,
+        lineStart: currentLine,
+        lineEnd: currentLine + newHeight - 1,
+      };
+
+      currentLine += newHeight;
+    }
+
+    updateDocument({ blocks: newBlocks });
+  };
+
+  const handleTableStructureChange = (blockId: string, headers: string[], rows: string[][], columnWidths: number[]) => {
+    const blockIndex = document.blocks.findIndex((b) => b.id === blockId);
+    if (blockIndex === -1) return;
+
+    const newBlocks = [...document.blocks];
+    const oldBlock = newBlocks[blockIndex] as TableBlock;
+
+    // Update the table block
+    const newHeight = rows.length + 1; // rows + header
+    newBlocks[blockIndex] = {
+      ...oldBlock,
+      headers,
+      rows,
+      columnWidths,
+      lineEnd: oldBlock.lineStart + newHeight - 1,
+    };
+
+    // Recalculate positions for subsequent blocks
+    let currentLine = newBlocks[blockIndex].lineEnd + 1;
+    for (let i = blockIndex + 1; i < newBlocks.length; i++) {
+      const block = newBlocks[i];
+      const height = block.lineEnd - block.lineStart + 1;
+
+      newBlocks[i] = {
+        ...block,
+        lineStart: currentLine,
+        lineEnd: currentLine + height - 1,
+      };
+      currentLine += height;
+    }
+
+    updateDocument({ blocks: newBlocks });
+  };
+
+  const handleDrawingBlockHeightChange = (blockId: string, newLineCount: number) => {
+    const blockIndex = document.blocks.findIndex((b) => b.id === blockId);
+    if (blockIndex === -1) return;
+
+    const newBlocks = [...document.blocks];
+    const oldBlock = newBlocks[blockIndex];
+
+    // Update the drawing block
+    const newHeight = newLineCount; // Height in lines
+    newBlocks[blockIndex] = {
+      ...oldBlock,
+      lineEnd: oldBlock.lineStart + newHeight - 1,
+    };
+
+    // Recalculate positions for subsequent blocks
+    let currentLine = newBlocks[blockIndex].lineEnd + 1;
+    for (let i = blockIndex + 1; i < newBlocks.length; i++) {
+      const block = newBlocks[i];
+      const height = block.lineEnd - block.lineStart + 1;
+
+      newBlocks[i] = {
+        ...block,
+        lineStart: currentLine,
+        lineEnd: currentLine + height - 1,
+      };
+      currentLine += height;
+    }
+
+    updateDocument({ blocks: newBlocks });
+  };
+
+  /**
+   * Convert a text block to a different block type (triggered by slash commands)
+   * If triggered on a line other than the first, it splits the text block.
+   */
+  const handleConvertBlock = (blockId: string, newBlockType: BlockType, lineIndex: number) => {
+    const blockIndex = document.blocks.findIndex((b) => b.id === blockId);
+    if (blockIndex === -1) return;
+
+    const oldBlock = document.blocks[blockIndex] as unknown as TextBlock; // We know it's a text block
+    if (oldBlock.type !== "text") return;
+
+    // 1. Prepare the new block (Table or Drawing)
+    let newBlock: AnswerSheetBlock;
+    // The new block will start at: oldBlock.lineStart + lineIndex
+    const newBlockStartLine = oldBlock.lineStart + lineIndex;
+
+    if (newBlockType === "table") {
       const headers = ["항목", "내용", "비고"];
       const rows = Array(2).fill(null).map(() => ["", "", ""]);
       const columnWidths = [6, 8, 5];
-      newBlock = createTableBlock(headers, rows, columnWidths, oldBlock.lineStart);
+      newBlock = createTableBlock(headers, rows, columnWidths, newBlockStartLine);
+    } else if (newBlockType === "drawing") {
+      newBlock = createDrawingBlock(8, newBlockStartLine);
     } else {
-      // drawing
-      newBlock = createDrawingBlock(8, oldBlock.lineStart);
+      return;
     }
 
-    // Replace the block
-    const newBlocks = [...document.blocks];
-    newBlocks[blockIndex] = newBlock;
+    const newBlockHeight = newBlock.lineEnd - newBlock.lineStart;
 
-    // Recalculate positions for blocks after this one
-    for (let i = blockIndex + 1; i < newBlocks.length; i++) {
+    // 2. Prepare blocks to insert
+    const blocksToInsert: AnswerSheetBlock[] = [];
+
+    // Part A: Text before the insertion point (if any)
+    if (lineIndex > 0) {
+      const textBefore = oldBlock.lines.slice(0, lineIndex);
+      blocksToInsert.push({
+        ...oldBlock,
+        id: crypto.randomUUID(), // New ID for the split part
+        lines: textBefore,
+        lineStart: oldBlock.lineStart, // Explicitly set lineStart
+        lineEnd: oldBlock.lineStart + lineIndex - 1,
+      });
+    }
+
+    // Part B: The new block
+    blocksToInsert.push(newBlock);
+
+    // Part C: Text after the insertion point (if any)
+    // The slash command line itself is replaced by the new block, so we skip it?
+    // Usually slash command consumes the line.
+    // So we take lines from lineIndex + 1 onwards.
+    if (lineIndex + 1 < oldBlock.lines.length) {
+      const textAfter = oldBlock.lines.slice(lineIndex + 1);
+      // If textAfter is empty, do we need a block? Maybe not.
+      // But if user splits in middle, they want text after.
+      if (textAfter.length > 0) {
+        const startLine = newBlock.lineEnd + 1;
+        blocksToInsert.push({
+          ...oldBlock,
+          id: crypto.randomUUID(),
+          lines: textAfter,
+          lineStart: startLine, // Explicitly set lineStart
+          lineEnd: startLine + textAfter.length - 1,
+        });
+      }
+    }
+
+    // 3. Construct new blocks array
+    const newBlocks = [...document.blocks];
+    // Remove the old block and insert the new ones
+    newBlocks.splice(blockIndex, 1, ...blocksToInsert);
+
+    // 4. Recalculate positions for all subsequent blocks
+    // Start recalculating from the block AFTER the last inserted block
+    const lastInsertedIndex = blockIndex + blocksToInsert.length - 1;
+
+    for (let i = lastInsertedIndex + 1; i < newBlocks.length; i++) {
       const prevBlock = newBlocks[i - 1];
       const currentBlock = newBlocks[i];
       const currentHeight = currentBlock.lineEnd - currentBlock.lineStart;
@@ -245,14 +440,14 @@ export function AnswerSheetEditor({
             const hasSpaceForMoreBlocks = document.totalLines < BLOCK_CONSTANTS.MAX_LINES;
 
             return (
-              <div key={block.id} className="relative">
+              <div key={block.id} className="absolute inset-0 pointer-events-none">
                 {/* Block content */}
                 {block.type === "text" && (
                   <TextBlockRenderer
                     block={block}
                     editable={true}
                     onChange={(lines) => handleTextBlockChange(block.id, lines)}
-                    onConvertToBlock={(blockType) => handleConvertBlock(block.id, blockType)}
+                    onConvertToBlock={(blockType, lineIndex) => handleConvertBlock(block.id, blockType, lineIndex)}
                   />
                 )}
                 {block.type === "table" && (
@@ -260,13 +455,16 @@ export function AnswerSheetEditor({
                     block={block}
                     editable={true}
                     onChange={(headers, rows) => handleTableBlockChange(block.id, headers, rows)}
+                    onStructureChange={(headers, rows, columnWidths) => handleTableStructureChange(block.id, headers, rows, columnWidths)}
+                    onDelete={() => handleDeleteBlock(block.id)}
                   />
                 )}
                 {block.type === "drawing" && (
                   <DrawingBlockEditor
                     block={block}
-                    editable={true}
                     onChange={(data) => handleDrawingBlockChange(block.id, data)}
+                    onHeightChange={(lines) => handleDrawingBlockHeightChange(block.id, lines)}
+                    onDelete={() => handleDeleteBlock(block.id)}
                   />
                 )}
 

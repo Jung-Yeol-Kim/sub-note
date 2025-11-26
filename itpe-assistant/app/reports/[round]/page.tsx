@@ -96,28 +96,28 @@ export default async function ReportPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fcfaf7] via-[#f8f5f0] to-[#f5f1eb]">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-muted/50">
       {/* Header */}
-      <div className="border-b border-[#3d5a4c]/10 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/reports"
-                className="p-2 hover:bg-[#3d5a4c]/10 rounded-lg transition-colors"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
-                <ArrowLeft className="w-5 h-5 text-[#3d5a4c]" />
+                <ArrowLeft className="w-5 h-5 text-foreground" />
               </Link>
 
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-[#3d5a4c] to-[#2d4a3c] rounded-lg">
-                  <FileText className="w-6 h-6 text-white" />
+                <div className="p-2 bg-gradient-to-br from-primary to-primary/80 rounded-lg">
+                  <FileText className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-[#3d5a4c] font-crimson">
+                  <h1 className="text-2xl font-bold text-foreground font-crimson">
                     {report.round}회 분석 리포트
                   </h1>
-                  <div className="flex items-center gap-2 text-sm text-[#3d5a4c]/60">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="w-3 h-3" />
                     <span>{report.date}</span>
                   </div>
@@ -126,9 +126,9 @@ export default async function ReportPage({ params }: PageProps) {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="px-4 py-2 bg-white rounded-lg border border-[#3d5a4c]/10">
-                <p className="text-xs text-[#3d5a4c]/60">총 문제 수</p>
-                <p className="text-xl font-bold text-[#3d5a4c]">
+              <div className="px-4 py-2 bg-card rounded-lg border border-border">
+                <p className="text-xs text-muted-foreground">총 문제 수</p>
+                <p className="text-xl font-bold text-foreground">
                   {report.totalQuestions}
                 </p>
               </div>
@@ -148,10 +148,10 @@ export default async function ReportPage({ params }: PageProps) {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Category Overview */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-[#3d5a4c]/10 sticky top-24">
+            <div className="bg-card rounded-xl p-6 shadow-sm border border-border sticky top-24">
               <div className="flex items-center gap-2 mb-6">
-                <BarChart3 className="w-5 h-5 text-[#3d5a4c]" />
-                <h2 className="text-lg font-bold text-[#3d5a4c] font-crimson">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-bold text-foreground font-crimson">
                   카테고리 분포
                 </h2>
               </div>
@@ -160,21 +160,21 @@ export default async function ReportPage({ params }: PageProps) {
                 {report.categories.map((category, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-[#3d5a4c]">
+                      <span className="text-sm font-medium text-foreground">
                         {category.name}
                       </span>
-                      <span className="text-sm text-[#3d5a4c]/60">
+                      <span className="text-sm text-muted-foreground">
                         {category.count}문제
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-[#3d5a4c]/10 rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-[#3d5a4c] to-[#c49a6c] rounded-full transition-all"
+                          className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all"
                           style={{ width: `${category.percentage}%` }}
                         />
                       </div>
-                      <span className="text-xs text-[#3d5a4c]/60 w-12 text-right">
+                      <span className="text-xs text-muted-foreground w-12 text-right">
                         {category.percentage.toFixed(1)}%
                       </span>
                     </div>
@@ -183,19 +183,19 @@ export default async function ReportPage({ params }: PageProps) {
               </div>
 
               {/* Quick Stats */}
-              <div className="mt-6 pt-6 border-t border-[#3d5a4c]/10">
+              <div className="mt-6 pt-6 border-t border-border">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <TrendingUp className="w-5 h-5 text-[#c49a6c] mx-auto mb-1" />
-                    <p className="text-xs text-[#3d5a4c]/60">최다 출제</p>
-                    <p className="text-sm font-bold text-[#3d5a4c]">
+                    <TrendingUp className="w-5 h-5 text-secondary mx-auto mb-1" />
+                    <p className="text-xs text-muted-foreground">최다 출제</p>
+                    <p className="text-sm font-bold text-foreground">
                       {report.categories[0]?.count || 0}문제
                     </p>
                   </div>
                   <div className="text-center">
-                    <BarChart3 className="w-5 h-5 text-[#c49a6c] mx-auto mb-1" />
-                    <p className="text-xs text-[#3d5a4c]/60">평균</p>
-                    <p className="text-sm font-bold text-[#3d5a4c]">
+                    <BarChart3 className="w-5 h-5 text-secondary mx-auto mb-1" />
+                    <p className="text-xs text-muted-foreground">평균</p>
+                    <p className="text-sm font-bold text-foreground">
                       {(
                         report.totalQuestions / report.categories.length
                       ).toFixed(1)}
