@@ -30,6 +30,7 @@ import { validateImageFiles } from "@/lib/utils/vision-helper";
 import dynamic from "next/dynamic";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { extractStructuredAnswerSheet } from "@/lib/utils/ai-message-parsers";
 
 // Dynamically import AnswerSheetEditor to avoid SSR issues
 const AnswerSheetEditor = dynamic(
@@ -133,16 +134,12 @@ export function OcrAnswerSheetImporter({ onComplete }: OcrAnswerSheetImporterPro
           setStatus("error");
         }
       }
+    }
 
-      // Extract structured document (object output)
-      const objectParts = lastMessage.parts.filter(
-        (part: any) => part.type === "object"
-      );
-      if (objectParts.length > 0) {
-        const doc = (objectParts[objectParts.length - 1] as any).data;
-        setDocument(doc as AnswerSheetDocument);
-        console.log("[OcrImporter] Document updated:", doc);
-      }
+    const structuredDoc = extractStructuredAnswerSheet(lastMessage as any);
+    if (structuredDoc) {
+      setDocument(structuredDoc);
+      console.log("[OcrImporter] Document updated via tool:", structuredDoc);
     }
   }, [messages]);
 

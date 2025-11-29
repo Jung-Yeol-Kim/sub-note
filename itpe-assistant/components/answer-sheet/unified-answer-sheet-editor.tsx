@@ -49,6 +49,8 @@ import { Sparkles, Layers, Save } from "lucide-react";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
+import { extractStructuredAnswerSheet } from "@/lib/utils/ai-message-parsers";
+import { AnswerSheetArtifactCard } from "@/components/answer-sheet/answer-sheet-artifact-card";
 
 // Dynamically import AnswerSheetEditor to avoid SSR issues
 const AnswerSheetEditor = dynamic(
@@ -80,12 +82,16 @@ export function UnifiedAnswerSheetEditor({
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [ocrText, setOcrText] = useState("");
   const [title, setTitle] = useState(initialTitle);
+  const [artifactsByMessage, setArtifactsByMessage] = useState<Record<string, AnswerSheetDocument>>({});
 
   // UI state
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Track last processed message ID to avoid infinite loops
-  const lastProcessedMessageIdRef = useRef<string | null>(null);
+  const lastMetadataMessageIdRef = useRef<Set<string>>(new Set());
+  const artifactFingerprintsRef = useRef<Record<string, string>>({});
+  const documentFingerprintRef = useRef<string | null>(
+    initialDocument ? JSON.stringify(initialDocument) : null
+  );
 
   // AI Chat - useChat with DefaultChatTransport
   const { messages, sendMessage, status } = useChat({
@@ -116,70 +122,67 @@ export function UnifiedAnswerSheetEditor({
     },
   });
 
-  // Process messages in real-time to extract custom data
+  // Process messages to extract custom data and tool artifacts
   useEffect(() => {
     if (messages.length === 0) return;
 
-    const lastMessage = messages[messages.length - 1];
+    let latestDocument: AnswerSheetDocument | null = null;
+    const newArtifacts: Record<string, AnswerSheetDocument> = {};
+    const metadataSeen = lastMetadataMessageIdRef.current;
 
-    // Skip if we've already processed this message
-    if (lastMessage.id === lastProcessedMessageIdRef.current) {
-      return;
-    }
+    for (const message of messages) {
+      const structuredDoc = extractStructuredAnswerSheet(message as any);
 
-    console.log("[UnifiedEditor] Processing message:", lastMessage);
+      if (structuredDoc) {
+        latestDocument = structuredDoc;
+        const fingerprint = JSON.stringify(structuredDoc);
 
-    // Mark this message as processed
-    lastProcessedMessageIdRef.current = lastMessage.id;
-
-    // Process custom data parts from message.parts
-    if (lastMessage.role === "assistant" && lastMessage.parts) {
-      // Extract tool results (NEW - tool-based approach)
-      const toolResults = lastMessage.parts.filter(
-        (part: any) => part.type === "tool-result" && part.toolName === "structure_answer_sheet"
-      );
-
-      if (toolResults.length > 0) {
-        const toolResult = toolResults[0] as any;
-        const doc = toolResult.result as AnswerSheetDocument;
-        console.log("[UnifiedEditor] Document from tool-result:", doc);
-        setDocument(doc);
-        toast.success("답안지 구조화 완료", {
-          description: `${doc.blocks.length}개 블록, ${doc.totalLines}줄 사용`,
-        });
-      } else {
-        // Fallback: Check for old data-document or object parts (backward compatibility)
-        const documentParts = lastMessage.parts.filter(
-          (part: any) => part.type === "data-document" || part.type === "object"
-        );
-        if (documentParts.length > 0) {
-          const doc = (documentParts[documentParts.length - 1] as any).data;
-          console.log("[UnifiedEditor] Document from legacy format:", doc);
-          setDocument(doc as AnswerSheetDocument);
-          toast.success("답안지 업데이트 완료", {
-            description: "왼쪽 편집기가 업데이트되었습니다.",
+        if (artifactFingerprintsRef.current[message.id] !== fingerprint) {
+          artifactFingerprintsRef.current[message.id] = fingerprint;
+          newArtifacts[message.id] = structuredDoc;
+          toast.success("답안지 구조화 완료", {
+            description: `${structuredDoc.blocks.length}개 블록, ${structuredDoc.totalLines}줄 사용`,
           });
         }
       }
 
       // Extract metadata (OCR stats, warnings)
-      const metadataParts = lastMessage.parts.filter(
-        (part: any) => part.type === "data-metadata"
-      );
-      if (metadataParts.length > 0) {
-        const metadata = (metadataParts[metadataParts.length - 1] as any).data;
-        if (metadata.imageUrls) setImageUrls(metadata.imageUrls);
-        if (metadata.ocrText) setOcrText(metadata.ocrText);
+      if (message.role === "assistant" && Array.isArray((message as any).parts)) {
+        for (const part of (message as any).parts) {
+          const metadataKey = part.toolCallId || message.id;
+          if (part.type === "data-metadata" && metadataKey && !metadataSeen.has(metadataKey)) {
+            const metadata = (part as any).data;
+            if (metadata.imageUrls) setImageUrls(metadata.imageUrls);
+            if (metadata.ocrText) setOcrText(metadata.ocrText);
 
-        // Show OCR warnings if any
-        if (metadata.warnings && metadata.warnings.length > 0) {
-          toast.warning("OCR 경고", {
-            description: metadata.warnings.join("\n"),
-          });
+            if (metadata.warnings && metadata.warnings.length > 0) {
+              toast.warning("OCR 경고", {
+                description: metadata.warnings.join("\n"),
+              });
+            }
+
+            metadataSeen.add(metadataKey);
+          }
         }
       }
     }
+
+    if (Object.keys(newArtifacts).length > 0) {
+      setArtifactsByMessage((prev) => ({ ...prev, ...newArtifacts }));
+    }
+
+    if (latestDocument) {
+      const nextFingerprint = JSON.stringify(latestDocument);
+      if (nextFingerprint !== documentFingerprintRef.current) {
+        documentFingerprintRef.current = nextFingerprint;
+        setDocument(latestDocument);
+      }
+    }
   }, [messages]);
+
+  useEffect(() => {
+    documentFingerprintRef.current = document ? JSON.stringify(document) : null;
+  }, [document]);
 
   // Handle image upload
   const handleImageUpload = async (files: File[]) => {
@@ -458,12 +461,97 @@ export function UnifiedAnswerSheetEditor({
 
                   {/* Message content */}
                   <MessageContent>
-                    <MessageResponse>
-                      {message.parts
-                        ?.filter((part: any) => part.type === "text")
-                        .map((part: any) => part.text)
-                        .join("") || ""}
-                    </MessageResponse>
+                    {(message.parts?.filter((part: any) => part.type === "data-status") || []).map(
+                      (part: any, index: number) => (
+                        <div
+                          key={`${message.id}-status-${index}`}
+                          className="flex items-center gap-2 rounded-md bg-[#3d5a4c]/5 px-3 py-2 text-xs text-[#3d5a4c]"
+                        >
+                          <span className="font-semibold">
+                            {part.data?.step === "ocr" ? "OCR" : "AI"} 진행 중
+                          </span>
+                          <span className="text-muted-foreground">{part.data?.message}</span>
+                        </div>
+                      )
+                    )}
+
+                    {(message.parts?.filter((part: any) => part.type === "text")?.length ||
+                      typeof (message as any).content === "string") && (
+                      <MessageResponse>
+                        {message.parts
+                          ?.filter((part: any) => part.type === "text")
+                          .map((part: any) => part.text)
+                          .join("") || (message as any).content || ""}
+                      </MessageResponse>
+                    )}
+
+                    {message.role === "assistant" &&
+                      (message.parts?.filter(
+                        (part: any) => part.type === "tool-structure_answer_sheet"
+                      ) || []).map((part: any, index: number) => {
+                        switch (part.state) {
+                          case "input-streaming":
+                            return (
+                              <div
+                                key={`${message.id}-tool-${index}`}
+                                className="rounded-md bg-[#f5f0e9] px-3 py-2 text-sm text-muted-foreground"
+                              >
+                                이미지와 OCR 텍스트를 분석 중입니다...
+                              </div>
+                            );
+                          case "input-available":
+                            return (
+                              <div
+                                key={`${message.id}-tool-${index}`}
+                                className="rounded-md bg-[#f5f0e9] px-3 py-2 text-sm text-muted-foreground"
+                              >
+                                구조화 요청을 준비하고 있습니다...
+                              </div>
+                            );
+                          case "output-error":
+                            return (
+                              <div
+                                key={`${message.id}-tool-${index}`}
+                                className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-800"
+                              >
+                                구조화 도구 실행 중 오류가 발생했습니다: {part.errorText}
+                              </div>
+                            );
+                          case "output-available": {
+                            const doc = (part as any).output as AnswerSheetDocument;
+                            return (
+                              <AnswerSheetArtifactCard
+                                key={`${message.id}-tool-${index}`}
+                                document={doc}
+                                onApply={(appliedDoc) => {
+                                  setDocument(appliedDoc);
+                                  toast.success("편집기에 적용했습니다", {
+                                    description: `${appliedDoc.blocks.length}개 블록, ${appliedDoc.totalLines}줄 사용`,
+                                  });
+                                }}
+                                title="AI가 구조화한 답안지"
+                                description="아래 구조를 바로 편집기에 반영할 수 있습니다."
+                              />
+                            );
+                          }
+                          default:
+                            return null;
+                        }
+                      })}
+
+                    {message.role === "assistant" &&
+                      !message.parts?.some((part: any) => part.type === "tool-structure_answer_sheet") &&
+                      artifactsByMessage[message.id] && (
+                        <AnswerSheetArtifactCard
+                          document={artifactsByMessage[message.id]}
+                          onApply={(doc) => {
+                            setDocument(doc);
+                            toast.success("편집기에 적용했습니다", {
+                              description: `${doc.blocks.length}개 블록, ${doc.totalLines}줄 사용`,
+                            });
+                          }}
+                        />
+                      )}
                   </MessageContent>
                 </Message>
               ))

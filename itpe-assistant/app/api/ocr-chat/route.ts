@@ -44,6 +44,8 @@ const AnswerSheetDocumentDraftSchema = z.object({
         .optional(),
 });
 
+const PAGE_NUMBER_REGEX = /^(\d+)\s*쪽?$/i;
+
 const normalizeAnswerSheetDocument = (
     draft: z.infer<typeof AnswerSheetDocumentDraftSchema>
 ) => {
@@ -107,12 +109,68 @@ const normalizeAnswerSheetDocument = (
             };
         }
 
+        if (block.type === "drawing") {
+            const hasExcalidrawData = Boolean(block.excalidrawData);
+            return {
+                ...block,
+                excalidrawData: hasExcalidrawData
+                    ? block.excalidrawData
+                    : { elements: [], appState: { viewBackgroundColor: "#ffffff" }, files: {} },
+            };
+        }
+
         return block;
     });
 
+    // Remove page-number-only lines (예: "4쪽") and re-flow line numbers
+    const sanitizedBlocks: typeof normalizedBlocks = [];
+    let currentLine = 1;
+    for (const block of normalizedBlocks) {
+        if (block.type === "text") {
+            const filtered = block.lines.filter((line) => !PAGE_NUMBER_REGEX.test(line.trim()));
+            if (filtered.length !== block.lines.length) {
+                normalizationWarnings.push(`쪽번호로 추정되는 텍스트를 제거했습니다: ${block.lines.join(" | ")}`);
+            }
+
+            if (filtered.length === 0) continue;
+
+            const height = filtered.length;
+            sanitizedBlocks.push({
+                ...block,
+                lines: filtered,
+                lineStart: currentLine,
+                lineEnd: currentLine + height - 1,
+            });
+            currentLine += height;
+            continue;
+        }
+
+        const height = block.lineEnd - block.lineStart + 1;
+        sanitizedBlocks.push({
+            ...block,
+            lineStart: currentLine,
+            lineEnd: currentLine + height - 1,
+        });
+        currentLine += height;
+    }
+
+    const blocksToUse = sanitizedBlocks.length > 0
+        ? sanitizedBlocks
+        : [{
+            id: "placeholder-1",
+            type: "text" as const,
+            lineStart: 1,
+            lineEnd: 1,
+            lines: [""],
+        }];
+
+    if (sanitizedBlocks.length === 0) {
+        normalizationWarnings.push("모든 블록이 제거되어 빈 텍스트 블록을 생성했습니다.");
+    }
+
     const totalLines = Math.min(
         draft.totalLines ??
-            Math.max(...normalizedBlocks.map((b) => b.lineEnd), 1),
+            Math.max(...blocksToUse.map((b) => b.lineEnd), 1),
         BLOCK_CONSTANTS.MAX_LINES
     );
 
@@ -126,7 +184,7 @@ const normalizeAnswerSheetDocument = (
     };
 
     return AnswerSheetDocumentSchema.parse({
-        blocks: normalizedBlocks,
+        blocks: blocksToUse,
         leftMargin: draft.leftMargin,
         totalLines,
         metadata,
