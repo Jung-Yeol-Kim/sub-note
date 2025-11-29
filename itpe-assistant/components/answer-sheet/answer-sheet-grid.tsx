@@ -31,6 +31,7 @@ export function AnswerSheetGrid({
 }: AnswerSheetGridProps) {
   // Create array of all lines (66 lines for 3 pages)
   const lines = Array.from({ length: BLOCK_CONSTANTS.MAX_LINES }, (_, i) => i + 1);
+  const pages = Array.from({ length: BLOCK_CONSTANTS.MAX_PAGES }, (_, i) => i + 1);
 
   // Helper: Check if this line is the last line of a page
   const isPageEnd = (lineNum: number): boolean => {
@@ -109,34 +110,68 @@ export function AnswerSheetGrid({
             {/* Left margin column (문1), 답1), etc.) */}
             {showLeftMargin && (
               <div className="relative border-r-2 border-border" style={{ width: '90px' }}>
-                {/* Grid overlay for left margin - 66 rows × 3 columns (1.5:1:1 ratio) */}
-                <div className="h-full flex flex-col">
-                  {lines.map((lineNum) => {
-                    const isLastLineOfPage = isPageEnd(lineNum);
-                    return (
-                      <div key={lineNum} style={{ flex: '1 1 0%' }}>
-                        <div
-                          className="h-full grid border-b border-border/20 last:border-b-0"
-                          style={{ gridTemplateColumns: '1.5fr 1fr 1fr' }}
-                        >
-                          <div className="border-r border-border/10" />
-                          <div className="border-r border-border/10" />
-                          <div />
-                        </div>
-                        {/* Add spacing for page divider */}
-                        {isLastLineOfPage && <div className="h-0" />}
-                      </div>
+                {pages.map((pageNumber, pageIndex) => {
+                  const startLine = pageIndex * BLOCK_CONSTANTS.LINES_PER_PAGE + 1;
+                  const endLine = startLine + BLOCK_CONSTANTS.LINES_PER_PAGE - 1;
+                  const pageLines = Array.from({ length: BLOCK_CONSTANTS.LINES_PER_PAGE }, (_, i) => startLine + i);
+                  const height =
+                    layoutMetrics.lineHeight > 0
+                      ? `${layoutMetrics.lineHeight * BLOCK_CONSTANTS.LINES_PER_PAGE}px`
+                      : `${100 / BLOCK_CONSTANTS.MAX_PAGES}%`;
+                  const top =
+                    layoutMetrics.lineHeight > 0
+                      ? `${layoutMetrics.lineHeight * BLOCK_CONSTANTS.LINES_PER_PAGE * pageIndex}px`
+                      : `${(100 / BLOCK_CONSTANTS.MAX_PAGES) * pageIndex}%`;
+
+                  const pageItems = leftMargin.filter(
+                    (item) => item.line >= startLine && item.line <= endLine
+                  );
+
+                  const handleLeftMarginChange = (items: LeftMarginItem[]) => {
+                    if (!onLeftMarginChange) return;
+
+                    const otherItems = leftMargin.filter(
+                      (item) => item.line < startLine || item.line > endLine
                     );
-                  })}
-                </div>
-                {/* Left margin content overlay */}
-                <div className="absolute inset-0 z-10">
-                  <LeftMarginRenderer
-                    items={leftMargin}
-                    editable={leftMarginEditable}
-                    onChange={onLeftMarginChange}
-                  />
-                </div>
+
+                    onLeftMarginChange([...otherItems, ...items]);
+                  };
+
+                  return (
+                    <div
+                      key={`left-margin-page-${pageNumber}`}
+                      className="absolute left-0 right-0"
+                      style={{ height, top }}
+                    >
+                      {/* Grid overlay for left margin - 22 rows × 3 columns (1.5:1:1 ratio) */}
+                      <div className="h-full flex flex-col">
+                        {pageLines.map((lineNum) => (
+                          <div key={lineNum} style={{ flex: '1 1 0%' }}>
+                            <div
+                              className="h-full grid border-b border-border/20 last:border-b-0"
+                              style={{ gridTemplateColumns: '1.5fr 1fr 1fr' }}
+                            >
+                              <div className="border-r border-border/10" />
+                              <div className="border-r border-border/10" />
+                              <div />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Left margin content overlay */}
+                      <div className="absolute inset-0 z-10">
+                        <LeftMarginRenderer
+                          items={pageItems}
+                          editable={leftMarginEditable}
+                          onChange={handleLeftMarginChange}
+                          startLine={startLine}
+                          linesPerPage={BLOCK_CONSTANTS.LINES_PER_PAGE}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
 

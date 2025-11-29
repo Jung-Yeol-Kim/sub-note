@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
   type TextBlock,
@@ -50,6 +50,23 @@ export function AnswerSheetEditor({
   };
 
   const [document, setDocument] = useState<AnswerSheetDocument>(getInitialDocument());
+  const externalFingerprintRef = useRef<string | null>(
+    initialDocument ? JSON.stringify(initialDocument) : null
+  );
+
+  useEffect(() => {
+    if (!initialDocument) return;
+
+    const nextFingerprint = JSON.stringify(initialDocument);
+    if (nextFingerprint !== externalFingerprintRef.current) {
+      externalFingerprintRef.current = nextFingerprint;
+      setDocument(initialDocument);
+    }
+  }, [initialDocument]);
+
+  useEffect(() => {
+    externalFingerprintRef.current = JSON.stringify(document);
+  }, [document]);
 
   const updateDocument = (updates: Partial<AnswerSheetDocument>) => {
     const newDoc = { ...document, ...updates };

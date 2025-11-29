@@ -11,6 +11,7 @@ import {
     generateObject,
     createUIMessageStream,
     createUIMessageStreamResponse,
+    NoSuchToolError,
 } from "ai";
 import { z } from "zod";
 import {
@@ -31,8 +32,42 @@ import {
 } from "@/lib/prompts/ocr-structuring-prompt";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
 
+// Draft schema: 더 관대한 검증으로 LLM이 반환한 중간 결과를 수용한 뒤 normalize 단계에서 엄격히 검증
+const AnswerSheetBlockDraftSchema = z.discriminatedUnion("type", [
+    z.object({
+        id: z.string(),
+        type: z.literal("text"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lines: z.array(z.string()).min(1),
+    }),
+    z.object({
+        id: z.string(),
+        type: z.literal("table"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        headers: z.array(z.string()).min(1),
+        rows: z.array(z.array(z.string())).min(1),
+        columnWidths: z.array(z.number().int().min(1)).min(1),
+    }),
+    z.object({
+        id: z.string(),
+        type: z.literal("drawing"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        excalidrawData: z
+            .object({
+                elements: z.array(z.any()),
+                appState: z.any().optional(),
+                files: z.any().optional(),
+            })
+            .optional(),
+        thumbnail: z.string().nullable().optional(),
+    }),
+]);
+
 const AnswerSheetDocumentDraftSchema = z.object({
-    blocks: z.array(AnswerSheetBlockSchema),
+    blocks: z.array(AnswerSheetBlockDraftSchema),
     leftMargin: z.array(LeftMarginItemSchema).optional(),
     totalLines: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES).optional(),
     metadata: z
@@ -43,6 +78,8 @@ const AnswerSheetDocumentDraftSchema = z.object({
         })
         .optional(),
 });
+
+const PAGE_NUMBER_REGEX = /^(\d+)\s*쪽?$/i;
 
 const normalizeAnswerSheetDocument = (
     draft: z.infer<typeof AnswerSheetDocumentDraftSchema>
@@ -107,14 +144,93 @@ const normalizeAnswerSheetDocument = (
             };
         }
 
+        if (block.type === "drawing") {
+            const hasExcalidrawData = Boolean(block.excalidrawData);
+            return {
+                ...block,
+                excalidrawData: hasExcalidrawData
+                    ? block.excalidrawData
+                    : { elements: [], appState: { viewBackgroundColor: "#ffffff" }, files: {} },
+                thumbnail: typeof block.thumbnail === "string" ? block.thumbnail : undefined,
+            };
+        }
+
         return block;
     });
 
+    // Remove page-number-only lines (예: "4쪽") and re-flow line numbers
+    const sanitizedBlocks: typeof normalizedBlocks = [];
+    let currentLine = 1;
+    for (const block of normalizedBlocks) {
+        if (block.type === "text") {
+            const filtered = block.lines.filter((line) => !PAGE_NUMBER_REGEX.test(line.trim()));
+            if (filtered.length !== block.lines.length) {
+                normalizationWarnings.push(`쪽번호로 추정되는 텍스트를 제거했습니다: ${block.lines.join(" | ")}`);
+            }
+
+            if (filtered.length === 0) continue;
+
+            const height = filtered.length;
+            sanitizedBlocks.push({
+                ...block,
+                lines: filtered,
+                lineStart: currentLine,
+                lineEnd: currentLine + height - 1,
+            });
+            currentLine += height;
+            continue;
+        }
+
+        const height = block.lineEnd - block.lineStart + 1;
+        sanitizedBlocks.push({
+            ...block,
+            lineStart: currentLine,
+            lineEnd: currentLine + height - 1,
+        });
+        currentLine += height;
+    }
+
+    const blocksToUse = sanitizedBlocks.length > 0
+        ? sanitizedBlocks
+        : [{
+            id: "placeholder-1",
+            type: "text" as const,
+            lineStart: 1,
+            lineEnd: 1,
+            lines: [""],
+        }];
+
+    if (sanitizedBlocks.length === 0) {
+        normalizationWarnings.push("모든 블록이 제거되어 빈 텍스트 블록을 생성했습니다.");
+    }
+
     const totalLines = Math.min(
         draft.totalLines ??
-            Math.max(...normalizedBlocks.map((b) => b.lineEnd), 1),
+            Math.max(...blocksToUse.map((b) => b.lineEnd), 1),
         BLOCK_CONSTANTS.MAX_LINES
     );
+
+    const normalizedLeftMargin = (draft.leftMargin || []).flatMap((item) => {
+        const trimmed = (item.content || "").trim();
+        if (!trimmed) {
+            return [];
+        }
+
+        let line = item.line;
+        if (item.line < 1 || item.line > BLOCK_CONSTANTS.MAX_LINES) {
+            const clamped = Math.min(Math.max(item.line, 1), BLOCK_CONSTANTS.MAX_LINES);
+            normalizationWarnings.push(
+                `왼쪽 목차(${item.line}행)의 위치를 ${clamped}행으로 보정했습니다.`
+            );
+            line = clamped;
+        }
+
+        return [{
+            ...item,
+            line,
+            content: trimmed,
+        }];
+    }).sort((a, b) => (a.line === b.line ? a.column - b.column : a.line - b.line));
 
     const metadata = {
         isValid: draft.metadata?.isValid ?? true,
@@ -126,11 +242,64 @@ const normalizeAnswerSheetDocument = (
     };
 
     return AnswerSheetDocumentSchema.parse({
-        blocks: normalizedBlocks,
-        leftMargin: draft.leftMargin,
+        blocks: blocksToUse,
+        leftMargin: normalizedLeftMargin.length > 0 ? normalizedLeftMargin : undefined,
         totalLines,
         metadata,
     });
+};
+
+const validateAndNormalizeDraft = (
+    candidate: unknown,
+    source: string
+) => {
+    const validated = AnswerSheetDocumentDraftSchema.safeParse(candidate);
+
+    if (validated.success) {
+        console.warn(`[Tool] Recovered structured document from ${source}.`);
+        return normalizeAnswerSheetDocument(validated.data);
+    }
+
+    console.warn(
+        `[Tool] Failed to validate recovered JSON from ${source}:`,
+        validated.error.format()
+    );
+
+    return null;
+};
+
+const tryRecoverStructuredDocument = (error: unknown) => {
+    if (!error || typeof error !== "object") return null;
+
+    const rawText = (error as any).text;
+    if (typeof rawText === "string") {
+        try {
+            const parsed = JSON.parse(rawText);
+            const recovered = validateAndNormalizeDraft(parsed, "raw text response");
+            if (recovered) return recovered;
+        } catch (parseError) {
+            console.warn("[Tool] Unable to parse raw text as JSON:", parseError);
+        }
+    }
+
+    const causeValue = (error as any).cause?.value ?? (error as any).value;
+    if (causeValue) {
+        const recovered = validateAndNormalizeDraft(causeValue, "schema error payload");
+        if (recovered) return recovered;
+    }
+
+    return null;
+};
+
+const stringifyCandidate = (candidate: unknown) => {
+    try {
+        return typeof candidate === "string"
+            ? candidate
+            : JSON.stringify(candidate, null, 2);
+    } catch (err) {
+        console.warn("[Tool] Failed to stringify candidate for retry:", err);
+        return null;
+    }
 };
 
 export const runtime = "edge";
@@ -311,13 +480,9 @@ export async function POST(req: Request) {
                                     .describe("Pre-extracted OCR text for additional context"),
                             }),
                             execute: async ({ imageUrls: toolImageUrls, mergedOcrText: toolOcrText }: { imageUrls: string[]; mergedOcrText: string }) => {
-                                try {
-                                    console.log(`[Tool] Structuring ${toolImageUrls.length} images...`);
+                                const userPrompt = createOCRStructuringPrompt(toolOcrText, toolImageUrls.length);
 
-                                    const userPrompt = createOCRStructuringPrompt(toolOcrText, toolImageUrls.length);
-
-                                    // Use generateObject for structured output
-                                    // Mode 'json' for better compatibility with complex schemas
+                                const runStructuring = async (prompt: string) => {
                                     const { object } = await generateObject({
                                         model: anthropic(RECOMMENDED_MODELS.primary),
                                         schema: AnswerSheetDocumentDraftSchema,
@@ -329,7 +494,7 @@ export async function POST(req: Request) {
                                             {
                                                 role: "user",
                                                 content: [
-                                                    { type: "text", text: userPrompt },
+                                                    { type: "text", text: prompt },
                                                     ...toolImageUrls.map((url: string) => ({
                                                         type: "image" as const,
                                                         image: url,
@@ -340,7 +505,13 @@ export async function POST(req: Request) {
                                         temperature: OCR_STRUCTURING_TEMPERATURE,
                                     });
 
-                                    const normalized = normalizeAnswerSheetDocument(object);
+                                    return normalizeAnswerSheetDocument(object);
+                                };
+
+                                try {
+                                    console.log(`[Tool] Structuring ${toolImageUrls.length} images...`);
+
+                                    const normalized = await runStructuring(userPrompt);
 
                                     console.log(`[Tool] Structuring completed. Blocks: ${normalized.blocks.length}, Lines: ${normalized.totalLines}`);
 
@@ -349,34 +520,32 @@ export async function POST(req: Request) {
                                 } catch (error) {
                                     console.error("[Tool] Vision LLM structuring failed:", error);
 
-                                    // Attempt to recover structured data from raw text when the
-                                    // AI SDK throws AI_NoObjectGeneratedError. The Anthropic
-                                    // response occasionally contains a valid JSON object that
-                                    // narrowly misses schema validation. Instead of immediately
-                                    // falling back to the plain-text blocks, try to parse and
-                                    // validate the raw text first.
-                                    if (
-                                        error &&
-                                        typeof error === "object" &&
-                                        typeof (error as any).text === "string"
-                                    ) {
+                                    const recovered = tryRecoverStructuredDocument(error);
+                                    if (recovered) return recovered;
+
+                                    // Retry once with repaired prompt leveraging the previous payload
+                                    const retryPayload =
+                                        stringifyCandidate((error as any)?.text) ||
+                                        stringifyCandidate((error as any)?.cause?.value) ||
+                                        stringifyCandidate((error as any)?.value);
+
+                                    if (retryPayload) {
+                                        console.warn("[Tool] Retrying structuring with recovered raw payload.");
+
                                         try {
-                                            const parsed = JSON.parse((error as any).text);
-                                            const validated = AnswerSheetDocumentDraftSchema.safeParse(parsed);
+                                            const repairPrompt = `${userPrompt}\n\n이전 시도에서 스키마 검증 오류가 발생했습니다. 아래 JSON을 참고해 스키마에 맞게 수정한 완전한 문서를 생성하세요.\n${retryPayload}`;
+                                            const retryNormalized = await runStructuring(repairPrompt);
 
-                                            if (validated.success) {
-                                                console.warn(
-                                                    "[Tool] Recovered structured document from raw text after schema error."
-                                                );
-                                                return normalizeAnswerSheetDocument(validated.data);
-                                            }
-
-                                            console.warn(
-                                                "[Tool] Failed to validate recovered JSON:",
-                                                validated.error.flatten().formErrors
+                                            console.log(
+                                                `[Tool] Retry succeeded. Blocks: ${retryNormalized.blocks.length}, Lines: ${retryNormalized.totalLines}`
                                             );
-                                        } catch (parseError) {
-                                            console.warn("[Tool] Unable to parse raw text as JSON:", parseError);
+
+                                            return retryNormalized;
+                                        } catch (retryError) {
+                                            console.error("[Tool] Retry failed:", retryError);
+
+                                            const retryRecovered = tryRecoverStructuredDocument(retryError);
+                                            if (retryRecovered) return retryRecovered;
                                         }
                                     }
 
@@ -458,6 +627,62 @@ structure_answer_sheet 도구를 사용하여 분석해주세요.`,
                         ],
                         tools,
                         toolChoice: "required",  // Force tool usage
+                        experimental_repairToolCall: async ({
+                            toolCall,
+                            inputSchema,
+                            error,
+                            system: repairSystem,
+                        }) => {
+                            if (NoSuchToolError.isInstance(error)) return null;
+
+                            const schema = inputSchema(toolCall);
+                            const serializedInput = stringifyCandidate(toolCall.input);
+                            const serializedSchema = stringifyCandidate(schema);
+
+                            const repairInstructions = [
+                                `도구 "${toolCall.toolName}" 호출 인자가 스키마와 맞지 않습니다.`,
+                                "유효한 JSON 형식으로 올바른 입력 객체만 반환하세요.",
+                            ];
+
+                            if (serializedInput) {
+                                repairInstructions.push(`원본 입력:\n${serializedInput}`);
+                            }
+
+                            if (serializedSchema) {
+                                repairInstructions.push(`도구 스키마(참고용):\n${serializedSchema}`);
+                            }
+
+                            try {
+                                const { object: repairedInput } = await generateObject({
+                                    model: anthropic(RECOMMENDED_MODELS.primary),
+                                    schema,
+                                    mode: "json",
+                                    system: repairSystem,
+                                    messages: [
+                                        {
+                                            role: "user",
+                                            content: [
+                                                {
+                                                    type: "text",
+                                                    text: repairInstructions.join("\n\n"),
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                    temperature: 0,
+                                });
+
+                                console.warn("[Tool] Repaired invalid tool call input and retrying.");
+
+                                return {
+                                    ...toolCall,
+                                    input: repairedInput,
+                                };
+                            } catch (repairError) {
+                                console.warn("[Tool] Tool call repair failed:", repairError);
+                                return null;
+                            }
+                        },
                     });
 
                     console.log(`[OCR-Chat] Streaming AI agent response...`);
