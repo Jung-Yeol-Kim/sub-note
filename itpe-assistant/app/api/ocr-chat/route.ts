@@ -210,6 +210,28 @@ const normalizeAnswerSheetDocument = (
         BLOCK_CONSTANTS.MAX_LINES
     );
 
+    const normalizedLeftMargin = (draft.leftMargin || []).flatMap((item) => {
+        const trimmed = (item.content || "").trim();
+        if (!trimmed) {
+            return [];
+        }
+
+        let line = item.line;
+        if (item.line < 1 || item.line > BLOCK_CONSTANTS.MAX_LINES) {
+            const clamped = Math.min(Math.max(item.line, 1), BLOCK_CONSTANTS.MAX_LINES);
+            normalizationWarnings.push(
+                `왼쪽 목차(${item.line}행)의 위치를 ${clamped}행으로 보정했습니다.`
+            );
+            line = clamped;
+        }
+
+        return [{
+            ...item,
+            line,
+            content: trimmed,
+        }];
+    }).sort((a, b) => (a.line === b.line ? a.column - b.column : a.line - b.line));
+
     const metadata = {
         isValid: draft.metadata?.isValid ?? true,
         validationErrors: draft.metadata?.validationErrors ?? [],
@@ -221,7 +243,7 @@ const normalizeAnswerSheetDocument = (
 
     return AnswerSheetDocumentSchema.parse({
         blocks: blocksToUse,
-        leftMargin: draft.leftMargin,
+        leftMargin: normalizedLeftMargin.length > 0 ? normalizedLeftMargin : undefined,
         totalLines,
         metadata,
     });

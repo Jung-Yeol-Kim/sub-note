@@ -6,13 +6,24 @@ interface LeftMarginRendererProps {
   items: LeftMarginItem[];
   editable?: boolean;
   onChange?: (items: LeftMarginItem[]) => void;
+  startLine?: number;
+  linesPerPage?: number;
 }
 
 /**
  * Renders the left margin (목차 영역) based on LeftMarginItem data
- * 22 rows × 3 columns with 1.5:1:1 ratio
+ * Configurable 22-row (per page) grid × 3 columns with 1.5:1:1 ratio
  */
-export function LeftMarginRenderer({ items, editable = false, onChange }: LeftMarginRendererProps) {
+export function LeftMarginRenderer({
+  items,
+  editable = false,
+  onChange,
+  startLine: startLineProp = 1,
+  linesPerPage: linesPerPageProp = 22,
+}: LeftMarginRendererProps) {
+  const startLine = startLineProp;
+  const linesPerPage = linesPerPageProp;
+
   // Create a map for quick lookup
   const itemMap = new Map<string, string>();
   for (const item of items) {
@@ -20,8 +31,8 @@ export function LeftMarginRenderer({ items, editable = false, onChange }: LeftMa
     itemMap.set(key, item.content);
   }
 
-  // Create 22 rows
-  const rows = Array.from({ length: 22 }, (_, i) => i + 1);
+  // Create rows for the given page segment
+  const rows = Array.from({ length: linesPerPage }, (_, i) => startLine + i);
 
   const handleCellChange = (line: number, column: 1 | 2 | 3, value: string) => {
     if (!onChange) return;
@@ -59,7 +70,7 @@ export function LeftMarginRenderer({ items, editable = false, onChange }: LeftMa
             key={`left-margin-${lineNum}`}
             className="grid"
             style={{
-              height: 'calc(100% / 22)',
+              height: `calc(100% / ${linesPerPage})`,
               gridTemplateColumns: '1.5fr 1fr 1fr'
             }}
           >

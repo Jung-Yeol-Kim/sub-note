@@ -72,7 +72,7 @@ export type AnswerSheetBlock = TextBlock | TableBlock | DrawingBlock;
  * Left margin item - 왼쪽 목차 항목
  */
 export interface LeftMarginItem {
-  line: number;        // 줄 번호 (1-22)
+  line: number;        // 줄 번호 (1-66, 페이지 기준 22줄 단위)
   column: 1 | 2 | 3;  // 열 번호 (1=문1)/답), 2=1./2., 3=1)/2))
   content: string;     // 표시할 내용
 }
@@ -83,7 +83,7 @@ export interface LeftMarginItem {
 export interface AnswerSheetDocument {
   blocks: AnswerSheetBlock[];
   leftMargin?: LeftMarginItem[]; // 왼쪽 목차 (선택사항)
-  totalLines: number; // 1-22
+  totalLines: number; // 1-66 (페이지당 22줄)
   metadata: {
     isValid: boolean;
     validationErrors: string[];

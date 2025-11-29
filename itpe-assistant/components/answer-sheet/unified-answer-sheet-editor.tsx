@@ -418,7 +418,7 @@ export function UnifiedAnswerSheetEditor({
       </div>
 
       {/* Right Panel: AI Assistant */}
-      <div className="w-2/5 flex flex-col bg-white relative">
+      <div className="w-2/5 flex flex-col bg-white relative overflow-hidden">
         {/* Header */}
         <div className="flex-none px-6 py-4 border-b border-[#3d5a4c]/20">
           <div className="flex items-center gap-2">
@@ -431,8 +431,8 @@ export function UnifiedAnswerSheetEditor({
         </div>
 
         {/* Conversation Area */}
-        <Conversation className="flex-1">
-          <ConversationContent>
+        <Conversation className="flex-1 overflow-hidden">
+          <ConversationContent className="p-0 gap-6">
             {messages.length === 0 ? (
               <ConversationEmptyState
                 title="AI 어시스턴트와 함께 작성하세요"
