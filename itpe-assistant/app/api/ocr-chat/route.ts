@@ -61,7 +61,7 @@ const AnswerSheetBlockDraftSchema = z.discriminatedUnion("type", [
                 files: z.any().optional(),
             })
             .optional(),
-        thumbnail: z.string().optional(),
+        thumbnail: z.string().nullable().optional(),
     }),
 ]);
 
@@ -150,6 +150,7 @@ const normalizeAnswerSheetDocument = (
                 excalidrawData: hasExcalidrawData
                     ? block.excalidrawData
                     : { elements: [], appState: { viewBackgroundColor: "#ffffff" }, files: {} },
+                thumbnail: typeof block.thumbnail === "string" ? block.thumbnail : undefined,
             };
         }
 
@@ -223,6 +224,48 @@ const normalizeAnswerSheetDocument = (
         totalLines,
         metadata,
     });
+};
+
+const validateAndNormalizeDraft = (
+    candidate: unknown,
+    source: string
+) => {
+    const validated = AnswerSheetDocumentDraftSchema.safeParse(candidate);
+
+    if (validated.success) {
+        console.warn(`[Tool] Recovered structured document from ${source}.`);
+        return normalizeAnswerSheetDocument(validated.data);
+    }
+
+    console.warn(
+        `[Tool] Failed to validate recovered JSON from ${source}:`,
+        validated.error.format()
+    );
+
+    return null;
+};
+
+const tryRecoverStructuredDocument = (error: unknown) => {
+    if (!error || typeof error !== "object") return null;
+
+    const rawText = (error as any).text;
+    if (typeof rawText === "string") {
+        try {
+            const parsed = JSON.parse(rawText);
+            const recovered = validateAndNormalizeDraft(parsed, "raw text response");
+            if (recovered) return recovered;
+        } catch (parseError) {
+            console.warn("[Tool] Unable to parse raw text as JSON:", parseError);
+        }
+    }
+
+    const causeValue = (error as any).cause?.value ?? (error as any).value;
+    if (causeValue) {
+        const recovered = validateAndNormalizeDraft(causeValue, "schema error payload");
+        if (recovered) return recovered;
+    }
+
+    return null;
 };
 
 export const runtime = "edge";
@@ -441,36 +484,8 @@ export async function POST(req: Request) {
                                 } catch (error) {
                                     console.error("[Tool] Vision LLM structuring failed:", error);
 
-                                    // Attempt to recover structured data from raw text when the
-                                    // AI SDK throws AI_NoObjectGeneratedError. The Anthropic
-                                    // response occasionally contains a valid JSON object that
-                                    // narrowly misses schema validation. Instead of immediately
-                                    // falling back to the plain-text blocks, try to parse and
-                                    // validate the raw text first.
-                                    if (
-                                        error &&
-                                        typeof error === "object" &&
-                                        typeof (error as any).text === "string"
-                                    ) {
-                                        try {
-                                            const parsed = JSON.parse((error as any).text);
-                                            const validated = AnswerSheetDocumentDraftSchema.safeParse(parsed);
-
-                                            if (validated.success) {
-                                                console.warn(
-                                                    "[Tool] Recovered structured document from raw text after schema error."
-                                                );
-                                                return normalizeAnswerSheetDocument(validated.data);
-                                            }
-
-                                            console.warn(
-                                                "[Tool] Failed to validate recovered JSON:",
-                                                validated.error.flatten().formErrors
-                                            );
-                                        } catch (parseError) {
-                                            console.warn("[Tool] Unable to parse raw text as JSON:", parseError);
-                                        }
-                                    }
+                                    const recovered = tryRecoverStructuredDocument(error);
+                                    if (recovered) return recovered;
 
                                     // Log detailed error information for debugging
                                     if (error && typeof error === 'object') {
