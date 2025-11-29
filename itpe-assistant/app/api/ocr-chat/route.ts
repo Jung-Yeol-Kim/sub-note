@@ -11,6 +11,7 @@ import {
     generateObject,
     createUIMessageStream,
     createUIMessageStreamResponse,
+    NoSuchToolError,
 } from "ai";
 import { z } from "zod";
 import {
@@ -604,6 +605,62 @@ structure_answer_sheet 도구를 사용하여 분석해주세요.`,
                         ],
                         tools,
                         toolChoice: "required",  // Force tool usage
+                        experimental_repairToolCall: async ({
+                            toolCall,
+                            inputSchema,
+                            error,
+                            system: repairSystem,
+                        }) => {
+                            if (NoSuchToolError.isInstance(error)) return null;
+
+                            const schema = inputSchema(toolCall);
+                            const serializedInput = stringifyCandidate(toolCall.input);
+                            const serializedSchema = stringifyCandidate(schema);
+
+                            const repairInstructions = [
+                                `도구 "${toolCall.toolName}" 호출 인자가 스키마와 맞지 않습니다.`,
+                                "유효한 JSON 형식으로 올바른 입력 객체만 반환하세요.",
+                            ];
+
+                            if (serializedInput) {
+                                repairInstructions.push(`원본 입력:\n${serializedInput}`);
+                            }
+
+                            if (serializedSchema) {
+                                repairInstructions.push(`도구 스키마(참고용):\n${serializedSchema}`);
+                            }
+
+                            try {
+                                const { object: repairedInput } = await generateObject({
+                                    model: anthropic(RECOMMENDED_MODELS.primary),
+                                    schema,
+                                    mode: "json",
+                                    system: repairSystem,
+                                    messages: [
+                                        {
+                                            role: "user",
+                                            content: [
+                                                {
+                                                    type: "text",
+                                                    text: repairInstructions.join("\n\n"),
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                    temperature: 0,
+                                });
+
+                                console.warn("[Tool] Repaired invalid tool call input and retrying.");
+
+                                return {
+                                    ...toolCall,
+                                    input: repairedInput,
+                                };
+                            } catch (repairError) {
+                                console.warn("[Tool] Tool call repair failed:", repairError);
+                                return null;
+                            }
+                        },
                     });
 
                     console.log(`[OCR-Chat] Streaming AI agent response...`);
