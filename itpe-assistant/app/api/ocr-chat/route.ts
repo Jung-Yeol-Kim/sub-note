@@ -14,7 +14,9 @@ import {
 } from "ai";
 import { z } from "zod";
 import {
+    AnswerSheetBlockSchema,
     AnswerSheetDocumentSchema,
+    LeftMarginItemSchema,
     UpstageOCRResponseSchema,
 } from "@/lib/schemas/ocr-schemas";
 import {
@@ -27,6 +29,109 @@ import {
     OCR_STRUCTURING_TEMPERATURE,
     RECOMMENDED_MODELS,
 } from "@/lib/prompts/ocr-structuring-prompt";
+import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
+
+const AnswerSheetDocumentDraftSchema = z.object({
+    blocks: z.array(AnswerSheetBlockSchema),
+    leftMargin: z.array(LeftMarginItemSchema).optional(),
+    totalLines: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES).optional(),
+    metadata: z
+        .object({
+            isValid: z.boolean().optional(),
+            validationErrors: z.array(z.string()).optional(),
+            validationWarnings: z.array(z.string()).optional(),
+        })
+        .optional(),
+});
+
+const normalizeAnswerSheetDocument = (
+    draft: z.infer<typeof AnswerSheetDocumentDraftSchema>
+) => {
+    const normalizationWarnings: string[] = [];
+
+    const normalizedBlocks = draft.blocks.map((block) => {
+        if (block.type === "text") {
+            const lines = block.lines.filter((line) => line.trim().length > 0);
+            const correctedLineEnd = block.lineStart + lines.length - 1;
+
+            if (correctedLineEnd !== block.lineEnd) {
+                normalizationWarnings.push(
+                    `텍스트 블록(${block.id})의 lineEnd를 ${block.lineEnd} → ${correctedLineEnd}로 보정했습니다.`
+                );
+            }
+
+            return {
+                ...block,
+                lines: lines.length > 0 ? lines : [""],
+                lineEnd: correctedLineEnd,
+            };
+        }
+
+        if (block.type === "table") {
+            let headers = block.headers;
+            let columnWidths = block.columnWidths;
+
+            if (columnWidths.length !== headers.length) {
+                normalizationWarnings.push(
+                    `표 블록(${block.id})의 columnWidths 길이를 headers와 맞추기 위해 보정했습니다.`
+                );
+
+                if (columnWidths.length > headers.length) {
+                    columnWidths = columnWidths.slice(0, headers.length);
+                } else {
+                    const deficit = headers.length - columnWidths.length;
+                    columnWidths = [
+                        ...columnWidths,
+                        ...Array(deficit).fill(3),
+                    ];
+                }
+            }
+
+            const totalWidth = columnWidths.reduce((a, b) => a + b, 0);
+            if (totalWidth > BLOCK_CONSTANTS.MAX_CELLS_PER_LINE) {
+                const allowed = Math.max(
+                    1,
+                    BLOCK_CONSTANTS.MAX_CELLS_PER_LINE -
+                        columnWidths.slice(0, -1).reduce((a, b) => a + b, 0)
+                );
+                normalizationWarnings.push(
+                    `표 블록(${block.id})의 열 너비 합이 ${BLOCK_CONSTANTS.MAX_CELLS_PER_LINE}을 초과하여 마지막 열을 ${allowed}로 조정했습니다.`
+                );
+                columnWidths[columnWidths.length - 1] = allowed;
+            }
+
+            return {
+                ...block,
+                headers,
+                columnWidths,
+            };
+        }
+
+        return block;
+    });
+
+    const totalLines = Math.min(
+        draft.totalLines ??
+            Math.max(...normalizedBlocks.map((b) => b.lineEnd), 1),
+        BLOCK_CONSTANTS.MAX_LINES
+    );
+
+    const metadata = {
+        isValid: draft.metadata?.isValid ?? true,
+        validationErrors: draft.metadata?.validationErrors ?? [],
+        validationWarnings: [
+            ...(draft.metadata?.validationWarnings ?? []),
+            ...normalizationWarnings,
+        ],
+    };
+
+    return AnswerSheetDocumentSchema.parse({
+        blocks: normalizedBlocks,
+        leftMargin: draft.leftMargin,
+        totalLines,
+        metadata,
+    });
+};
 
 export const runtime = "edge";
 export const maxDuration = 60;
@@ -215,7 +320,7 @@ export async function POST(req: Request) {
                                     // Mode 'json' for better compatibility with complex schemas
                                     const { object } = await generateObject({
                                         model: anthropic(RECOMMENDED_MODELS.primary),
-                                        schema: AnswerSheetDocumentSchema,
+                                        schema: AnswerSheetDocumentDraftSchema,
                                         mode: "json", // Explicit JSON mode for Anthropic
                                         schemaName: "AnswerSheetDocument",
                                         schemaDescription: "Structured answer sheet document with text, table, and drawing blocks",
@@ -235,12 +340,45 @@ export async function POST(req: Request) {
                                         temperature: OCR_STRUCTURING_TEMPERATURE,
                                     });
 
-                                    console.log(`[Tool] Structuring completed. Blocks: ${object.blocks.length}, Lines: ${object.totalLines}`);
+                                    const normalized = normalizeAnswerSheetDocument(object);
 
-                                    return object;
+                                    console.log(`[Tool] Structuring completed. Blocks: ${normalized.blocks.length}, Lines: ${normalized.totalLines}`);
+
+                                    return normalized;
 
                                 } catch (error) {
                                     console.error("[Tool] Vision LLM structuring failed:", error);
+
+                                    // Attempt to recover structured data from raw text when the
+                                    // AI SDK throws AI_NoObjectGeneratedError. The Anthropic
+                                    // response occasionally contains a valid JSON object that
+                                    // narrowly misses schema validation. Instead of immediately
+                                    // falling back to the plain-text blocks, try to parse and
+                                    // validate the raw text first.
+                                    if (
+                                        error &&
+                                        typeof error === "object" &&
+                                        typeof (error as any).text === "string"
+                                    ) {
+                                        try {
+                                            const parsed = JSON.parse((error as any).text);
+                                            const validated = AnswerSheetDocumentDraftSchema.safeParse(parsed);
+
+                                            if (validated.success) {
+                                                console.warn(
+                                                    "[Tool] Recovered structured document from raw text after schema error."
+                                                );
+                                                return normalizeAnswerSheetDocument(validated.data);
+                                            }
+
+                                            console.warn(
+                                                "[Tool] Failed to validate recovered JSON:",
+                                                validated.error.flatten().formErrors
+                                            );
+                                        } catch (parseError) {
+                                            console.warn("[Tool] Unable to parse raw text as JSON:", parseError);
+                                        }
+                                    }
 
                                     // Log detailed error information for debugging
                                     if (error && typeof error === 'object') {
