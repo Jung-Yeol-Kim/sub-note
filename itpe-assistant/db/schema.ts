@@ -85,6 +85,9 @@ export const subNotes = pgTable("sub_notes", {
   isValidFormat: boolean("is_valid_format").default(true), // Meets 22×19 format requirements
   formatWarnings: text("format_warnings").array(), // Format warnings (e.g., "Line 5 exceeds 19 cells")
 
+  // OCR-based answer sheet creation
+  originalImages: text("original_images").array(), // Vercel Blob URLs of scanned/photographed answer sheets
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

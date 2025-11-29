@@ -77,9 +77,9 @@ export function AnswerSheetMetadataPanel({
   return (
     <div className="space-y-4 sticky top-6">
       {/* Document Title Preview */}
-      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] shadow-sm">
+      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] dark:bg-zinc-900 dark:border-zinc-800 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-[#3d5a4c] flex items-center gap-2">
+          <CardTitle className="text-sm font-medium text-[#3d5a4c] dark:text-emerald-400 flex items-center gap-2">
             <FileText className="h-4 w-4" />
             문서 정보
           </CardTitle>
@@ -121,9 +121,9 @@ export function AnswerSheetMetadataPanel({
       </Card>
 
       {/* Page Usage */}
-      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] shadow-sm">
+      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] dark:bg-zinc-900 dark:border-zinc-800 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-[#3d5a4c] flex items-center gap-2">
+          <CardTitle className="text-sm font-medium text-[#3d5a4c] dark:text-emerald-400 flex items-center gap-2">
             <FileStack className="h-4 w-4" />
             페이지 사용 현황
           </CardTitle>
@@ -150,21 +150,19 @@ export function AnswerSheetMetadataPanel({
                     <span className={isUsed ? "font-medium text-foreground/90" : "text-muted-foreground"}>
                       📄 {page.page}페이지
                     </span>
-                    <span className={`text-xs font-medium ${
-                      isFull ? "text-red-600" : isAlmostFull ? "text-[#c49a6c]" : "text-[#3d5a4c]"
-                    }`}>
+                    <span className={`text-xs font-medium ${isFull ? "text-red-600" : isAlmostFull ? "text-[#c49a6c]" : "text-[#3d5a4c]"
+                      }`}>
                       {page.used} / {BLOCK_CONSTANTS.LINES_PER_PAGE}줄
                     </span>
                   </div>
                   <div className="h-1.5 bg-[#3d5a4c]/10 rounded-full overflow-hidden">
                     <div
-                      className={`h-full transition-all duration-300 ${
-                        isFull
+                      className={`h-full transition-all duration-300 ${isFull
                           ? "bg-red-500"
                           : isAlmostFull
-                          ? "bg-[#c49a6c]"
-                          : "bg-[#3d5a4c]"
-                      }`}
+                            ? "bg-[#c49a6c]"
+                            : "bg-[#3d5a4c]"
+                        }`}
                       style={{ width: `${(page.used / BLOCK_CONSTANTS.LINES_PER_PAGE) * 100}%` }}
                     />
                   </div>
@@ -181,9 +179,9 @@ export function AnswerSheetMetadataPanel({
       </Card>
 
       {/* Total Line Count */}
-      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] shadow-sm">
+      <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7] dark:bg-zinc-900 dark:border-zinc-800 shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium text-[#3d5a4c] flex items-center gap-2">
+          <CardTitle className="text-sm font-medium text-[#3d5a4c] dark:text-emerald-400 flex items-center gap-2">
             <Layers className="h-4 w-4" />
             전체 규격
           </CardTitle>
@@ -193,13 +191,12 @@ export function AnswerSheetMetadataPanel({
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-muted-foreground">총 줄 사용량</span>
-              <span className={`text-sm font-bold transition-colors ${
-                totalLines > maxLines
+              <span className={`text-sm font-bold transition-colors ${totalLines > maxLines
                   ? "text-red-600"
                   : totalLines > maxLines * 0.9
-                  ? "text-[#c49a6c]"
-                  : "text-[#3d5a4c]"
-              }`}>
+                    ? "text-[#c49a6c]"
+                    : "text-[#3d5a4c]"
+                }`}>
                 {totalLines} / {maxLines}
               </span>
             </div>
@@ -207,13 +204,12 @@ export function AnswerSheetMetadataPanel({
             {/* Progress Bar */}
             <div className="relative h-2 bg-[#3d5a4c]/10 rounded-full overflow-hidden">
               <div
-                className={`absolute top-0 left-0 h-full transition-all duration-300 ease-out ${
-                  totalLines > maxLines
+                className={`absolute top-0 left-0 h-full transition-all duration-300 ease-out ${totalLines > maxLines
                     ? "bg-gradient-to-r from-red-500 to-red-600"
                     : totalLines > maxLines * 0.9
-                    ? "bg-gradient-to-r from-[#c49a6c] to-[#b8864f]"
-                    : "bg-gradient-to-r from-[#3d5a4c] to-[#2d4a3c]"
-                }`}
+                      ? "bg-gradient-to-r from-[#c49a6c] to-[#b8864f]"
+                      : "bg-gradient-to-r from-[#3d5a4c] to-[#2d4a3c]"
+                  }`}
                 style={{ width: `${Math.min(lineProgress, 100)}%` }}
               />
               {totalLines > maxLines && (
@@ -249,13 +245,12 @@ export function AnswerSheetMetadataPanel({
       </Card>
 
       {/* Validation Status */}
-      <Card className={`border-2 transition-all duration-300 shadow-sm ${
-        !document
-          ? "border-[#3d5a4c]/10 bg-[#fcfaf7]"
+      <Card className={`border-2 transition-all duration-300 shadow-sm ${!document
+          ? "border-[#3d5a4c]/10 bg-[#fcfaf7] dark:bg-zinc-900 dark:border-zinc-800"
           : isValid
-          ? "border-[#3d5a4c]/30 bg-gradient-to-br from-[#3d5a4c]/5 to-[#3d5a4c]/10"
-          : "border-red-500/30 bg-gradient-to-br from-red-50 to-red-100/50"
-      }`}>
+            ? "border-[#3d5a4c]/30 bg-gradient-to-br from-[#3d5a4c]/5 to-[#3d5a4c]/10 dark:from-[#3d5a4c]/20 dark:to-[#3d5a4c]/10 dark:border-[#3d5a4c]/50"
+            : "border-red-500/30 bg-gradient-to-br from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10 dark:border-red-500/50"
+        }`}>
         <CardHeader className="pb-3">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
             {isValid ? (
@@ -340,9 +335,9 @@ export function AnswerSheetMetadataPanel({
       </Card>
 
       {/* Quick Tips */}
-      <Card className="border-[#c49a6c]/20 bg-gradient-to-br from-[#c49a6c]/5 to-[#c49a6c]/10">
+      <Card className="border-[#c49a6c]/20 bg-gradient-to-br from-[#c49a6c]/5 to-[#c49a6c]/10 dark:from-[#c49a6c]/20 dark:to-[#c49a6c]/10 dark:border-[#c49a6c]/30">
         <CardContent className="pt-4 pb-4">
-          <p className="text-xs font-semibold text-[#c49a6c] mb-2">📝 작성 팁</p>
+          <p className="text-xs font-semibold text-[#c49a6c] dark:text-amber-400 mb-2">📝 작성 팁</p>
           <ul className="text-xs text-foreground/70 space-y-1.5 leading-relaxed">
             <li>• <code className="text-[10px] bg-[#3d5a4c]/10 px-1 py-0.5 rounded">/table</code> - 표 삽입</li>
             <li>• <code className="text-[10px] bg-[#3d5a4c]/10 px-1 py-0.5 rounded">/draw</code> - 그림 삽입</li>

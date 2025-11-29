@@ -2,14 +2,11 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BookOpen, Save } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SyllabusBrowser } from "@/components/syllabus/syllabus-browser";
-import { AnswerSheetEditor } from "@/components/answer-sheet/answer-sheet-editor";
-import { AnswerSheetMetadataPanel } from "@/components/answer-sheet/answer-sheet-metadata-panel";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { UnifiedAnswerSheetEditor } from "@/components/answer-sheet/unified-answer-sheet-editor";
 import type { AnswerSheetDocument } from "@/lib/types/answer-sheet-block";
 import { serializeAnswerSheet, prepareForStorage } from "@/lib/utils/answer-sheet-db";
 import { createSubNoteWithAuth } from "../actions";
@@ -17,15 +14,14 @@ import { createSubNoteWithAuth } from "../actions";
 export default function NewSubNotePage() {
   const router = useRouter();
   const [showSyllabus, setShowSyllabus] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [title, setTitle] = useState("");
-  const [document, setDocument] = useState<AnswerSheetDocument | null>(null);
 
-  const handleSave = async () => {
-    if (!title.trim()) {
-      alert("제목을 입력해주세요.");
-      return;
-    }
+  const handleSave = async (
+    document: AnswerSheetDocument,
+    imageUrls: string[],
+    ocrText: string
+  ) => {
+    // Extract title from first text block
+    const title = document.blocks.find(b => b.type === "text")?.lines[0] || "제목 없음";
 
     if (!document || document.blocks.length === 0) {
       alert("내용을 입력해주세요.");
@@ -66,7 +62,6 @@ export default function NewSubNotePage() {
       return;
     }
 
-    setIsSaving(true);
     try {
       const prepared = prepareForStorage(document);
 
@@ -79,6 +74,7 @@ export default function NewSubNotePage() {
         cellCount: prepared.cellCount,
         isValidFormat: prepared.isValidFormat,
         formatWarnings: prepared.formatWarnings,
+        originalImages: imageUrls.length > 0 ? imageUrls : undefined,
       });
 
       if (result.success) {
@@ -89,94 +85,42 @@ export default function NewSubNotePage() {
     } catch (error) {
       console.error("Error saving sub-note:", error);
       alert("서브노트 저장 중 오류가 발생했습니다.");
-    } finally {
-      setIsSaving(false);
     }
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <Link href="/sub-notes">
-            <Button variant="ghost" size="sm" className="mb-2">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              서브노트 목록으로
-            </Button>
-          </Link>
-          <h1 className="text-3xl font-bold tracking-tight">새 서브노트 작성</h1>
-          <p className="text-muted-foreground mt-1">
-            정보관리기술사 시험 답안지 형식에 맞춰 서브노트를 작성하세요
-          </p>
-        </div>
+    <div className="h-screen flex flex-col animate-in fade-in duration-500">
+      {/* Simplified Header - Only back button */}
+      <div className="flex-none px-6 py-3 border-b border-[#3d5a4c]/20 bg-white flex items-center justify-between">
+        <Link href="/sub-notes">
+          <Button variant="ghost" size="sm">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            목록으로
+          </Button>
+        </Link>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowSyllabus(!showSyllabus)}
-        >
-          <BookOpen className="mr-2 h-4 w-4" />
-          {showSyllabus ? "출제기준 숨기기" : "출제기준 보기"}
-        </Button>
+        {showSyllabus && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowSyllabus(false)}
+          >
+            출제기준 숨기기
+          </Button>
+        )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-12">
-        {/* Main Editor */}
-        <div className={showSyllabus ? "lg:col-span-6" : "lg:col-span-9"}>
-          <div className="space-y-4">
-            {/* Title input and save button */}
-            <Card className="border-[#3d5a4c]/20 bg-[#fcfaf7]">
-              <CardContent className="pt-6">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Input
-                      id="title"
-                      placeholder="서브노트 제목을 입력하세요 (예: OAuth 2.0 인증 프로토콜)"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 px-0 font-serif"
-                      style={{ fontFamily: "var(--font-crimson-pro, 'Crimson Pro', serif)" }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <Button
-                      onClick={handleSave}
-                      disabled={!title.trim() || !document || isSaving || !document?.metadata.isValid}
-                      className="bg-[#3d5a4c] hover:bg-[#2d4a3c] text-white disabled:opacity-50"
-                    >
-                      <Save className="mr-2 h-4 w-4" />
-                      {isSaving ? "저장 중..." : "저장"}
-                    </Button>
-                    {document && !document.metadata.isValid && (
-                      <span className="text-xs text-red-600 font-medium">
-                        ⚠ 검증 오류가 있습니다
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Answer Sheet Editor */}
-            <AnswerSheetEditor
-              initialDocument={document || undefined}
-              onChange={(doc) => setDocument(doc)}
-            />
-          </div>
-        </div>
-
-        {/* Metadata Sidebar - Always Visible */}
-        <div className="lg:col-span-3">
-          <AnswerSheetMetadataPanel document={document} title={title} />
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Unified Editor - Takes full width or shares with syllabus */}
+        <div className={showSyllabus ? "flex-1" : "w-full"}>
+          <UnifiedAnswerSheetEditor onSave={handleSave} />
         </div>
 
         {/* Syllabus Sidebar - Optional */}
         {showSyllabus && (
-          <div className="lg:col-span-3">
-            <div className="sticky top-6">
-              <SyllabusBrowser />
-            </div>
+          <div className="w-96 shrink-0 border-l border-[#3d5a4c]/20 overflow-y-auto">
+            <SyllabusBrowser />
           </div>
         )}
       </div>

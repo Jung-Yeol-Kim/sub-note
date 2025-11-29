@@ -18,6 +18,7 @@ export type SubNoteInput = {
   cellCount?: number;
   isValidFormat?: boolean;
   formatWarnings?: string[];
+  originalImages?: string[]; // Vercel Blob URLs of scanned/photographed answer sheets
 };
 
 // Get all sub-notes for a user
@@ -95,6 +96,7 @@ export async function createSubNote(userId: string, data: SubNoteInput) {
         cellCount: data.cellCount,
         isValidFormat: data.isValidFormat,
         formatWarnings: data.formatWarnings,
+        originalImages: data.originalImages,
         updatedAt: new Date(),
       })
       .returning();
