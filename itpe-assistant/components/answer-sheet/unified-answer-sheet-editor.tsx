@@ -9,7 +9,7 @@
  * - AI-elements 컴포넌트 최대한 활용
  */
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Button } from "@/components/ui/button";
@@ -88,29 +88,42 @@ export function UnifiedAnswerSheetEditor({
   const [isProcessing, setIsProcessing] = useState(false);
 
   const lastMetadataMessageIdRef = useRef<Set<string>>(new Set());
+  const lastProcessedMessageIdRef = useRef<string | null>(null);
   const artifactFingerprintsRef = useRef<Record<string, string>>({});
   const documentFingerprintRef = useRef<string | null>(
     initialDocument ? JSON.stringify(initialDocument) : null
   );
+  const requestContextRef = useRef<{ document: AnswerSheetDocument | null; title: string }>({
+    document,
+    title,
+  });
 
-  // AI Chat - useChat with DefaultChatTransport
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/ocr-chat",
-      prepareSendMessagesRequest: ({ id, messages }) => {
-        // Include current document state in the request
-        return {
+  useEffect(() => {
+    requestContextRef.current = { document, title };
+  }, [document, title]);
+
+  // Stable transport and request payload builder to avoid re-renders creating new instances
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/ocr-chat",
+        prepareSendMessagesRequest: ({ id, messages }) => ({
           body: {
             id,
             message: messages[messages.length - 1],
             context: {
-              currentDocument: document,
-              title: title,
+              currentDocument: requestContextRef.current.document,
+              title: requestContextRef.current.title,
             },
           },
-        };
-      },
-    }),
+        }),
+      }),
+    []
+  );
+
+  // AI Chat - useChat with DefaultChatTransport
+  const { messages, sendMessage, status } = useChat({
+    transport,
     onFinish: (result) => {
       console.log("[UnifiedEditor] Chat finished:", result);
       setIsProcessing(false);
@@ -122,47 +135,53 @@ export function UnifiedAnswerSheetEditor({
     },
   });
 
-  // Process messages to extract custom data and tool artifacts
+  // Process only the newest message to avoid repetitive state updates during streaming
   useEffect(() => {
     if (messages.length === 0) return;
+
+    const latestMessage = messages[messages.length - 1] as any;
+
+    if (latestMessage.id === lastProcessedMessageIdRef.current) {
+      return;
+    }
+
+    lastProcessedMessageIdRef.current = latestMessage.id;
 
     let latestDocument: AnswerSheetDocument | null = null;
     const newArtifacts: Record<string, AnswerSheetDocument> = {};
     const metadataSeen = lastMetadataMessageIdRef.current;
 
-    for (const message of messages) {
-      const structuredDoc = extractStructuredAnswerSheet(message as any);
+    const structuredDoc = extractStructuredAnswerSheet(latestMessage as any);
 
-      if (structuredDoc) {
-        latestDocument = structuredDoc;
-        const fingerprint = JSON.stringify(structuredDoc);
+    if (structuredDoc) {
+      latestDocument = structuredDoc;
+      const fingerprint = JSON.stringify(structuredDoc);
 
-        if (artifactFingerprintsRef.current[message.id] !== fingerprint) {
-          artifactFingerprintsRef.current[message.id] = fingerprint;
-          newArtifacts[message.id] = structuredDoc;
-          toast.success("답안지 구조화 완료", {
-            description: `${structuredDoc.blocks.length}개 블록, ${structuredDoc.totalLines}줄 사용`,
-          });
-        }
+      if (artifactFingerprintsRef.current[latestMessage.id] !== fingerprint) {
+        artifactFingerprintsRef.current[latestMessage.id] = fingerprint;
+        newArtifacts[latestMessage.id] = structuredDoc;
+        toast.success("답안지 구조화 완료", {
+          description: `${structuredDoc.blocks.length}개 블록, ${structuredDoc.totalLines}줄 사용`,
+        });
       }
+    }
 
-      // Extract metadata (OCR stats, warnings)
-      if (message.role === "assistant" && Array.isArray((message as any).parts)) {
-        for (const part of (message as any).parts) {
-          const metadataKey = part.toolCallId || message.id;
-          if (part.type === "data-metadata" && metadataKey && !metadataSeen.has(metadataKey)) {
-            const metadata = (part as any).data;
-            if (metadata.imageUrls) setImageUrls(metadata.imageUrls);
-            if (metadata.ocrText) setOcrText(metadata.ocrText);
+    // Extract metadata (OCR stats, warnings)
+    if (latestMessage.role === "assistant" && Array.isArray(latestMessage.parts)) {
+      for (const part of latestMessage.parts) {
+        const metadataKey = part.toolCallId || latestMessage.id;
+        if (part.type === "data-metadata" && metadataKey && !metadataSeen.has(metadataKey)) {
+          const metadata = (part as any).data;
+          if (metadata.imageUrls) setImageUrls(metadata.imageUrls);
+          if (metadata.ocrText) setOcrText(metadata.ocrText);
 
-            if (metadata.warnings && metadata.warnings.length > 0) {
-              toast.warning("OCR 경고", {
-                description: metadata.warnings.join("\n"),
-              });
-            }
-
-            metadataSeen.add(metadataKey);
+          if (metadata.warnings && metadata.warnings.length > 0) {
+            toast.warning("OCR 경고", {
+              description: metadata.warnings.join("\n"),
+            });
           }
+
+          metadataSeen.add(metadataKey);
         }
       }
     }
