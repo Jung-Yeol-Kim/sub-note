@@ -268,6 +268,17 @@ const tryRecoverStructuredDocument = (error: unknown) => {
     return null;
 };
 
+const stringifyCandidate = (candidate: unknown) => {
+    try {
+        return typeof candidate === "string"
+            ? candidate
+            : JSON.stringify(candidate, null, 2);
+    } catch (err) {
+        console.warn("[Tool] Failed to stringify candidate for retry:", err);
+        return null;
+    }
+};
+
 export const runtime = "edge";
 export const maxDuration = 60;
 
@@ -446,13 +457,9 @@ export async function POST(req: Request) {
                                     .describe("Pre-extracted OCR text for additional context"),
                             }),
                             execute: async ({ imageUrls: toolImageUrls, mergedOcrText: toolOcrText }: { imageUrls: string[]; mergedOcrText: string }) => {
-                                try {
-                                    console.log(`[Tool] Structuring ${toolImageUrls.length} images...`);
+                                const userPrompt = createOCRStructuringPrompt(toolOcrText, toolImageUrls.length);
 
-                                    const userPrompt = createOCRStructuringPrompt(toolOcrText, toolImageUrls.length);
-
-                                    // Use generateObject for structured output
-                                    // Mode 'json' for better compatibility with complex schemas
+                                const runStructuring = async (prompt: string) => {
                                     const { object } = await generateObject({
                                         model: anthropic(RECOMMENDED_MODELS.primary),
                                         schema: AnswerSheetDocumentDraftSchema,
@@ -464,7 +471,7 @@ export async function POST(req: Request) {
                                             {
                                                 role: "user",
                                                 content: [
-                                                    { type: "text", text: userPrompt },
+                                                    { type: "text", text: prompt },
                                                     ...toolImageUrls.map((url: string) => ({
                                                         type: "image" as const,
                                                         image: url,
@@ -475,7 +482,13 @@ export async function POST(req: Request) {
                                         temperature: OCR_STRUCTURING_TEMPERATURE,
                                     });
 
-                                    const normalized = normalizeAnswerSheetDocument(object);
+                                    return normalizeAnswerSheetDocument(object);
+                                };
+
+                                try {
+                                    console.log(`[Tool] Structuring ${toolImageUrls.length} images...`);
+
+                                    const normalized = await runStructuring(userPrompt);
 
                                     console.log(`[Tool] Structuring completed. Blocks: ${normalized.blocks.length}, Lines: ${normalized.totalLines}`);
 
@@ -486,6 +499,32 @@ export async function POST(req: Request) {
 
                                     const recovered = tryRecoverStructuredDocument(error);
                                     if (recovered) return recovered;
+
+                                    // Retry once with repaired prompt leveraging the previous payload
+                                    const retryPayload =
+                                        stringifyCandidate((error as any)?.text) ||
+                                        stringifyCandidate((error as any)?.cause?.value) ||
+                                        stringifyCandidate((error as any)?.value);
+
+                                    if (retryPayload) {
+                                        console.warn("[Tool] Retrying structuring with recovered raw payload.");
+
+                                        try {
+                                            const repairPrompt = `${userPrompt}\n\n이전 시도에서 스키마 검증 오류가 발생했습니다. 아래 JSON을 참고해 스키마에 맞게 수정한 완전한 문서를 생성하세요.\n${retryPayload}`;
+                                            const retryNormalized = await runStructuring(repairPrompt);
+
+                                            console.log(
+                                                `[Tool] Retry succeeded. Blocks: ${retryNormalized.blocks.length}, Lines: ${retryNormalized.totalLines}`
+                                            );
+
+                                            return retryNormalized;
+                                        } catch (retryError) {
+                                            console.error("[Tool] Retry failed:", retryError);
+
+                                            const retryRecovered = tryRecoverStructuredDocument(retryError);
+                                            if (retryRecovered) return retryRecovered;
+                                        }
+                                    }
 
                                     // Log detailed error information for debugging
                                     if (error && typeof error === 'object') {
