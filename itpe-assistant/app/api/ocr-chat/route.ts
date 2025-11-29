@@ -31,8 +31,42 @@ import {
 } from "@/lib/prompts/ocr-structuring-prompt";
 import { BLOCK_CONSTANTS } from "@/lib/types/answer-sheet-block";
 
+// Draft schema: 더 관대한 검증으로 LLM이 반환한 중간 결과를 수용한 뒤 normalize 단계에서 엄격히 검증
+const AnswerSheetBlockDraftSchema = z.discriminatedUnion("type", [
+    z.object({
+        id: z.string(),
+        type: z.literal("text"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lines: z.array(z.string()).min(1),
+    }),
+    z.object({
+        id: z.string(),
+        type: z.literal("table"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        headers: z.array(z.string()).min(1),
+        rows: z.array(z.array(z.string())).min(1),
+        columnWidths: z.array(z.number().int().min(1)).min(1),
+    }),
+    z.object({
+        id: z.string(),
+        type: z.literal("drawing"),
+        lineStart: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        lineEnd: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES),
+        excalidrawData: z
+            .object({
+                elements: z.array(z.any()),
+                appState: z.any().optional(),
+                files: z.any().optional(),
+            })
+            .optional(),
+        thumbnail: z.string().optional(),
+    }),
+]);
+
 const AnswerSheetDocumentDraftSchema = z.object({
-    blocks: z.array(AnswerSheetBlockSchema),
+    blocks: z.array(AnswerSheetBlockDraftSchema),
     leftMargin: z.array(LeftMarginItemSchema).optional(),
     totalLines: z.number().int().min(1).max(BLOCK_CONSTANTS.MAX_LINES).optional(),
     metadata: z
